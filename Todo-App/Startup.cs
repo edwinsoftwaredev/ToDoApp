@@ -101,8 +101,8 @@ namespace Todo_App
 
                     options.UserInteraction = new UserInteractionOptions
                     {
-                        LoginUrl = "/account/login",
-                        LogoutUrl = "/account/logout",
+                        LoginUrl = "/signin",
+                        LogoutUrl = "/signout",
                         LoginReturnUrlParameter = "returnUrl"
                     };
                 })
