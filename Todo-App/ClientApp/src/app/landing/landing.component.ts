@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LandingComponent implements OnInit {
 
+  title = 'todo-app';
+
   constructor() { }
 
   ngOnInit(): void {

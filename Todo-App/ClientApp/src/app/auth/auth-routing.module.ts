@@ -6,18 +6,17 @@ import { AuthGuard } from './auth.guard';
 import { AuthComponent } from './auth.component';
 
 
-const routes: Routes = [{
-  path: 'auth',
-  component: AuthComponent,
-  children: [{
+const routes: Routes = [
+  {
     path: 'signin',
-    component: SignInComponent
+    component: SignInComponent,
+    canActivate: [AuthGuard]
   }, {
     path: 'signup',
-    component: SignUpComponent
-  }],
-  canActivate: [AuthGuard]
-}];
+    component: SignUpComponent,
+    canActivate: [AuthGuard]
+  }
+];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
