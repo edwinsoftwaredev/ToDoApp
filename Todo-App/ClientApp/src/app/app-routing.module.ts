@@ -5,6 +5,12 @@ import { AppComponent } from './app.component';
 import { SignInComponent } from './auth/sign-in/sign-in.component';
 import { LandingComponent } from './landing/landing.component';
 
+/**
+ * Something to remember is that if you TYPE a child path directly in the url direction bar of the browser,
+ * the parent is going to be reset or you will see whole reload on the browser.
+ * When there is a link and is used to route to a child then angular will make the process of routing, which
+ * prevent to see a reload in the parent component.
+ */
 
 const routes: Routes = [
   {
