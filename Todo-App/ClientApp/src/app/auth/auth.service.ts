@@ -19,7 +19,7 @@ export class AuthService {
    */
   identifyUser(force?: boolean): Promise<User> {
     if (!force) {
-      
+
     }
   }
 }
