@@ -5,6 +5,7 @@ riderModule.iml
 /_ReSharper.Caches/
 .idea/
 /.vs/
+node_modules/
 
 ## important files (e.g keys, codes, ...)
 tempkey.rsa
