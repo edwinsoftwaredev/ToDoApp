@@ -22,4 +22,17 @@ describe('LandingComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it(`should have as title 'todo-app'`, () => {
+    // const fixture = TestBed.createComponent(LandingComponent);
+    const app = fixture.componentInstance;
+    expect(app.title).toEqual('todo-app');
+  });
+
+  it('should render title', () => {
+    // const fixture = TestBed.createComponent(LandingComponent);
+    fixture.detectChanges();
+    const compiled = fixture.nativeElement;
+    expect(compiled.querySelector('.content span').textContent).toContain('todo-app app is running!');
+  });
 });
