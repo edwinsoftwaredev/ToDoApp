@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule, UrlSegment, UrlSegmentGroup, Route } from '@angular/router';
+import { Routes, RouterModule, UrlSegment, UrlSegmentGroup, Route, UrlMatchResult } from '@angular/router';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { AuthGuard } from './auth.guard';
@@ -27,7 +27,7 @@ const routes: Routes = [
   }
 ];
 
-export function authPathMatcher(url: UrlSegment[], group: UrlSegmentGroup, route: Route) {
+export function authPathMatcher(url: UrlSegment[], group: UrlSegmentGroup, route: Route): UrlMatchResult {
 
   /**
    * Here I am using a empty UrlSegment[] as consumed because nothing in this function will consume the original url segment.

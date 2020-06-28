@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LandingComponent } from './landing.component';
+import {RouterTestingModule} from '@angular/router/testing';
 
 describe('LandingComponent', () => {
   let component: LandingComponent;
@@ -8,31 +9,32 @@ describe('LandingComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LandingComponent ]
+        imports: [RouterTestingModule],
+        declarations: [ LandingComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LandingComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+        fixture = TestBed.createComponent(LandingComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+        expect(component).toBeTruthy();
   });
 
   it(`should have as title 'todo-app'`, () => {
     // const fixture = TestBed.createComponent(LandingComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('todo-app');
+        const app = fixture.componentInstance;
+        expect(app.title).toEqual('todo-app');
   });
 
   it('should render title', () => {
     // const fixture = TestBed.createComponent(LandingComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('todo-app app is running!');
+        fixture.detectChanges();
+        const compiled = fixture.nativeElement;
+        expect(compiled.querySelector('.content span').textContent).toContain('todo-app app is running!');
   });
 });
