@@ -1,4 +1,3 @@
-using System;
 using System.Reflection;
 using IdentityServer4.Configuration;
 using Microsoft.AspNetCore.Builder;
@@ -12,7 +11,6 @@ using Microsoft.Extensions.Hosting;
 using Todo_App.DAL;
 using Todo_App.Model.Auth;
 using Todo_App.Services;
-using Todo_App.Services.Models;
 
 namespace Todo_App
 {
@@ -39,7 +37,7 @@ namespace Todo_App
                 InitialCatalog = Configuration["ConnData:Catalog"]
             }.ConnectionString;
         }
-        
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -58,11 +56,11 @@ namespace Todo_App
             var migrationAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
 
             /*
-             * OpenId Connect - OAuth 2.0 -->  
+             * OpenId Connect - OAuth 2.0 -->
              * Auth diagrams: https://christianlydemann.com/creating-an-openid-connect-system-with-angular-8-and-identityserver4-oidc-part-1/
              * Open Id Connect specification: https://openid.net/specs/openid-connect-core-1_0.html
              * pkce: https://tools.ietf.org/html/rfc7636
-             * 
+             *
              * For pkce                                       +-------------------+
                                                               |   Authz Server    |
                     +--------+                                | +---------------+ |
@@ -81,14 +79,14 @@ namespace Todo_App
                                                               +-------------------+
 
                      Figure 2: Abstract Protocol Flow
-             * 
+             *
              * To understand better this; The authorization code has an utility of just one time in the token endpoint.
-             * When an authorization request is sent, it is send with a sha256 encrypted random string 
+             * When an authorization request is sent, it is send with a sha256 encrypted random string
              * known as t(code_verifier) from a code_verifier. Auth server respond with an Authorization code as normal.
              * Then the client send the code to token endpoint along with the code_verifier without been transformed.
              * the code_verifier is used to compare and decript the t(code_verifier) sent in the first request.
              * If there is no match then the access token is not sent <-- the request is rejected.
-             * 
+             *
              * To know more about the attack read: https://tools.ietf.org/html/rfc7636#section-1
              */
 
@@ -144,7 +142,7 @@ namespace Todo_App
                 {
                     builder.RequireScope("TodoAppApi.TodoApp");
                 });
-                
+
                 options.AddPolicy("TodoAppApiUserPolicy", builder =>
                 {
                     builder.RequireScope("TodoAppApi.TodoAppUser");
@@ -169,7 +167,7 @@ namespace Todo_App
             // app.UseAuthentication(); <-- It's not needed when we add the IdentityServer middleware to the pipeline
 
             app.UseIdentityServer();
-            
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
