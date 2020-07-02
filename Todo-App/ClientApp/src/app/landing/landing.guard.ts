@@ -12,7 +12,24 @@ export class LandingGuard implements CanActivate {
 
   canActivate(
     next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    return true;
+    state: RouterStateSnapshot
+  ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+
+    return this.checkAuthentication(state.url);
+  }
+
+  /**
+   * here we check if user is authenticated if not
+   * then it is redirected to the authentication endpoint.
+   * @param url: the url to redirected after successful signin
+   */
+  private checkAuthentication(url: string): boolean {
+    if (this.authService.isLoggedIn()) {
+      return true;
+    }
+
+    this.authService.startAuthentication();
+
+    return false;
   }
 }
