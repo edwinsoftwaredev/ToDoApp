@@ -17,11 +17,11 @@ const routes: Routes = [
     matcher: authPathMatcher,
     component: AuthComponent,
     children: [{
-        path: 'signin',
-        component: SignInComponent
-      }, {
-        path: 'signup',
-        component: SignUpComponent
+      path: 'signin',
+      component: SignInComponent
+    }, {
+      path: 'signup',
+      component: SignUpComponent
     }],
     canActivate: [AuthGuard]
   }
