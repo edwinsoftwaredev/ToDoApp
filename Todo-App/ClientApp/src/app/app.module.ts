@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { AuthModule } from './auth/auth.module';
 import { NotFoundComponent } from './shared/not-found/not-found.component';
 import { LandingComponent } from './landing/landing.component';
+import {SharedModule} from './shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { LandingComponent } from './landing/landing.component';
   ],
   imports: [
     BrowserModule,
+    SharedModule,
     AuthModule,
     AppRoutingModule
   ],
