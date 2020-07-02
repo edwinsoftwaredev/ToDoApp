@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { NotFoundComponent } from './shared/not-found/not-found.component';
 import { LandingComponent } from './landing/landing.component';
+import {LandingGuard} from './landing/landing.guard';
 
 /**
  * Something to remember is that if you TYPE a child path directly in the url direction bar of the browser,
@@ -14,7 +15,8 @@ const routes: Routes = [
   {
     path: '',
     component: LandingComponent,
-    pathMatch: 'full'
+    pathMatch: 'full',
+    canActivate: [LandingGuard]
   },
   {
     path: '**',
