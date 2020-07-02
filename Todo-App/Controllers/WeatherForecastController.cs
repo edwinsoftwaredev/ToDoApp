@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Threading.Tasks;
 using IdentityServer4;
 using IdentityServer4.EntityFramework.Entities;
 using IdentityServer4.EntityFramework.Interfaces;
@@ -12,8 +10,6 @@ using IdentityServer4.Stores;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
-using Todo_App.Model.Auth;
 using IdentityResource = IdentityServer4.EntityFramework.Entities.IdentityResource;
 
 namespace Todo_App.Controllers
@@ -36,12 +32,12 @@ namespace Todo_App.Controllers
             // this.AddClients(configurationDbContext);
             // this.AddIdentityResources(configurationDbContext);
             // this.AddApiResources(configurationDbContext);
+            // this.EditClient(configurationDbContext, 6);
         }
 
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
-            
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
                 {
@@ -54,18 +50,52 @@ namespace Todo_App.Controllers
 
         private void EditClient(IConfigurationDbContext configurationDbContext, int clientId)
         {
-            configurationDbContext.Clients.Include(client => client.AllowedGrantTypes).First(client => client.Id == clientId)
-                .AllowedGrantTypes.RemoveAll(grantType => true);
+            // configurationDbContext.Clients.Include(client => client.AllowedGrantTypes).First(client => client.Id == clientId)
+            //     .AllowedGrantTypes.RemoveAll(grantType => true);
 
-            var client = configurationDbContext.Clients.Include(client => client.AllowedGrantTypes).First(client => client.Id == clientId);
-            client.AllowedGrantTypes = new List<ClientGrantType>
-            {
-                new ClientGrantType
-                {
+            var client = configurationDbContext.Clients
+                .First(client => client.Id == clientId);
+
+            // client.AllowedGrantTypes = new List<ClientGrantType>
+            // {
+            //     new ClientGrantType
+            //     {
+            //         ClientId = client.Id,
+            //         GrantType = GrantType.AuthorizationCode
+            //     }
+            // };
+
+            var allowedCorsOrigins = configurationDbContext.Clients
+                .Include(client => client.AllowedCorsOrigins)
+                .Include(client => client.RedirectUris)
+                .First(client => client.Id == clientId);
+
+            allowedCorsOrigins.AllowedCorsOrigins
+                .AddRange(
+                 new List<ClientCorsOrigin>
+                    {
+                       new ClientCorsOrigin
+                       {
+                           ClientId = client.Id,
+                           Origin = "https://localhost:5001"
+                       },
+                       new ClientCorsOrigin
+                       {
+                           ClientId = client.Id,
+                           Origin = "http://localhost:4200"
+                       },
+                       new ClientCorsOrigin
+                       {
+                           ClientId = client.Id,
+                           Origin = "http://localhost:9876"
+                       }
+                    }
+                );
+
+            allowedCorsOrigins.RedirectUris.Add(new ClientRedirectUri {
                     ClientId = client.Id,
-                    GrantType = GrantType.AuthorizationCode
-                }
-            };
+                    RedirectUri = "http://localhost:9876/auth/codes"
+                });
 
             configurationDbContext.SaveChanges();
         }
@@ -145,9 +175,9 @@ namespace Todo_App.Controllers
                             DisplayName = "User access TodoApp"
                         }
                     }
-                    
+
                     // we are not including the api secret since by default IdentityServer
-                    // configure JWT to protect API, but there is other technique that 
+                    // configure JWT to protect API, but there is other technique that
                     // uses reference tokens. In this case the API, which IdentityServer is protecting and
                     // register with an ApiSecret, receives a token identifier by the Client, which requests first
                     // to IdentityServer the token identifier and set client.AccessTokenType = AccessTokenType.Reference;,
@@ -155,7 +185,7 @@ namespace Todo_App.Controllers
                     //
                     // Reference: https://identityserver4.readthedocs.io/en/latest/topics/reference_tokens.html
                     //            https://identityserver4.readthedocs.io/en/latest/topics/apis.html
-                    // 
+                    //
                 }.ToEntity()
             };
 
