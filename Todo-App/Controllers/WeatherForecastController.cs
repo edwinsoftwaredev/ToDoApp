@@ -66,11 +66,17 @@ namespace Todo_App.Controllers
             // };
 
             var allowedCorsOrigins = configurationDbContext.Clients
-                .Include(client => client.AllowedCorsOrigins)
-                .Include(client => client.RedirectUris)
+                // .Include(client => client.AllowedCorsOrigins)
+                // .Include(client => client.RedirectUris)
+                .Include(client => client.AllowedScopes)
                 .First(client => client.Id == clientId);
 
-            allowedCorsOrigins.AllowedCorsOrigins
+            allowedCorsOrigins
+                .AllowedScopes
+                .First(scope => scope.Scope == "TodoAppApi")
+                .Scope = "TodoAppApi.TodoAppUser";
+
+            /* allowedCorsOrigins.AllowedCorsOrigins
                 .AddRange(
                  new List<ClientCorsOrigin>
                     {
@@ -91,11 +97,12 @@ namespace Todo_App.Controllers
                        }
                     }
                 );
+                */
 
-            allowedCorsOrigins.RedirectUris.Add(new ClientRedirectUri {
+            /*allowedCorsOrigins.RedirectUris.Add(new ClientRedirectUri {
                     ClientId = client.Id,
                     RedirectUri = "http://localhost:9876/auth/codes"
-                });
+                });*/
 
             configurationDbContext.SaveChanges();
         }
@@ -125,7 +132,7 @@ namespace Todo_App.Controllers
                 AllowPlainTextPkce = false, // default is false
                 AllowedScopes =
                 {
-                    "TodoAppUser",
+                    "TodoAppApi.TodoAppUser", // This is name of an ApiResource scope
                     IdentityServerConstants.StandardScopes.OpenId,
                     IdentityServerConstants.StandardScopes.Profile
                 },

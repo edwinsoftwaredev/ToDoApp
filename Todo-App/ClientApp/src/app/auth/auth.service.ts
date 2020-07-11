@@ -15,7 +15,7 @@ export class AuthService {
     client_id: 'TodoAppFirstPartyUser',
     redirect_uri: REDIRECT_URI,
     response_type: 'code',
-    scope: 'TodoAppUser OpenId Profile',
+    scope: 'openid profile TodoAppApi.TodoAppUser',
     post_logout_redirect_uri: REDIRECT_LOGOUT
   };
 
