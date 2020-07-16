@@ -30,7 +30,9 @@ describe('LandingGuard', () => {
    */
   it('should return the same value as auth service isLoggedIn return value', () => {
     const isLoggedIn = authService.isLoggedIn();
+    spyOn(authService, 'startAuthentication');
     expect(guard.canActivate(routeMock, routeStateMock)).toEqual(isLoggedIn);
+    expect(authService.startAuthentication).toHaveBeenCalled();
   });
 
 });

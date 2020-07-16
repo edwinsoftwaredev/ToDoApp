@@ -29,8 +29,8 @@ describe('AuthGuard', () => {
    * So, the guard has to return true if user isn't authenticated or
    * it has to return false in any other case
    */
-  it('should return the same value as auth service isLoggedIn return value', () => {
+  it('should return the opposite value as auth service isLoggedIn return value', () => {
     const isLoggedIn = authService.isLoggedIn();
-    expect(guard.canActivate(routeMock, routeStateMock)).toEqual(isLoggedIn);
+    expect(guard.canActivate(routeMock, routeStateMock)).not.toEqual(isLoggedIn);
   });
 });

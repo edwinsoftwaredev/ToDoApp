@@ -55,8 +55,8 @@ export class AuthService {
   /**
    * Redirect to the authorization endpoint
    */
-  startAuthentication(): Promise<void> {
-    return this._userManager.signinRedirect()
+  async startAuthentication(): Promise<void> {
+    this._userManager.signinRedirect()
       .catch((error: HttpErrorResponse) => {
         if (error.message === 'Network Error') {
           //

@@ -43,7 +43,8 @@ export function authPathMatcher(url: UrlSegment[], group: UrlSegmentGroup, route
 
   const notConsumedUrl: UrlSegment[] = [];
 
-  return url.toString() === 'signin' || url.toString() === 'signup' ? {consumed: notConsumedUrl} : null;
+  // this return the last truthy value if there is one.
+  return url.length !== 0 ? url[0].path === 'signin' || url[0].path === 'signin' ? {consumed: notConsumedUrl} : null : null;
 }
 
 @NgModule({
