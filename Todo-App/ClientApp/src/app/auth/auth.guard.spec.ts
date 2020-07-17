@@ -2,22 +2,25 @@ import { TestBed } from '@angular/core/testing';
 
 import { AuthGuard } from './auth.guard';
 import {AuthService} from './auth.service';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
 
 describe('AuthGuard', () => {
   let guard: AuthGuard;
-  let authService: AuthService;
+  let authServiceSpy: jasmine.SpyObj<AuthService>;
+
   const routeMock: any = { snapshot: {} };
   const routeStateMock: any = { snapshot: {}, url: ''};
   const routerMock = {navigate: jasmine.createSpy('navigate')};
 
   beforeEach(() => {
+    const spy = jasmine.createSpyObj('AuthService', ['isLoggedIn']);
+
     TestBed.configureTestingModule({
-      providers: [AuthService],
-      imports: [HttpClientTestingModule]
+      providers: [
+        {provide: AuthService, useValue: spy}
+      ]
     });
     guard = TestBed.inject(AuthGuard);
-    authService = TestBed.inject(AuthService);
+    authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
   });
 
   it('should be created', () => {
@@ -29,8 +32,15 @@ describe('AuthGuard', () => {
    * So, the guard has to return true if user isn't authenticated or
    * it has to return false in any other case
    */
-  it('should return the opposite value as auth service isLoggedIn return value', () => {
-    const isLoggedIn = authService.isLoggedIn();
-    expect(guard.canActivate(routeMock, routeStateMock)).not.toEqual(isLoggedIn);
+  it('should not activate. user is not logged in', () => {
+    const stubValueIsLoggedIn = false;
+    authServiceSpy.isLoggedIn.and.returnValue(stubValueIsLoggedIn); // this return a spy not a value!!
+    expect(guard.canActivate(routeMock, routeStateMock)).not.toBe(stubValueIsLoggedIn);
+  });
+
+  it('should activate. user is logged in', () => {
+    const stubValueIsLoggedIn = true;
+    authServiceSpy.isLoggedIn.and.returnValue(stubValueIsLoggedIn); // this return a spy not a value!!
+    expect(guard.canActivate(routeMock, routeStateMock)).not.toBe(stubValueIsLoggedIn);
   });
 });
