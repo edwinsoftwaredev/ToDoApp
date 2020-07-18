@@ -4,7 +4,7 @@ import {AuthService} from '../auth/auth.service';
 
 describe('LandingGuard', () => {
   let guard: LandingGuard;
-  let authServiceSpy: jest.SpyObj<AuthService>;
+  let authServiceSpy: jasmine.SpyObj<AuthService>;
 
   const routeMock: any = { snapshot: {} };
   const routeStateMock: any = { snapshot: {}, url: ''};
