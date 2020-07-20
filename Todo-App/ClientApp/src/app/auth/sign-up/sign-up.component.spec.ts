@@ -9,19 +9,19 @@ describe('SignUpComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-        imports: [RouterTestingModule],
-        declarations: [ SignUpComponent ]
+      imports: [RouterTestingModule],
+      declarations: [ SignUpComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-        fixture = TestBed.createComponent(SignUpComponent);
-        component = fixture.componentInstance;
-        fixture.detectChanges();
+    fixture = TestBed.createComponent(SignUpComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
   });
 
   it('should create', () => {
-        expect(component).toBeTruthy();
+    expect(component).toBeTruthy();
   });
 });

@@ -85,6 +85,7 @@
           "options": {
              "polyfills": "src/polyfills.ts",
              "tsConfig": "tsconfig.spec.json",
+             "configPath": "./jest.config.js",
              "testMatch": [
                 "**/__tests__/**/*.[t]s?(x)",
                 "**/?(*.)+(spec).[t]s?(x)"

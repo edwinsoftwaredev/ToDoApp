@@ -1,3 +1,4 @@
 module.exports = {
-  coverageReporters: ['html', 'text', 'text-summary']
+  coverageReporters: ['html', 'text', 'text-summary'],
+  verbose: true
 };
