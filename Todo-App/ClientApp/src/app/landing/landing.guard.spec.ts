@@ -1,26 +1,23 @@
 import { TestBed } from '@angular/core/testing';
 import { LandingGuard } from './landing.guard';
+
 import {AuthService} from '../auth/auth.service';
+jest.mock('../auth/auth.service');
 
 describe('LandingGuard', () => {
   let guard: LandingGuard;
-  let authServiceSpy: jasmine.SpyObj<AuthService>;
+  let authService: jest.Mocked<AuthService>;
 
   const routeMock: any = { snapshot: {} };
   const routeStateMock: any = { snapshot: {}, url: ''};
-  const routerMock = {navigate: jasmine.createSpy('navigate')};
 
   beforeEach(() => {
-    const spy = jasmine.createSpyObj('AuthService', ['startAuthentication', 'isLoggedIn']);
-
     TestBed.configureTestingModule({
-      providers: [
-        {provide: AuthService, useValue: spy}
-      ]
+      providers: [AuthService]
     });
 
     guard = TestBed.inject(LandingGuard);
-    authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
+    authService = TestBed.inject(AuthService) as jest.Mocked<AuthService>;
   });
 
   it('should be created', () => {
@@ -46,17 +43,17 @@ describe('LandingGuard', () => {
    * and this: https://medium.com/@lawrey/unit-tests-ui-tests-integration-tests-end-to-end-tests-c0d98e0218a6
    */
   it('should not activate. user is not logged in', () => {
-    const stubValueIsLoggedIn = false;
-    authServiceSpy.isLoggedIn.and.returnValue(stubValueIsLoggedIn); // this return a spy not a value!!
-    expect(guard.canActivate(routeMock, routeStateMock)).toBe(stubValueIsLoggedIn);
-    expect(authServiceSpy.startAuthentication).toHaveBeenCalled();
+    const mockedIsUserLoggedIn = false;
+    authService.isLoggedIn.mockReturnValue(mockedIsUserLoggedIn);
+    expect(guard.canActivate(routeMock, routeStateMock)).toBe(mockedIsUserLoggedIn);
+    expect(authService.startAuthentication).toHaveBeenCalledTimes(1);
   });
 
   it('should activate. user is logged in', () => {
-    const stubValueIsLoggedIn = true;
-    authServiceSpy.isLoggedIn.and.returnValue(stubValueIsLoggedIn); // this return a spy not a value!!
-    expect(guard.canActivate(routeMock, routeStateMock)).toBe(stubValueIsLoggedIn);
-    expect(authServiceSpy.startAuthentication).not.toHaveBeenCalled();
+    const mockedIsUserLoggedIn = true;
+    authService.isLoggedIn.mockReturnValue(mockedIsUserLoggedIn);
+    expect(guard.canActivate(routeMock, routeStateMock)).toBe(mockedIsUserLoggedIn);
+    expect(authService.startAuthentication).not.toHaveBeenCalled();
   });
 
 });

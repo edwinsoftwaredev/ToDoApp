@@ -1,26 +1,22 @@
 import { TestBed } from '@angular/core/testing';
-
 import { AuthGuard } from './auth.guard';
+
 import {AuthService} from './auth.service';
+jest.mock('./auth.service');
 
 describe('AuthGuard', () => {
   let guard: AuthGuard;
-  let authServiceSpy: jasmine.SpyObj<AuthService>;
+  let authServiceMock: jest.Mocked<AuthService>;
 
   const routeMock: any = { snapshot: {} };
   const routeStateMock: any = { snapshot: {}, url: ''};
-  const routerMock = {navigate: jasmine.createSpy('navigate')};
 
   beforeEach(() => {
-    const spy = jasmine.createSpyObj('AuthService', ['isLoggedIn']);
-
     TestBed.configureTestingModule({
-      providers: [
-        {provide: AuthService, useValue: spy}
-      ]
+      providers: [AuthService]
     });
     guard = TestBed.inject(AuthGuard);
-    authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
+    authServiceMock = TestBed.inject(AuthService) as jest.Mocked<AuthService>;
   });
 
   it('should be created', () => {
@@ -33,14 +29,14 @@ describe('AuthGuard', () => {
    * it has to return false in any other case
    */
   it('should not activate. user is not logged in', () => {
-    const stubValueIsLoggedIn = false;
-    authServiceSpy.isLoggedIn.and.returnValue(stubValueIsLoggedIn); // this return a spy not a value!!
-    expect(guard.canActivate(routeMock, routeStateMock)).not.toBe(stubValueIsLoggedIn);
+    const mockedIsUserLoggedIn = false;
+    authServiceMock.isLoggedIn.mockReturnValue(mockedIsUserLoggedIn);
+    expect(guard.canActivate(routeMock, routeStateMock)).not.toBe(mockedIsUserLoggedIn);
   });
 
   it('should activate. user is logged in', () => {
-    const stubValueIsLoggedIn = true;
-    authServiceSpy.isLoggedIn.and.returnValue(stubValueIsLoggedIn); // this return a spy not a value!!
-    expect(guard.canActivate(routeMock, routeStateMock)).not.toBe(stubValueIsLoggedIn);
+    const mockedIsUserLoggedIn = true;
+    authServiceMock.isLoggedIn.mockReturnValue(mockedIsUserLoggedIn);
+    expect(guard.canActivate(routeMock, routeStateMock)).not.toBe(mockedIsUserLoggedIn);
   });
 });
