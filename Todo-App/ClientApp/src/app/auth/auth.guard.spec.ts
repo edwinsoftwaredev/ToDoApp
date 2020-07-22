@@ -2,21 +2,24 @@ import { TestBed } from '@angular/core/testing';
 import { AuthGuard } from './auth.guard';
 
 import {AuthService} from './auth.service';
-jest.mock('./auth.service');
 
 describe('AuthGuard', () => {
   let guard: AuthGuard;
-  let authServiceMock: jest.Mocked<AuthService>;
+  let authService: AuthService;
 
   const routeMock: any = { snapshot: {} };
   const routeStateMock: any = { snapshot: {}, url: ''};
+
+  let isLoggedInSpy: jest.SpyInstance<boolean>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [AuthService]
     });
     guard = TestBed.inject(AuthGuard);
-    authServiceMock = TestBed.inject(AuthService) as jest.Mocked<AuthService>;
+    authService = TestBed.inject(AuthService);
+
+    isLoggedInSpy = jest.spyOn(authService, 'isLoggedIn');
   });
 
   it('should be created', () => {
@@ -30,13 +33,13 @@ describe('AuthGuard', () => {
    */
   it('should not activate. user is not logged in', () => {
     const mockedIsUserLoggedIn = false;
-    authServiceMock.isLoggedIn.mockReturnValue(mockedIsUserLoggedIn);
+    isLoggedInSpy.mockReturnValue(mockedIsUserLoggedIn);
     expect(guard.canActivate(routeMock, routeStateMock)).not.toBe(mockedIsUserLoggedIn);
   });
 
   it('should activate. user is logged in', () => {
     const mockedIsUserLoggedIn = true;
-    authServiceMock.isLoggedIn.mockReturnValue(mockedIsUserLoggedIn);
+    isLoggedInSpy.mockReturnValue(mockedIsUserLoggedIn);
     expect(guard.canActivate(routeMock, routeStateMock)).not.toBe(mockedIsUserLoggedIn);
   });
 });

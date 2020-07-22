@@ -14,17 +14,12 @@ export class LandingGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-
     if (!this.authService.isLoggedIn()) {
-      this.startAuthentication();
+      this.authService
+        .startAuthentication();
       return false;
     } else {
       return true;
     }
-
-  }
-
-  startAuthentication(): void {
-    this.authService.startAuthentication();
   }
 }

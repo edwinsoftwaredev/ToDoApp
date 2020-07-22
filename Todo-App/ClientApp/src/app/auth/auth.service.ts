@@ -56,10 +56,10 @@ export class AuthService {
    * Redirect to the authorization endpoint
    */
   async startAuthentication(): Promise<void> {
-    this._userManager.signinRedirect()
+    return this._userManager.signinRedirect()
       .catch((error: HttpErrorResponse) => {
         if (error.message === 'Network Error') {
-          //
+          this.redirectLogNetworkErrorAuthServer(error.message);
         }
       });
   }
@@ -76,5 +76,15 @@ export class AuthService {
     this._userManager.getUser().then((user: OidcUser) => {
       this._user = user;
     });
+  }
+
+  /**
+   * using this for redirect and log when auth server is not reached.
+   * when this method is called when tests are running a error is going to be logged.
+   * that doesn't mean that the a test may fail.
+   */
+  private redirectLogNetworkErrorAuthServer(error: string): void {
+    console.error(error);
+    // here must be place the redirection to NetworkError component
   }
 }

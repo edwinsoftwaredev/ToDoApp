@@ -2,14 +2,15 @@ import { TestBed } from '@angular/core/testing';
 import { LandingGuard } from './landing.guard';
 
 import {AuthService} from '../auth/auth.service';
-jest.mock('../auth/auth.service');
 
 describe('LandingGuard', () => {
   let guard: LandingGuard;
-  let authService: jest.Mocked<AuthService>;
+  let authService: AuthService;
 
   const routeMock: any = { snapshot: {} };
   const routeStateMock: any = { snapshot: {}, url: ''};
+  let startAuthenticationSpy: jest.SpyInstance<Promise<void>>;
+  let isLoggedInSpy: jest.SpyInstance<boolean>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -17,7 +18,10 @@ describe('LandingGuard', () => {
     });
 
     guard = TestBed.inject(LandingGuard);
-    authService = TestBed.inject(AuthService) as jest.Mocked<AuthService>;
+    authService = TestBed.inject(AuthService);
+
+    startAuthenticationSpy = jest.spyOn(authService, 'startAuthentication');
+    isLoggedInSpy = jest.spyOn(authService, 'isLoggedIn');
   });
 
   it('should be created', () => {
@@ -44,16 +48,38 @@ describe('LandingGuard', () => {
    */
   it('should not activate. user is not logged in', () => {
     const mockedIsUserLoggedIn = false;
-    authService.isLoggedIn.mockReturnValue(mockedIsUserLoggedIn);
+    isLoggedInSpy.mockReturnValue(mockedIsUserLoggedIn);
     expect(guard.canActivate(routeMock, routeStateMock)).toBe(mockedIsUserLoggedIn);
-    expect(authService.startAuthentication).toHaveBeenCalledTimes(1);
+    expect(startAuthenticationSpy).toHaveBeenCalledTimes(1);
+    startAuthenticationSpy.mockClear();
+    isLoggedInSpy.mockClear();
   });
 
   it('should activate. user is logged in', () => {
     const mockedIsUserLoggedIn = true;
-    authService.isLoggedIn.mockReturnValue(mockedIsUserLoggedIn);
+    isLoggedInSpy.mockReturnValue(mockedIsUserLoggedIn);
     expect(guard.canActivate(routeMock, routeStateMock)).toBe(mockedIsUserLoggedIn);
-    expect(authService.startAuthentication).not.toHaveBeenCalled();
+    expect(startAuthenticationSpy).not.toHaveBeenCalled();
+    startAuthenticationSpy.mockClear();
+    isLoggedInSpy.mockClear();
   });
 
+  /**
+   * This is an integration test. here I am spying if the startAuthentication method is called.
+   * however I am no cheking if the oidc's signinRedirect method is called or testing its
+   * functionality. For that I am using a e2e testing using puppeteer.
+   * Also for testing a function with a promise as a return value a async test is needed.
+   */
+  it('should return a valid active state', () => {
+    const isUserLoggedIn = authService.isLoggedIn();
+    expect(guard.canActivate(routeMock, routeStateMock)).toBe(isUserLoggedIn);
+    /**
+     * here I am not checking if there is will be an error by calling startAuthentication.
+     * That exception has to be handled by the guard or by the authService and thats the
+     * method that has to be tested.
+     * Here I am testing that that method is called just 1 time.
+     */
+    expect(startAuthenticationSpy).toHaveBeenCalledTimes(1);
+    startAuthenticationSpy.mockClear();
+  });
 });
