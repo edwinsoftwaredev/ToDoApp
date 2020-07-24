@@ -5,6 +5,10 @@
     <RootNamespace>Todo_App</RootNamespace>
     <UserSecretsId>987eaa96-0350-49d9-a742-4192cac6a2d2</UserSecretsId>
     <StartupObject>Todo_App.Program</StartupObject>
+
+    <!-- preventing TypeScript compilation to execute -->
+    <!-- change this when both project are unified -->
+    <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
