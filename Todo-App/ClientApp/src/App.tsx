@@ -1,14 +1,14 @@
 import React from 'react';
 import logo from './logo.svg';
-import './App.css';
+import './App.scss';
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
-  Link
+  Route
 } from 'react-router-dom';
-import {SignIn} from './auth/sign-in/sign-in';
-import {SignUp} from './auth/sign-up/sign-up';
+import Home from './home/home';
+import SignIn from './auth/sign-in/sign-in';
+import SignUp from './auth/sign-up/sign-up';
 
 function App() {
   return (
@@ -18,7 +18,7 @@ function App() {
           <img src={logo} className="App-logo" alt="logo" />
           <p>
             Edit <code>src/App.tsx</code> and save to reload.
-        </p>
+          </p>
           <a
             className="App-link"
             href="https://reactjs.org"
@@ -26,32 +26,20 @@ function App() {
             rel="noopener noreferrer"
           >
             Learn React
-        </a>
+          </a>
+          <Switch>
+            <Route exact path="/">
+              <Home />
+            </Route>
+            <Route path="/signin">
+              <SignIn />
+            </Route>
+            <Route path="/signup">
+              <SignUp />
+            </Route>
+          </Switch>
         </header>
-
-        <div>
-          <nav>
-            <ul>
-              <li>
-                <Link to="/sigin">Sign In</Link>
-              </li>
-              <li>
-                <Link to="/signup">Sign Up</Link>
-              </li>
-            </ul>
-          </nav>
-        </div>
-
       </div>
-
-      <Switch>
-        <Route path="/signin">
-          <SignIn />
-        </Route>
-        <Route path="/signup">
-          <SignUp />
-        </Route>
-      </Switch>
     </Router>
   );
 }
