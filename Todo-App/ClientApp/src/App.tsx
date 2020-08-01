@@ -6,9 +6,9 @@ import {
   Switch,
   Route
 } from 'react-router-dom';
-import Home from './home/home';
-import SignIn from './auth/sign-in/sign-in';
-import SignUp from './auth/sign-up/sign-up';
+import SignIn from './auth/sign-in/SignIn';
+import SignUp from './auth/sign-up/SignUp';
+import Home from './home/Home';
 
 function App() {
   return (
