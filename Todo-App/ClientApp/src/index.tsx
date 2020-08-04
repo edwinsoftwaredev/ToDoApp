@@ -4,7 +4,7 @@ import './index.scss';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import {Provider} from 'react-redux';
-import Store from './Store';
+import Store from './store/Store';
 
 const store = Store.getInstance();
 

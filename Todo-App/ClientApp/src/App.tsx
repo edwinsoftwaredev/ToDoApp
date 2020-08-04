@@ -8,9 +8,9 @@ import {
 } from 'react-router-dom';
 import SignIn from './auth/sign-in/SignIn';
 import SignUp from './auth/sign-up/SignUp';
-import Home from './home/Home';
 import {useSelector} from 'react-redux';
-import {RootState} from './Store';
+import {RootState} from './store/Store';
+import Home from './home/Home';
 
 function App() {
   return (
