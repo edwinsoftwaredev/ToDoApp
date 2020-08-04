@@ -4,13 +4,14 @@ import {
   Slice,
   EnhancedStore,
   createReducer,
-  ActionReducerMapBuilder
+  ActionReducerMapBuilder,
+  AnyAction
 } from '@reduxjs/toolkit';
 
 export default class Store {
 
   private static _instance: Store;
-  private _store: EnhancedStore;
+  private _store: EnhancedStore<RootState, AnyAction>;
   private _injectReducer:
     (callback: (bldr: ActionReducerMapBuilder<any>) => ActionReducerMapBuilder<any>) => void;
 
@@ -21,7 +22,7 @@ export default class Store {
     const initialSlice: Slice<RootState> = createSlice({
       name: 'app',
       initialState: {
-        name: 'TodoApp',
+        appName: 'TodoApp',
       } as RootState,
       reducers: {
         // no reducers
@@ -43,15 +44,15 @@ export default class Store {
     return this._injectReducer;
   }
 
-  public static getInstance(): Store {
+  public static getInstance(): EnhancedStore<RootState, AnyAction> {
     if (!Store._instance) {
       Store._instance = new Store();
     }
 
-    return Store._instance;
+    return Store._instance._store;
   }
 }
 
-interface RootState {
-  name: string;
+export interface RootState {
+  appName: string;
 }

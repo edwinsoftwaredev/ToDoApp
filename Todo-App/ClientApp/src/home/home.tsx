@@ -2,11 +2,19 @@ import React from 'react';
 import {
   Link
 } from 'react-router-dom';
+import {connect} from 'react-redux';
 
-export default class Home extends React.Component {
+interface Props {
+  appName: string;
+}
+
+export class Home extends React.Component<Props> {
   render() {
     return (
       <div>
+        <div>
+          <h5>{this.props.appName} Home</h5>
+        </div>
         <nav>
           <ul>
             <li>
@@ -21,3 +29,9 @@ export default class Home extends React.Component {
     );
   }
 }
+
+export default connect((state: Props, props) => {
+  // useSelector cannot be used here
+  const appName = state.appName;
+  return {appName: appName};
+}, {})(Home);

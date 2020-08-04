@@ -9,12 +9,15 @@ import {
 import SignIn from './auth/sign-in/SignIn';
 import SignUp from './auth/sign-up/SignUp';
 import Home from './home/Home';
+import {useSelector} from 'react-redux';
+import {RootState} from './Store';
 
 function App() {
   return (
     <Router>
       <div className="App">
         <header className="App-header">
+          <h2>{useSelector((state: RootState) => state.appName)}</h2>
           <img src={logo} className="App-logo" alt="logo" />
           <p>
             Edit <code>src/App.tsx</code> and save to reload.
