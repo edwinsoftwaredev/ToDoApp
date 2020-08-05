@@ -3,7 +3,7 @@ import {
   Link
 } from 'react-router-dom';
 
-const SignUp = (): JSX.Element => {
+const SignUp: React.FC = (): JSX.Element => {
   return (
     <div>
       <p>sign-up works!</p>

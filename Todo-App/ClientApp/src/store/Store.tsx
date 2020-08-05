@@ -1,12 +1,11 @@
 import {
   configureStore,
-  createSlice,
-  Slice,
   EnhancedStore,
   createReducer,
   ActionReducerMapBuilder,
-  AnyAction
+  AnyAction,
 } from '@reduxjs/toolkit';
+import {RootState, rootReducer} from '../reducers/RootReducer';
 
 export default class Store {
 
@@ -18,18 +17,9 @@ export default class Store {
   // This class generates a singleton redux store instance
   // It's possible to create many stores with redux.
   private constructor() {
-
-    const initialSlice: Slice<RootState> = createSlice({
-      name: 'app',
-      initialState: {
-        appName: 'TodoApp',
-      } as RootState,
-      reducers: {
-        // no reducers
-      }
+    this._store = configureStore({
+      reducer: rootReducer
     });
-
-    this._store = configureStore(initialSlice);
 
     this._injectReducer =
       (callback: (bldr: ActionReducerMapBuilder<any>) => ActionReducerMapBuilder<any>) => {
@@ -53,6 +43,3 @@ export default class Store {
   }
 }
 
-export interface RootState {
-  appName: string;
-}

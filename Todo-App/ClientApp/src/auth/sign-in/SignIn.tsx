@@ -3,7 +3,7 @@ import {
   Link,
 } from 'react-router-dom';
 
-const SignIn = () => {
+const SignIn: React.FC = (): JSX.Element => {
   return (
     <div>
       <p>sign-in works!</p>
