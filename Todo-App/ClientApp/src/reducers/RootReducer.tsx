@@ -1,5 +1,5 @@
 import {combineReducers, Slice, createSlice} from '@reduxjs/toolkit';
-import authSlice from '../auth/authSlice';
+import authSlice from '../auth/AuthSlice';
 
 interface IAppInitialState {
   appName: string;
