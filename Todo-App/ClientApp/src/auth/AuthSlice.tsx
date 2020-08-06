@@ -1,20 +1,13 @@
 import {Slice, createSlice} from '@reduxjs/toolkit';
-import {User as OidcUser, UserManagerSettings, UserManager} from 'oidc-client';
-
-const userManagerSettings: UserManagerSettings = {
-  authority: process.env.REACT_APP_API_SERVER_URL,
-  client_id: 'TodoAppFirstPartyUser',
-  redirect_uri: process.env.REACT_APP_REDIRECT_URI,
-  response_type: 'code',
-  scope: 'openid profile TodoAppApi.TodoAppUser',
-  popup_redirect_uri: process.env.REACT_APP_REDIRECT_LOGOUT
-};
-
-const userManager: UserManager = new UserManager(userManagerSettings);
+import {User as OidcUser} from 'oidc-client';
+import {userManager} from '../auth/Auth';
 
 // return the authenticatedUser, if there isnt then return a empty object
 const authenticatedUser = ((): OidcUser | {} => {
   let user: OidcUser | null = null;
+
+  // The getUser method doesnt make an api request
+  // however it returns a promise
   userManager.getUser().then((usr: OidcUser | null) => {
     user = usr;
   });
