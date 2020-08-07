@@ -9,7 +9,7 @@ import Home from './home/Home';
 import Auth, {startAuthentication, isUserLoggedInSelector} from './auth/Auth';
 import {useSelector} from 'react-redux';
 
-const PrivateRoute = ({children, ...rest}: any) => {
+const PrivateRoute = ({children, ...rest}: any): JSX.Element => {
   const routeHome = (
     <Route {...rest} render={() => (children)} />
   );
