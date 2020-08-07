@@ -50,9 +50,7 @@ const redirectLogNetErrorAuthService = (error: string) => {
 const Auth: React.FC = (): JSX.Element => {
   return (
     <Switch>
-      <Route path="/signin">
-        <SignIn />
-      </Route>
+      <Route path="/signin" children={<SignIn />} />
       <Route path="/signup">
         <SignUp />
       </Route>
