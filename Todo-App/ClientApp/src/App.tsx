@@ -9,8 +9,9 @@ import Home from './home/Home';
 import Auth, {startAuthentication, isUserLoggedInSelector} from './auth/Auth';
 import {useSelector} from 'react-redux';
 
-const PrivateRoute = ({children, ...rest}: any): JSX.Element => {
-  const routeHome = (
+// this function has to be in another file to be used by diferents compenents
+export const PrivateRoute = ({children, ...rest}: any): JSX.Element => {
+  const guardedRoute = (
     <Route {...rest} render={() => (children)} />
   );
 
@@ -27,7 +28,7 @@ const PrivateRoute = ({children, ...rest}: any): JSX.Element => {
     }
   }, [isUserLoggedIn]);
 
-  return isUserLoggedIn ? routeHome : (<div><h3>You are not logged in.<br />😅</h3></div>);
+  return isUserLoggedIn ? guardedRoute : (<div><h3>You are not logged in.<br />😅</h3></div>);
 };
 
 function App(): JSX.Element {
