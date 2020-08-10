@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {
   Link, useLocation,
 } from 'react-router-dom';
-import {startAuthentication} from '../Auth';
+import {AuthService} from '../AuthService';
 
 const useQuery = (): URLSearchParams => {
   return new URLSearchParams(useLocation().search);
@@ -33,12 +33,13 @@ const checkUrlQuery = (returnUrlString: string | null): boolean => {
 const SignIn: React.FC = (): JSX.Element => {
 
   const isValidUrlQuery: boolean = checkUrlQuery(useQuery().get('returnUrl'));
+  const authService = AuthService.getInstance();
 
   useEffect(() => {
     if (!isValidUrlQuery) {
-      startAuthentication();
+      authService.startAuthentication();
     }
-  }, [isValidUrlQuery]);
+  }, [authService, isValidUrlQuery]);
 
   const signInValid: JSX.Element = (
     <div>

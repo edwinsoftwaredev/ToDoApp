@@ -1,14 +1,15 @@
 import {Slice, createSlice} from '@reduxjs/toolkit';
 import {User as OidcUser} from 'oidc-client';
-import {userManager} from '../auth/Auth';
+import {AuthService} from './AuthService';
 
 // return the authenticatedUser, if there isnt then return a empty object
 const authenticatedUser = ((): OidcUser | {} => {
   let user: OidcUser | null = null;
+  const authService = AuthService.getInstance();
 
   // The getUser method doesnt make an api request
   // however it returns a promise
-  userManager.getUser().then((usr: OidcUser | null) => {
+  authService.getUser().then((usr: OidcUser | null) => {
     user = usr;
   });
 
