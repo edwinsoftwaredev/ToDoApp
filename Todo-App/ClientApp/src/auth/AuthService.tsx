@@ -32,7 +32,7 @@ export class AuthService {
   }
 
   /**
-   * returns an singleton instance of AuthService
+   * returns a singleton instance of AuthService
    */
   public static getInstance(): AuthService {
     if (this._instance) return this._instance;
@@ -97,6 +97,12 @@ export class AuthService {
       }
     }, [isUserLoggedIn]);
 
-    return isUserLoggedIn ? guardedRoute : (<div><h3>You are not logged in.<br />😅</h3></div>);
+    return isUserLoggedIn ? guardedRoute : AuthService.NotAuthenticated();
   };
+
+  public static NotAuthenticated(): JSX.Element {
+    return (
+      <div><h3>You are not logged in.<br />😅</h3></div>
+    );
+  }
 }
