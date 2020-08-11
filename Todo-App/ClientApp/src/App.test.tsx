@@ -15,18 +15,21 @@ describe('App Component', () => {
   let startAuthenticationSpy: jest.SpyInstance<Promise<void>>;
   let isUserLoggedInSpy: jest.SpyInstance<any>;
   let homeComponentSpy: jest.SpyInstance<any>;
+  let notAuthenticatedComponentSpy: jest.SpyInstance<any>;
 
   const authService: AuthService = AuthService.getInstance();
 
   beforeEach(() => {
     startAuthenticationSpy = jest.spyOn(authService, 'startAuthentication');
     isUserLoggedInSpy = jest.spyOn(AuthService, 'isUserLoggedInSelector');
+    notAuthenticatedComponentSpy = jest.spyOn(AuthService, 'NotAuthenticated')
     homeComponentSpy = jest.spyOn(Home, 'default');
   });
 
   afterEach(() => {
     isUserLoggedInSpy.mockClear();
     startAuthenticationSpy.mockClear();
+    notAuthenticatedComponentSpy.mockClear();
   });
 
   test('should not render guarded route. User is not authenticated', () => {
@@ -50,6 +53,7 @@ describe('App Component', () => {
     expect(isUserLoggedInSpy).toHaveBeenCalledTimes(2); // the call is outside the useEffect
     expect(startAuthenticationSpy).toHaveBeenCalledTimes(1);
     expect(homeComponentSpy).not.toHaveBeenCalled();
+    expect(notAuthenticatedComponentSpy).toHaveBeenCalledTimes(1);
   });
 
   test('should render guarded route. User is authenticated', () => {
@@ -66,5 +70,6 @@ describe('App Component', () => {
     expect(isUserLoggedInSpy).toHaveBeenCalledTimes(2); // the call is outside the useEffect
     expect(startAuthenticationSpy).not.toHaveBeenCalled();
     expect(homeComponentSpy).toHaveBeenCalled();
+    expect(notAuthenticatedComponentSpy).not.toHaveBeenCalled();
   });
 });
