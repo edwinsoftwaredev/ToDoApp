@@ -99,8 +99,8 @@ namespace Todo_App
 
                     options.UserInteraction = new UserInteractionOptions
                     {
-                        LoginUrl = "http://localhost:4200/signin", // This must be the Server URL! -- Im testing now
-                        LogoutUrl = "http://localhost:4200/signout", // This must be the Server URL! -- Im testing now
+                        LoginUrl = "http://localhost:3000/signin", // This must be the Server URL! -- Im testing now
+                        LogoutUrl = "http://localhost:3000/signout", // This must be the Server URL! -- Im testing now
                         LoginReturnUrlParameter = "returnUrl"
                     };
                 })
