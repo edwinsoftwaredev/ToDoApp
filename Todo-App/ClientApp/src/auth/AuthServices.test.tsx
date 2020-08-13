@@ -13,7 +13,6 @@ describe('Auth Service', () => {
   const authService = AuthService.getInstance();
   const store = Store.getInstance();
 
-
   beforeAll(() => {
     notAuthenticatedComponentSpy = jest.spyOn(AuthService, 'NotAuthenticated');
     isUserLoggedInSpy = jest.spyOn(AuthService, 'isUserLoggedInSelector');
@@ -77,6 +76,7 @@ describe('Auth Service', () => {
       );
     })());
 
+    // this is the component tested
     const PrivateRoute = authService.privateRoute;
     // defining the type of the function is required when typescript is used
     // this way jest returns the JSX.Element instead of the type of jest.fn()

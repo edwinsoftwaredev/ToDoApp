@@ -13,7 +13,7 @@ describe('Home Component', () => {
   });
 
   test('should render', () => {
-    // this could have a mocked implemenation
+    // this could have a mocked implementation
     const homeSpy = jest.spyOn(HomeUtils, 'default');
     render(<Provider store={store}><Home /></Provider>);
     expect(homeSpy).toHaveBeenCalledTimes(1);
