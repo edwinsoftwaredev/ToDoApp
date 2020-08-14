@@ -25,7 +25,9 @@ namespace Todo_App.Controllers
 
         private readonly ILogger<WeatherForecastController> _logger;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger, IConfigurationDbContext configurationDbContext, ISigningCredentialStore credentialStore)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger,
+                IConfigurationDbContext configurationDbContext,
+                ISigningCredentialStore credentialStore)
         {
             _logger = logger;
 
@@ -50,7 +52,8 @@ namespace Todo_App.Controllers
 
         private void EditClient(IConfigurationDbContext configurationDbContext, int clientId)
         {
-            // configurationDbContext.Clients.Include(client => client.AllowedGrantTypes).First(client => client.Id == clientId)
+            // configurationDbContext.Clients
+            // .Include(client => client.AllowedGrantTypes).First(client => client.Id == clientId)
             //     .AllowedGrantTypes.RemoveAll(grantType => true);
 
             var client = configurationDbContext.Clients
