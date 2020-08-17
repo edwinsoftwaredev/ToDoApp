@@ -9,7 +9,7 @@ namespace Todo_App.DAL
         // define foreign keys to let the use of Navigation properties in some entities
         public static void EntitiesModelCustomConfiguration(ModelBuilder modelBuilder)
         {
-            
+
             // configure Identity entities
             modelBuilder.Entity<User>(user =>
             {
@@ -53,7 +53,7 @@ namespace Todo_App.DAL
             {
                 ut.ToTable("UserToken");
             });
-            
+
         }
     }
 }
