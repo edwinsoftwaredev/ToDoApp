@@ -1,8 +1,10 @@
+using System.Net.Mime;
 using System.Reflection;
 using IdentityServer4.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -10,7 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Todo_App.DAL;
 using Todo_App.Model.Auth;
-using Todo_App.Services;
+using Todo_App.Services.Models;
 
 namespace Todo_App
 {
@@ -41,7 +43,19 @@ namespace Todo_App
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers(options => options.Filters.Add(new HttpResponseExceptionFilter()))
+                .ConfigureApiBehaviorOptions(options =>
+                {
+                    options.InvalidModelStateResponseFactory = context =>  {
+                        /*
+                         * these lines change the results type to a serializable type (JSON)
+                         **/
+                        var result = new BadRequestObjectResult(context.ModelState);
+                        result.ContentTypes.Add(MediaTypeNames.Application.Json);
+                        return result;
+                    };
+                });
+
             services.AddDbContext<IdDbContext>();
 
             // *** adding other services *** //
@@ -157,6 +171,10 @@ namespace Todo_App
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+            }
+            else {
+                app.UseExceptionHandler("/error");
+                // app.UseHsts();
             }
 
             app.UseHttpsRedirection();
