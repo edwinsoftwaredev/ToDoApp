@@ -13,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using Todo_App.DAL;
 using Todo_App.Model.Auth;
 using Todo_App.Services.Models;
+using Todo_App.Services.Models.Interfaces;
 
 namespace Todo_App
 {
@@ -59,7 +60,7 @@ namespace Todo_App
             services.AddDbContext<IdDbContext>();
 
             // *** adding other services *** //
-            services.AddScoped<UserService>();
+            services.AddScoped<IUserService, UserService>();
 
             // *** ****** ***** ******** *** //
 
