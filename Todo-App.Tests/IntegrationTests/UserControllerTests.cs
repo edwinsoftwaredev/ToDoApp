@@ -41,11 +41,50 @@ namespace Todo_App.Tests.IntegrationTests {
                 })
                 .CreateClient();
 
-            var json = JsonConvert.SerializeObject(userStateNotValid);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var content = this.GetContent<UserVM>(userStateNotValid);
             var result = await client.PostAsync("User", content);
             Assert.False(result.IsSuccessStatusCode);
             mockUserService.Verify(userService => userService.Create(userStateNotValid as User, userStateNotValid.Password), Times.Never());
+        }
+
+        /*
+         * this test if the ModelState is valid or not
+         * Test if a model is valid or ModelState is valid is only possible with
+         * an Integration Test ModelState is ASPNETCOREMVC
+         **/
+        [Fact]
+        public async Task CreateUser_PasswordOfInvalidLength_NotSuccessful()
+        {
+            // password must have at least 6 characters
+            var mockUser = new UserVM {
+                Password = "none"
+            };
+
+            var mockUserService = new Mock<IUserService>();
+
+            mockUserService.Setup(userService => userService.Create(mockUser as User, mockUser.Password))
+                .Returns(() => Task.Factory.StartNew(() => Console.WriteLine("X")));
+
+            var client = this._factory.WithWebHostBuilder(builder =>
+                {
+                    builder.ConfigureTestServices(services =>
+                        {
+                            services.AddScoped(mockUserService.Object.GetType());
+                        });
+                })
+                .CreateClient();
+
+            var content = this.GetContent<UserVM>(mockUser);
+            var result = await client.PostAsync("User", content);
+            Assert.False(result.IsSuccessStatusCode);
+            mockUserService.Verify(userService => userService.Create(mockUser as User, mockUser.Password), Times.Never());
+        }
+
+        private StringContent GetContent<T>(T mock)
+        {
+            var json = JsonConvert.SerializeObject(mock);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            return content;
         }
     }
 }
