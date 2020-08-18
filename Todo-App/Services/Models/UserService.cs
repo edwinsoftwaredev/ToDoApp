@@ -1,12 +1,13 @@
 ﻿using IdentityServer4.Services;
 using Microsoft.AspNetCore.Identity;
 using Todo_App.Model.Auth;
-using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using System;
+using Todo_App.Services.Models.Interfaces;
 
 namespace Todo_App.Services.Models
 {
-    public class UserService : BaseModelsService<User>
+    public class UserService : IUserService
     {
         private readonly UserManager<User> _userManager;
         private readonly IIdentityServerInteractionService _identityServerInteractionService;
@@ -18,7 +19,14 @@ namespace Todo_App.Services.Models
             _identityServerInteractionService = identityServerInteractionService;
         }
 
-        public async Task CreateUser(User user, string password)
+        /*
+         * this creates a user without password -> guest cases
+         **/
+        public Task Create(User user) {
+            throw new NotImplementedException();
+        }
+
+        public async Task Create(User user, string password)
         {
             var result = await this._userManager.CreateAsync(user, password);
 
@@ -35,6 +43,18 @@ namespace Todo_App.Services.Models
                     }
                 };
             }
+        }
+
+        public Task Get(string userName) {
+            throw new NotImplementedException();
+        }
+
+        public Task Update(User user) {
+            throw new NotImplementedException();
+        }
+
+        public Task Delete(string userName) {
+            throw new NotImplementedException();
         }
     }
 }
