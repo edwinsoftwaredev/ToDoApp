@@ -2,7 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Todo_App.Model.Auth;
-using Todo_App.Services.Models;
+using Todo_App.Model.Auth.VM;
+using Todo_App.Services.Models.Interfaces;
 
 namespace Todo_App.Controllers.Auth
 {
@@ -11,10 +12,8 @@ namespace Todo_App.Controllers.Auth
     [Authorize]
     public class UserController : ControllerBase
     {
-        private readonly UserService _userService;
-        public UserController(
-                UserService userService
-                )
+        private readonly IUserService _userService;
+        public UserController(IUserService userService)
         {
             this._userService = userService;
         }
@@ -24,7 +23,7 @@ namespace Todo_App.Controllers.Auth
         public async Task<IActionResult> CreateUser(UserVM userVM)
         {
             if (ModelState.IsValid) {
-                await this._userService.CreateUser(userVM as User, userVM.Password);
+                await this._userService.Create(userVM as User, userVM.Password);
 
                 return Ok();
             }
