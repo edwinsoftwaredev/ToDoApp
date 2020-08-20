@@ -1,4 +1,5 @@
 using System;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ using Moq;
 using Newtonsoft.Json;
 using Todo_App.Model.Auth;
 using Todo_App.Model.Auth.VM;
+using Todo_App.Services.Models;
 using Todo_App.Services.Models.Interfaces;
 using Xunit;
 
@@ -22,10 +24,13 @@ namespace Todo_App.Tests.IntegrationTests {
             this._factory = factory;
         }
 
-        [Fact]
+        /*[Fact]
         public async Task CreateUser_UserNotValid_NotSuccessful()
         {
             var userStateNotValid = new UserVM {};
+
+            var userValue = It.IsAny<User>();
+            var passwordValue = It.IsAny<string>();
 
             var mockUserService = new Mock<IUserService>();
 
@@ -42,17 +47,17 @@ namespace Todo_App.Tests.IntegrationTests {
                 .CreateClient();
 
             var content = this.GetContent<UserVM>(userStateNotValid);
-            var result = await client.PostAsync("User", content);
+            var result = await client.PostAsync("/api/user", content);
             Assert.False(result.IsSuccessStatusCode);
-            mockUserService.Verify(userService => userService.Create(userStateNotValid as User, userStateNotValid.Password), Times.Never());
-        }
+            mockUserService.Verify(userService => userService.Create(It.IsAny<User>(), It.IsAny<string>()), Times.Never());
+        }*/
 
         /*
          * this test if the ModelState is valid or not
          * Test if a model is valid or ModelState is valid is only possible with
          * an Integration Test ModelState is ASPNETCOREMVC
          **/
-        [Fact]
+        /*[Fact]
         public async Task CreateUser_PasswordOfInvalidLength_NotSuccessful()
         {
             // password must have at least 6 characters
@@ -60,24 +65,57 @@ namespace Todo_App.Tests.IntegrationTests {
                 Password = "none"
             };
 
-            var mockUserService = new Mock<IUserService>();
-
-            mockUserService.Setup(userService => userService.Create(mockUser as User, mockUser.Password))
-                .Returns(() => Task.Factory.StartNew(() => Console.WriteLine("X")));
+            var mockUserService = Mock.Of<IUserService>(MockBehavior.Strict);
+            var secuence = new MockSequence();
+            Mock.Get(mockUserService)
+                .InSequence(secuence)
+                .Setup(service => service.Create(mockUser as User, mockUser.Password))
+                .Returns(new Task(() => {Console.WriteLine("X");}));
 
             var client = this._factory.WithWebHostBuilder(builder =>
                 {
                     builder.ConfigureTestServices(services =>
                         {
-                            services.AddScoped(mockUserService.Object.GetType());
+                            services.AddScoped<IUserService>(service => mockUserService);
                         });
                 })
                 .CreateClient();
 
             var content = this.GetContent<UserVM>(mockUser);
-            var result = await client.PostAsync("User", content);
+            var result = await client.PostAsync("/api/user", content);
             Assert.False(result.IsSuccessStatusCode);
-            mockUserService.Verify(userService => userService.Create(mockUser as User, mockUser.Password), Times.Never());
+            Mock.Get(mockUserService).Verify(userService => userService.Create(It.IsAny<User>(), It.IsAny<string>()), Times.Never());
+        }*/
+
+        [Fact]
+        public async Task CreateUser_RegularPostRequest_UserServiceCreateUserMethodHasBeenCalled()
+        {
+            // this is just for make the state valid
+            var mockUser = new UserVM
+            {
+                Password = "password"
+            };
+
+            var mockUserService = Mock.Of<IUserService>();
+            var secuence = new MockSequence();
+            Mock.Get(mockUserService)
+                .InSequence(secuence);
+                // .Setup(service => service.Create(mockUser as User, mockUser.Password))
+                // .Returns(new Task(() => {Console.WriteLine("X");}));
+
+            var client = this._factory.WithWebHostBuilder(builder =>
+                {
+                    builder.ConfigureTestServices(services =>
+                        {
+                            services.AddScoped<IUserService>(service => mockUserService);
+                        });
+                })
+                .CreateClient();
+
+            var content = this.GetContent<UserVM>(mockUser);
+            var result = await client.PostAsync("/api/user", content);
+            Assert.Equal(HttpStatusCode.OK, result.StatusCode);
+            Mock.Get(mockUserService).Verify(us => us.Create(It.IsAny<User>(), It.IsAny<string>()), Times.Once());
         }
 
         private StringContent GetContent<T>(T mock)
