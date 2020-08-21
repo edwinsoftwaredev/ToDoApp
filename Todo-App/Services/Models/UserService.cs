@@ -30,11 +30,7 @@ namespace Todo_App.Services.Models
         {
             var result = await this._userManager.CreateAsync(user, password);
 
-            if (result.Succeeded) {
-                // Here I have to add authentication features, like:
-                // Token Email Confirmation, Password Recovery, Google, Facebook, Microsoft, Twitter
-                // 2FA or MFA. And other options
-            } else {
+            if (!result.Succeeded)
                 throw new HttpResponseException
                 {
                     Status = 500,
@@ -42,7 +38,10 @@ namespace Todo_App.Services.Models
                         title = "Error creating user"
                     }
                 };
-            }
+            // Here I have to add authentication features, like:
+            // Token Email Confirmation, Password Recovery, Google, Facebook, Microsoft, Twitter
+            // 2FA or MFA. And other options
+            return;
         }
 
         public Task Get(string userName) {

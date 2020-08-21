@@ -22,7 +22,7 @@ namespace Todo_App.Controllers.Auth
         [AllowAnonymous]
         public async Task<IActionResult> CreateUser(UserVM userVM)
         {
-            if (!ModelState.IsValid) BadRequest();
+            if (!ModelState.IsValid) return BadRequest(ModelState);
 
             await this._userService.Create(userVM as User, userVM.Password);
 
