@@ -46,5 +46,22 @@ namespace Todo_App.Tests.UnitTests
             var result = await userController.CreateUser(mockUser);
             Assert.IsType<OkResult>(result);
         }
+
+        [Fact]
+        public async Task CreateUser_StateValid_UserServiceCreateUserHasToBeCalled()
+        {
+            var mockUserService = Mock.Of<IUserService>();
+            Mock.Get(mockUserService)
+                .Setup(us => us.Create(It.IsAny<User>(), It.IsAny<string>()))
+                .Returns(Task.CompletedTask)
+                .Verifiable();
+
+            var userController = new UserController(mockUserService);
+            // !!!!!MODELSTATE IS NOT VALIDATED!!!!!!
+            // Integration tests validate the state
+            var mockUser = new UserVM {};
+            var result = await userController.CreateUser(mockUser);
+            Mock.Get(mockUserService).Verify(us => us.Create(It.IsAny<User>(), It.IsAny<string>()), Times.Once());
+        }
     }
 }
