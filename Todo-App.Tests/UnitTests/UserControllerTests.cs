@@ -24,6 +24,7 @@ namespace Todo_App.Tests.UnitTests
             // is not checked. So if the actual state is correct but it has been added a
             // ModelError to ModelState a BadRequest or Error is returned or thrown by the controller.
             userController.ModelState.AddModelError("Password", "Required");
+            // There might be more AddModelError...
 
             var userStateNotValid = new UserVM {};
             var result = await userController.CreateUser(userStateNotValid);
@@ -62,6 +63,24 @@ namespace Todo_App.Tests.UnitTests
             var mockUser = new UserVM {};
             var result = await userController.CreateUser(mockUser);
             Mock.Get(mockUserService).Verify(us => us.Create(It.IsAny<User>(), It.IsAny<string>()), Times.Once());
+        }
+
+        [Fact]
+        public async Task CreateUser_StateValid_UserServiceCreateUserHasNotBeenCalled()
+        {
+            var mockUserService = Mock.Of<IUserService>();
+            Mock.Get(mockUserService)
+                .Setup(us => us.Create(It.IsAny<User>(), It.IsAny<string>()))
+                .Returns(Task.CompletedTask)
+                .Verifiable();
+
+            var userController = new UserController(mockUserService);
+            userController.ModelState.AddModelError("Password", "Required");
+            // There might be more AddModelError...
+
+            var mockUser = new UserVM {};
+            var result = await userController.CreateUser(mockUser);
+            Mock.Get(mockUserService).Verify(us => us.Create(It.IsAny<User>(), It.IsAny<string>()), Times.Never());
         }
     }
 }
