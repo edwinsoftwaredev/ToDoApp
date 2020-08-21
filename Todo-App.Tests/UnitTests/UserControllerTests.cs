@@ -12,7 +12,7 @@ namespace Todo_App.Tests.UnitTests
     public class UserControllerTests
     {
         [Fact]
-        public async Task CreateUser_StateNotValid_BadRequest()
+        public async void CreateUser_StateNotValid_BadRequest()
         {
             var mockUserService = new Mock<IUserService>();
             mockUserService.Setup(userService => userService.Create(It.IsAny<User>(), It.IsAny<string>()))
@@ -32,7 +32,7 @@ namespace Todo_App.Tests.UnitTests
         }
 
         [Fact]
-        public async Task CreateUser_StateValid_Ok()
+        public async void CreateUser_StateValid_Ok()
         {
             var mockUserService = Mock.Of<IUserService>();
             Mock.Get(mockUserService)
@@ -49,7 +49,7 @@ namespace Todo_App.Tests.UnitTests
         }
 
         [Fact]
-        public async Task CreateUser_StateValid_UserServiceCreateUserHasToBeCalled()
+        public async void CreateUser_StateValid_UserServiceCreateUserHasToBeCalled()
         {
             var mockUserService = Mock.Of<IUserService>();
             Mock.Get(mockUserService)
@@ -66,7 +66,7 @@ namespace Todo_App.Tests.UnitTests
         }
 
         [Fact]
-        public async Task CreateUser_StateValid_UserServiceCreateUserHasNotBeenCalled()
+        public async void CreateUser_StateValid_UserServiceCreateUserHasNotBeenCalled()
         {
             var mockUserService = Mock.Of<IUserService>();
             Mock.Get(mockUserService)
