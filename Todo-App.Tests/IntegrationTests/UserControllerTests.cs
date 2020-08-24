@@ -1,3 +1,4 @@
+using System;
 using System.Data.Common;
 using System.Linq;
 using System.Net;
@@ -126,7 +127,8 @@ namespace Todo_App.Tests.IntegrationTests {
         {
             var mockUser = new UserVM
             {
-                Password = "password"
+                UserName = "user",
+                Password = "password" // it is not a valid password
             };
 
             var _connection = CreateInMemoryDatabase();
@@ -149,10 +151,21 @@ namespace Todo_App.Tests.IntegrationTests {
 
             var content = this.GetContent<UserVM>(mockUser);
             var result = await client.PostAsync("/api/user", content);
+
             var resultObject = JsonConvert
                 .DeserializeObject<HttpResponseException>(result.Content.ReadAsStringAsync().Result);
             Assert.IsType<HttpResponseException>(resultObject);
             Assert.Equal(HttpStatusCode.InternalServerError, result.StatusCode);
+
+            /*var selectCmd = _connection.CreateCommand();
+            selectCmd.CommandText = "Select * from User where UserName = 'user'";
+
+            using (var reader = selectCmd.ExecuteReader())
+            {
+                reader.Read();
+                Assert.Throws<InvalidOperationException>(() => reader.GetString(reader.GetOrdinal("UserName")));
+            }*/
+
             _connection.Dispose();
         }
 
