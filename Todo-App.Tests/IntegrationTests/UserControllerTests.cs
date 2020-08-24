@@ -186,13 +186,13 @@ namespace Todo_App.Tests.IntegrationTests {
             var content = this.GetContent<UserVM>(mockUser);
             var result = await client.PostAsync("/api/user", content);
             Assert.Equal(HttpStatusCode.OK, result.StatusCode);
-            /*var selectCmd =_connection.CreateCommand();
+            var selectCmd =_connection.CreateCommand();
             selectCmd.CommandText = "Select * from User where UserName = 'user'";
             using (var reader = selectCmd.ExecuteReader())
             {
                 reader.Read();
                 Assert.Equal("user", reader.GetString(reader.GetOrdinal("UserName")));
-            }*/
+            }
             _connection.Dispose();
         }
 
