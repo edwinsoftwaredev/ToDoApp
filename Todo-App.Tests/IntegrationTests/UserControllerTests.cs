@@ -153,6 +153,47 @@ namespace Todo_App.Tests.IntegrationTests {
                 .DeserializeObject<HttpResponseException>(result.Content.ReadAsStringAsync().Result);
             Assert.IsType<HttpResponseException>(resultObject);
             Assert.Equal(HttpStatusCode.InternalServerError, result.StatusCode);
+            _connection.Dispose();
+        }
+
+        [Fact]
+        public async void CreateUser_UserIsValid_UserIsStored()
+        {
+            var mockUser = new UserVM
+            {
+                UserName = "user",
+                Password = "1Password."
+            };
+
+            var _connection = CreateInMemoryDatabase();
+            var client = this._factory
+                .WithWebHostBuilder(builder =>
+                    {
+                        builder.ConfigureTestServices(services =>
+                                {
+                                    var descriptor = services.SingleOrDefault(d =>
+                                            d.ServiceType == typeof(DbContextOptions<IdDbContext>));
+
+                                    services.Remove(descriptor);
+
+                                    services.AddDbContext<IdDbContext>(options =>
+                                            {
+                                                options.UseSqlite(_connection);
+                                            });
+                                });
+                    }).CreateClient();
+
+            var content = this.GetContent<UserVM>(mockUser);
+            var result = await client.PostAsync("/api/user", content);
+            Assert.Equal(HttpStatusCode.OK, result.StatusCode);
+            /*var selectCmd =_connection.CreateCommand();
+            selectCmd.CommandText = "Select * from User where UserName = 'user'";
+            using (var reader = selectCmd.ExecuteReader())
+            {
+                reader.Read();
+                Assert.Equal("user", reader.GetString(reader.GetOrdinal("UserName")));
+            }*/
+            _connection.Dispose();
         }
 
         private static DbConnection CreateInMemoryDatabase()
