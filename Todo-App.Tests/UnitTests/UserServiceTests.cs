@@ -47,5 +47,35 @@ namespace Todo_App.Tests.UnitTests
             mockUserManager
                 .Verify(um => um.CreateAsync(It.IsAny<User>(), It.IsAny<string>()), Times.Once());
         }
+
+        [Fact]
+        public void CreateUser_UserAndPasswordValid_Void()
+        {
+            var mockUserStore = Mock.Of<IUserStore<User>>();
+
+            var mockUserManager =
+                new Mock<UserManager<User>>(mockUserStore, null, null, null, null, null, null, null, null);
+
+            mockUserManager
+                .Setup(ums => ums.CreateAsync(It.IsAny<User>(), It.IsAny<string>()))
+                .Returns(Task.Run(() => IdentityResult.Success));
+
+            var mockIIdentityServerInteractionService =
+                Mock.Of<IIdentityServerInteractionService>();
+
+            var userService =
+                new UserService(mockUserManager.Object, mockIIdentityServerInteractionService);
+
+            var mockUserVM = new UserVM {};
+
+            var result = userService.Create(mockUserVM as User, mockUserVM.Password);
+            // IsFaulted returns true if the task has thrown an unhandled exception
+            //
+            // ThrowsAsync throws an exception which means that the task isFaulted when the
+            // function(var result) has not thrown a HttpResponseException
+            Assert.True((Assert.ThrowsAsync<HttpResponseException>(() => result).IsFaulted));
+            mockUserManager
+                .Verify(um => um.CreateAsync(It.IsAny<User>(), It.IsAny<string>()), Times.Once());
+        }
     }
 }

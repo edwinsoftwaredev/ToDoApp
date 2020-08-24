@@ -23,28 +23,32 @@ namespace Todo_App.DAL
             IConfiguration configuration) : base(dbContextOptions)
         {
             Configuration = configuration;
+            this.Database.Migrate();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder); // this goes first because previous implementations and their overrides
 
-            // here we are doing a custom modeling of some entities i.e changing table names 
+            // here we are doing a custom modeling of some entities i.e changing table names
             IdentityEntitiesModelConfiguration.EntitiesModelCustomConfiguration(modelBuilder);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseSqlServer(
-                new SqlConnectionStringBuilder
-                {
-                    DataSource = "localhost",
-                    IntegratedSecurity = true,
-                    UserID = Configuration["ConnData:UserID"],
-                    Password = Configuration["ConnData:Password"],
-                    InitialCatalog = Configuration["ConnData:Catalog"]
-                }.ConnectionString);
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlServer(
+                    new SqlConnectionStringBuilder
+                    {
+                        DataSource = "localhost",
+                        IntegratedSecurity = true,
+                        UserID = Configuration["ConnData:UserID"],
+                        Password = Configuration["ConnData:Password"],
+                        InitialCatalog = Configuration["ConnData:Catalog"]
+                    }.ConnectionString);
+            }
         }
     }
 }
