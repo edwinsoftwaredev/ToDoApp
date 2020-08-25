@@ -64,7 +64,9 @@ namespace Todo_App
 
             // *** ****** ***** ******** *** //
 
-            services.AddIdentity<User, Role>()
+            services.AddIdentity<User, Role>(opts => {
+                        opts.User.RequireUniqueEmail = true;
+                    })
                 .AddEntityFrameworkStores<IdDbContext>()
                 .AddDefaultTokenProviders();
 
