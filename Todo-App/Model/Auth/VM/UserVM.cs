@@ -10,5 +10,9 @@ namespace Todo_App.Model.Auth.VM {
         [Required]
         [MinLength(6), MaxLength(60)]
         public string Password { get; set; }
+
+        [Required]
+        [EmailAddress]
+        public override string Email {get; set;}
     }
 }
