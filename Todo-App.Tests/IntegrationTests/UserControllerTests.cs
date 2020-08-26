@@ -97,7 +97,8 @@ namespace Todo_App.Tests.IntegrationTests {
             // this is just to make the state valid
             var mockUser = new UserVM
             {
-                Password = "password"
+                Password = "password", // in controller it is checked by ModelState.IsValid
+                Email = "user@email.com" // in controller it is checked by ModelState.IsValid
             };
 
             var mockUserService = Mock.Of<IUserService>();
@@ -128,7 +129,8 @@ namespace Todo_App.Tests.IntegrationTests {
             var mockUser = new UserVM
             {
                 UserName = "user",
-                Password = "password" // it is not a valid password
+                Password = "password", // it is not a valid password
+                Email = "user@email" // it is not a valid email
             };
 
             var _connection = CreateInMemoryDatabase();
@@ -157,14 +159,14 @@ namespace Todo_App.Tests.IntegrationTests {
             Assert.IsType<HttpResponseException>(resultObject);
             Assert.Equal(HttpStatusCode.InternalServerError, result.StatusCode);
 
-            /*var selectCmd = _connection.CreateCommand();
+            var selectCmd = _connection.CreateCommand();
             selectCmd.CommandText = "Select * from User where UserName = 'user'";
 
             using (var reader = selectCmd.ExecuteReader())
             {
                 reader.Read();
                 Assert.Throws<InvalidOperationException>(() => reader.GetString(reader.GetOrdinal("UserName")));
-            }*/
+            }
 
             _connection.Dispose();
         }
@@ -175,7 +177,8 @@ namespace Todo_App.Tests.IntegrationTests {
             var mockUser = new UserVM
             {
                 UserName = "user",
-                Password = "1Password."
+                Password = "1Password.",
+                Email = "user@email.com"
             };
 
             var _connection = CreateInMemoryDatabase();
