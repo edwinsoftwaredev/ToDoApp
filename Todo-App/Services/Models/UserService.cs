@@ -34,7 +34,6 @@ namespace Todo_App.Services.Models
             this._userManager.UserValidators.Add(userValidator);
 
             if (!RegexUtilities.IsValidEmail(user.Email))
-            {
                 throw new HttpResponseException
                 {
                     Status = 500,
@@ -42,7 +41,6 @@ namespace Todo_App.Services.Models
                         title = "Error creating user"
                     }
                 };
-            }
 
             var result = await this._userManager.CreateAsync(user, password);
 
