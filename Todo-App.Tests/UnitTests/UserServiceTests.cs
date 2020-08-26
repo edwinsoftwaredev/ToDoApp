@@ -41,7 +41,10 @@ namespace Todo_App.Tests.UnitTests
             var userService =
                 new UserService(mockUserManager.Object, mockIIdentityServerInteractionService);
 
-            var mockUserVM = new UserVM {};
+            var mockUserVM = new UserVM
+            {
+                Email = "user@email.com" // validation is done in the service class
+            };
 
             await Assert.ThrowsAsync<HttpResponseException>(() => userService.Create(mockUserVM as User, mockUserVM.Password));
             mockUserManager
@@ -66,7 +69,10 @@ namespace Todo_App.Tests.UnitTests
             var userService =
                 new UserService(mockUserManager.Object, mockIIdentityServerInteractionService);
 
-            var mockUserVM = new UserVM {};
+            var mockUserVM = new UserVM
+            {
+                Email = "user@email.com" // validation in done in the service class
+            };
 
             var result = userService.Create(mockUserVM as User, mockUserVM.Password);
             // IsFaulted returns true if the task has thrown an unhandled exception

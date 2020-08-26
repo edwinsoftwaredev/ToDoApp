@@ -4,6 +4,7 @@ using Todo_App.Model.Auth;
 using System.Threading.Tasks;
 using System;
 using Todo_App.Services.Models.Interfaces;
+using Todo_App.Utils;
 
 namespace Todo_App.Services.Models
 {
@@ -28,6 +29,21 @@ namespace Todo_App.Services.Models
 
         public async Task Create(User user, string password)
         {
+            var userValidator = new UserValidator<User>();
+            userValidator.Describer.InvalidEmail(user.Email);
+            this._userManager.UserValidators.Add(userValidator);
+
+            if (!RegexUtilities.IsValidEmail(user.Email))
+            {
+                throw new HttpResponseException
+                {
+                    Status = 500,
+                    Value = new {
+                        title = "Error creating user"
+                    }
+                };
+            }
+
             var result = await this._userManager.CreateAsync(user, password);
 
             if (!result.Succeeded)
