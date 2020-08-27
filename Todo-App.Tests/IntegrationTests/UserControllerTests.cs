@@ -5,17 +5,20 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Newtonsoft.Json;
 using Todo_App.DAL;
 using Todo_App.Model.Auth;
 using Todo_App.Model.Auth.VM;
 using Todo_App.Services.Models.Interfaces;
+using Todo_App.Utils.Constants;
 using Xunit;
 
 namespace Todo_App.Tests.IntegrationTests {
@@ -23,9 +26,11 @@ namespace Todo_App.Tests.IntegrationTests {
     {
 
         private readonly WebApplicationFactory<Todo_App.Startup> _factory;
+        private static DbConnection _connection;
 
         public UserControllerTests(WebApplicationFactory<Todo_App.Startup> factory) {
             this._factory = factory;
+            _connection = CreateInMemoryDatabase();
         }
 
         [Fact]
@@ -70,23 +75,7 @@ namespace Todo_App.Tests.IntegrationTests {
                 Email = "user@email" // it is not a valid email
             };
 
-            var _connection = CreateInMemoryDatabase();
-            var client = this._factory.WithWebHostBuilder(builder =>
-                {
-                    builder.ConfigureTestServices(services =>
-                        {
-                            var descriptor = services.SingleOrDefault(d =>
-                                    d.ServiceType == typeof(DbContextOptions<IdDbContext>));
-
-                            services.Remove(descriptor);
-
-                            services.AddDbContext<IdDbContext>(options =>
-                                {
-                                    options.UseSqlite(_connection);
-                                });
-
-                        });
-                }).CreateClient();
+            var client = GetHostBuilder(this._factory).CreateClient();
 
             var content = this.GetContent<UserVM>(mockUser);
             var result = await client.PostAsync("/api/user", content);
@@ -118,35 +107,76 @@ namespace Todo_App.Tests.IntegrationTests {
                 Email = "user@email.com"
             };
 
-            var _connection = CreateInMemoryDatabase();
-            var client = this._factory
-                .WithWebHostBuilder(builder =>
-                    {
-                        builder.ConfigureTestServices(services =>
-                                {
-                                    var descriptor = services.SingleOrDefault(d =>
-                                            d.ServiceType == typeof(DbContextOptions<IdDbContext>));
-
-                                    services.Remove(descriptor);
-
-                                    services.AddDbContext<IdDbContext>(options =>
-                                            {
-                                                options.UseSqlite(_connection);
-                                            });
-                                });
-                    }).CreateClient();
+            var client = GetHostBuilder(this._factory).CreateClient();
 
             var content = this.GetContent<UserVM>(mockUser);
             var result = await client.PostAsync("/api/user", content);
             Assert.Equal(HttpStatusCode.OK, result.StatusCode);
-            var selectCmd =_connection.CreateCommand();
+            var selectCmd = _connection.CreateCommand();
             selectCmd.CommandText = "Select * from User where UserName = 'user'";
+
             using (var reader = selectCmd.ExecuteReader())
             {
                 reader.Read();
                 Assert.Equal("user", reader.GetString(reader.GetOrdinal("UserName")));
             }
+
+            selectCmd.CommandText = $"Select * from Role where Name = '{RoleConstants.USER_ROLE}'";
+            using (var reader = selectCmd.ExecuteReader())
+            {
+                reader.Read();
+                Assert.Equal(RoleConstants.USER_ROLE, reader.GetString(reader.GetOrdinal("Name")));
+            };
+
             _connection.Dispose();
+        }
+
+        //
+        // Summary:
+        //      returns a WebApplicationFactory with out mocked services
+        //
+        private static WebApplicationFactory<Startup> GetHostBuilder(WebApplicationFactory<Todo_App.Startup> factory)
+        {
+            return factory
+                .WithWebHostBuilder(builder =>
+                    {
+                        builder.ConfigureTestServices(services =>
+                            {
+                                var descriptor = services.SingleOrDefault(d =>
+                                          d.ServiceType == typeof(DbContextOptions<IdDbContext>));
+
+                                services.Remove(descriptor);
+
+                                services.AddDbContext<IdDbContext>(options =>
+                                      {
+                                          options.UseSqlite(_connection);
+                                      });
+
+                                var sp = services.BuildServiceProvider();
+
+                                using (var scope = sp.CreateScope())
+                                {
+                                    var scopedServices = scope.ServiceProvider;
+                                    var logger = scopedServices
+                                        .GetRequiredService<ILogger<UserControllerTests>>();
+
+                                    try
+                                    {
+                                        var context = scopedServices
+                                            .GetRequiredService<IdDbContext>();
+                                        var roleManager = scopedServices
+                                            .GetRequiredService<RoleManager<Role>>();
+
+                                        DataSeedingContext.Initialize(context, roleManager);
+                                    }
+                                    catch(Exception ex)
+                                    {
+                                        logger.LogError(ex, "An Error ocurred seeding the" +
+                                            "database with test messages. Error: {Message}", ex.Message);
+                                    }
+                                }
+                            });
+                    });
         }
 
         private static DbConnection CreateInMemoryDatabase()
