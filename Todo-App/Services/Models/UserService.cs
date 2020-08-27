@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using System;
 using Todo_App.Services.Models.Interfaces;
 using Todo_App.Utils;
+using Todo_App.Utils.Constants;
+using System.Collections.Generic;
 
 namespace Todo_App.Services.Models
 {
@@ -20,9 +22,6 @@ namespace Todo_App.Services.Models
             _identityServerInteractionService = identityServerInteractionService;
         }
 
-        /*
-         * this creates a user without password -> guest cases
-         **/
         public Task Create(User user) {
             throw new NotImplementedException();
         }
@@ -34,7 +33,6 @@ namespace Todo_App.Services.Models
             this._userManager.UserValidators.Add(userValidator);
 
             if (!RegexUtilities.IsValidEmail(user.Email))
-            {
                 throw new HttpResponseException
                 {
                     Status = 500,
@@ -42,9 +40,11 @@ namespace Todo_App.Services.Models
                         title = "Error creating user"
                     }
                 };
-            }
 
-            var result = await this._userManager.CreateAsync(user, password);
+            var result = await this._userManager
+                .AddToRolesAsync(user, new List<string> {RoleConstants.USER_ROLE})
+                .ContinueWith(a => this._userManager.CreateAsync(user, password))
+                .Unwrap();
 
             if (!result.Succeeded)
                 throw new HttpResponseException
@@ -58,6 +58,11 @@ namespace Todo_App.Services.Models
             // Token Email Confirmation, Password Recovery, Google, Facebook, Microsoft, Twitter
             // 2FA or MFA. And other options
             return;
+        }
+
+        public Task Create(User user, string password, List<string> roles)
+        {
+            throw new NotImplementedException();
         }
 
         public Task Get(string userName) {

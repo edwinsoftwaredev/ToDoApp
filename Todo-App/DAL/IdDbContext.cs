@@ -23,7 +23,7 @@ namespace Todo_App.DAL
             IConfiguration configuration) : base(dbContextOptions)
         {
             Configuration = configuration;
-            this.Database.Migrate();
+            // this.Database.Migrate();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
