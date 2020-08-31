@@ -7,17 +7,24 @@ import {AccountService} from '../AccountService';
 
 describe('SignUp Component', () => {
   let spyStartAuthentication: jest.SpyInstance<Promise<void>>;
-  let spyAccountService: jest.SpyInstance<any>;
+  let spyRegisterUser: jest.SpyInstance<any>;
   const authService: AuthService = AuthService.getInstance();
 
   beforeEach(() => {
+    const mockFunc = (userObj: object): Promise<void> => {
+      return Promise.resolve();
+    };
+    // To mock a static method it must be assigned to mock function
+    // like next:
+    AccountService.registerUser = mockFunc;
+
     spyStartAuthentication = jest.spyOn(authService, 'startAuthentication');
-    spyAccountService = jest.spyOn(AccountService, 'registerUser');
+    spyRegisterUser = jest.spyOn(AccountService, 'registerUser');
   });
 
   afterEach(() => {
     spyStartAuthentication.mockClear();
-    spyAccountService.mockClear();
+    spyRegisterUser.mockClear();
   });
 
   test('should render', () => {
@@ -28,18 +35,13 @@ describe('SignUp Component', () => {
 
   test('should have a Sign Up button', () => {
     render(<MemoryRouter><SignUp /></MemoryRouter>);
-    expect(screen.getByRole('button', {name: 'Sign Up'})).toBeTruthy();
+    expect(screen.getByRole('button', {name: 'Sign Up'})).toBeInTheDocument();
   });
 
-  test('should startAuthentication when submitted (after user has been store in backend)', () => {
+  test('should startAuthentication when submitted (after user has been store in backend)', async () => {
     render(<MemoryRouter><SignUp /></MemoryRouter>);
     fireEvent.click(screen.getByRole('button', {name: 'Sign Up'}));
-    spyAccountService.mockImplementation((userObj: object): Promise<void> => {
-      return Promise.resolve();
-    });
-    expect(spyAccountService).toHaveBeenCalledTimes(1);
-    spyAccountService.mockResolvedValueOnce(() => {
-      expect(spyStartAuthentication).not.toHaveBeenCalledTimes(1);
-    });
+    await expect(spyRegisterUser).toHaveBeenCalledTimes(1);
+    await expect(spyStartAuthentication).toHaveBeenCalledTimes(1);
   });
 });
