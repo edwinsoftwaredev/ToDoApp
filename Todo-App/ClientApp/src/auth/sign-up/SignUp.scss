@@ -1,0 +1,47 @@
+.container {
+  min-width: 20vw;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-fields {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  & > * {
+    margin-bottom: 8px;
+
+    &:last-child {
+      margin-bottom: 20px;
+    }
+  }
+
+  input {
+    line-height: 2em;
+    border-radius: 3px;
+    border: 2px solid lightgray;
+    color: dimgray;
+
+    &:hover {
+      border: 2px solid gray;
+    }
+  }
+}
+
+.btn-submit {
+  line-height: 2.5em;
+  color: white;
+  background-color: forestgreen;
+  font-weight: bold;
+  border-radius: 5px;
+  border: 1px solid forestgreen;
+
+  &:hover {
+    cursor: pointer;
+    background-color: limegreen;
+    border: 1px solid forestgreen;
+  }
+}
