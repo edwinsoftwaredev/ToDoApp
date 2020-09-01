@@ -22,7 +22,8 @@
     "react-scripts": "^3.4.3",
     "redux-observable": "^1.2.0",
     "rxjs": "^6.6.0",
-    "typescript": "~3.7.2"
+    "typescript": "~3.7.2",
+    "uikit": "^3.5.7"
   },
   "scripts": {
     "start": "react-scripts start",
