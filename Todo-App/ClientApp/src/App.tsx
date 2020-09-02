@@ -15,14 +15,14 @@ function App(): JSX.Element {
   return (
     <Router>
       <div className="App">
-        <header className="App-header">
-          <Switch>
-            <PrivateRoute exact path="/">
-              <Home />
-            </PrivateRoute>
-            <Auth />
-          </Switch>
-        </header>
+        <Switch>
+          <PrivateRoute exact path="/">
+            <Home />
+          </PrivateRoute>
+          <Auth />
+        </Switch>
+        {/*<header className="App-header">
+        </header>*/}
       </div>
     </Router>
   );
