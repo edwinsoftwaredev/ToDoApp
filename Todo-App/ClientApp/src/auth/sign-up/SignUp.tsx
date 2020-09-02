@@ -1,8 +1,5 @@
 import React, {useState} from 'react';
 import './SignUp.scss';
-import {
-  Link
-} from 'react-router-dom';
 import {AxiosError} from 'axios';
 import {AuthService} from '../AuthService';
 import {AccountService} from '../AccountService';
@@ -36,12 +33,13 @@ const SignUp: React.FC = (): JSX.Element => {
   // check spread operator and in which cases is important immutability
   return (
     <div className="container">
-      <p>sign-up works!</p>
+      <h1 className="uk-heading-medium">TaskMan</h1>
       <div>
         <div>
           <form className="form" onSubmit={handleSubmit}>
             <div className="form-fields">
               <input
+                className="uk-input"
                 type="text"
                 name="Username"
                 placeholder="Username"
@@ -50,6 +48,7 @@ const SignUp: React.FC = (): JSX.Element => {
                 }
               />
               <input
+                className="uk-input"
                 type="text"
                 name="Name"
                 placeholder="Name"
@@ -58,6 +57,7 @@ const SignUp: React.FC = (): JSX.Element => {
                 }
               />
               <input
+                className="uk-input"
                 type="email"
                 name="Email"
                 placeholder="Email"
@@ -66,6 +66,7 @@ const SignUp: React.FC = (): JSX.Element => {
                 }
               />
               <input
+                className="uk-input"
                 type="password"
                 name="Password"
                 placeholder="Password"
@@ -74,6 +75,7 @@ const SignUp: React.FC = (): JSX.Element => {
                 }
               />
               <input
+                className="uk-input"
                 type="password"
                 name="Confirm Password"
                 placeholder="Confirm Password"
@@ -82,18 +84,12 @@ const SignUp: React.FC = (): JSX.Element => {
                 }
               />
             </div>
-            <button className="btn-submit" type="submit">Sign Up</button>
+            <button className="uk-button uk-button-default" type="submit">Sign Up</button>
           </form>
         </div>
         <Message text={errorMessage} />
         <nav>
           <ul>
-            <li>
-              <Link to="/signin">Sign In</Link>
-            </li>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
           </ul>
         </nav>
       </div>

@@ -1,5 +1,5 @@
 .container {
-  min-width: 20vw;
+  min-width: 22vw;
 }
 
 .form {
@@ -12,36 +12,42 @@
   flex-direction: column;
   align-items: stretch;
   & > * {
-    margin-bottom: 8px;
+    margin-bottom: 8px !important;
 
     &:last-child {
-      margin-bottom: 20px;
+      margin-bottom: 30px !important;
     }
   }
 
-  input {
-    line-height: 2em;
+  /*input {
+    line-height: 1.25em;
     border-radius: 3px;
-    border: 2px solid lightgray;
+    border: 1px solid lightgray;
     color: dimgray;
+    outline: 0;
+    padding: 0.7em 0.5em;
 
     &:hover {
-      border: 2px solid gray;
+      border: 1px solid gray;
     }
-  }
+
+    &:focus {
+      border: 1px solid gray;
+    }
+  }*/
 }
 
 .btn-submit {
   line-height: 2.5em;
   color: white;
-  background-color: forestgreen;
+  background-color: limegreen;
   font-weight: bold;
   border-radius: 5px;
-  border: 1px solid forestgreen;
+  border: 1px solid limegreen;
 
   &:hover {
     cursor: pointer;
-    background-color: limegreen;
+    background-color: forestgreen;
     border: 1px solid forestgreen;
   }
 }
