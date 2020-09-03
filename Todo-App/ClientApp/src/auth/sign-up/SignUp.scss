@@ -19,6 +19,19 @@
     }
   }
 
+  // https://alligator.io/css/styling-form-input-validity/
+  input {
+    &:invalid {
+      border-right: 3px solid;
+      border-right-color: red;
+    }
+
+    &:valid {
+      border-right: 3px solid;
+      border-right-color: green;
+    }
+  }
+
   /*input {
     line-height: 1.25em;
     border-radius: 3px;
@@ -51,3 +64,4 @@
     border: 1px solid forestgreen;
   }
 }
+
