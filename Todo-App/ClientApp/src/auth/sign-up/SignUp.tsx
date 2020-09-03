@@ -6,17 +6,9 @@ import {AccountService} from '../AccountService';
 import Message from '../../shared/message/Message';
 
 const SignUp: React.FC = (): JSX.Element => {
+
   const [userObj, setUserObj] =
-    useState(
-      {
-        // userName: '',
-        // name: '',
-        // picture: '',
-        // email: '',
-        // password: '',
-        // confirmPassword: ''
-      }
-    );
+    useState({});
 
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -30,19 +22,37 @@ const SignUp: React.FC = (): JSX.Element => {
     event.preventDefault(); // avoids redirection on submit because of default behavior
   }
 
+  const passwordRegex =
+    new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{6,60})');
+
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
+
+  const passwordChangeHandler = (password: string) => {
+    if (!passwordRegex.test(password) && password) {
+      setPasswordErrorMessage('Password must match the pattern');
+    } else {
+      setPasswordErrorMessage('');
+    }
+  };
+
   // check spread operator and in which cases is important immutability
   return (
     <div className="container">
       <h1 className="uk-heading-medium">TaskMan</h1>
       <div>
         <div>
-          <form className="form" onSubmit={handleSubmit}>
+          <form className="form" onSubmit={e => handleSubmit(e)}>
             <div className="form-fields">
               <input
                 className="uk-input"
                 type="text"
                 name="Username"
                 placeholder="Username"
+                autoComplete={"off"}
+                required
+                minLength={6}
+                maxLength={18}
+                pattern="^[_.@A-Za-z0-9-]+$"
                 onChange={
                   event => setUserObj({...userObj, userName: event.target.value})
                 }
@@ -52,6 +62,9 @@ const SignUp: React.FC = (): JSX.Element => {
                 type="text"
                 name="Name"
                 placeholder="Name"
+                required
+                pattern="^[_.@A-Za-z0-9-]+$"
+                maxLength={200}
                 onChange={
                   event => setUserObj({...userObj, name: event.target.value})
                 }
@@ -60,6 +73,8 @@ const SignUp: React.FC = (): JSX.Element => {
                 className="uk-input"
                 type="email"
                 name="Email"
+                autoComplete={"off"}
+                required
                 placeholder="Email"
                 onChange={
                   event => setUserObj({...userObj, email: event.target.value})
@@ -70,14 +85,19 @@ const SignUp: React.FC = (): JSX.Element => {
                 type="password"
                 name="Password"
                 placeholder="Password"
-                onChange={
+                //pattern={passwordRegex.source}
+                /*{onChange={
                   event => setUserObj({...userObj, password: event.target.value})
-                }
+                 }}*/
+                onChange={event => passwordChangeHandler(event.target.value)}
+                required
               />
+              {passwordErrorMessage}
               <input
                 className="uk-input"
                 type="password"
                 name="Confirm Password"
+                required
                 placeholder="Confirm Password"
                 onChange={
                   event => setUserObj({...userObj, confirmPassword: event.target.value})
