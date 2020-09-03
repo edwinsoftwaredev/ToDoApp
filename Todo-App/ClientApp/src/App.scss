@@ -1,14 +1,30 @@
 .App {
   text-align: center;
   // background-color: #282c34;
-  background-color: white;
+  background-color: #546e7a;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   // font-size: calc(10px + 2vmin);
-  color: black;
+  color: #ffffff;
+}
+
+.uk-input {
+  color: #546e7a;
+}
+
+.uk-heading-medium {
+  color: #ffffff;
+}
+
+.uk-button-default {
+  color: white;
+
+  &:hover {
+    color: white;
+  }
 }
 
 .App-logo {
