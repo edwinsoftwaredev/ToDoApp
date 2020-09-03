@@ -14,7 +14,7 @@ const Message: React.FC<IMessage> = (props: any) => {
 
   return (
     <div>
-      <h3>{props.text}</h3>
+      {props.text}
     </div>
   );
 }
