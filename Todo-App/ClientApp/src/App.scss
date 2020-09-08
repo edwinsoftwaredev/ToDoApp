@@ -1,6 +1,6 @@
 .App {
   text-align: center;
-  background-color: #282c34;
+  // background-color: #282c34;
   // background-color: #546e7a;
   min-height: 100vh;
   display: flex;
@@ -9,6 +9,7 @@
   justify-content: center;
   // font-size: calc(10px + 2vmin);
   // color: #ffffff;
+  color: black;
 }
 
 .uk-input {
@@ -20,10 +21,10 @@
 }
 
 .uk-button-default {
-  color: white;
+  color: black;
 
   &:hover {
-    color: white;
+    color: black;
   }
 }
 
