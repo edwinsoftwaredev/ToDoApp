@@ -1,10 +1,11 @@
 .container {
-  min-width: 22vw;
+  padding: 2em;
 }
 
 .form {
   display: flex;
   flex-direction: column;
+  width: 30em;
 }
 
 .form-fields {
@@ -20,7 +21,7 @@
   }
 
   // https://alligator.io/css/styling-form-input-validity/
-  input {
+  /*input {
     &:invalid {
       border-right: 3px solid;
       border-right-color: red;
@@ -30,7 +31,7 @@
       border-right: 3px solid;
       border-right-color: green;
     }
-  }
+  }*/
 
   /*input {
     line-height: 1.25em;

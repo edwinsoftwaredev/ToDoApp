@@ -6,8 +6,12 @@ const validate = (
   username: string,
   setUsernameErrorMessage: Dispatch<React.SetStateAction<string>>,
 ): boolean => {
+  const usernameregexPatt = new RegExp('^[_.@A-Za-z0-9-]+$');
   if (!username) {
     setUsernameErrorMessage('Username is required');
+    return false;
+  } if (!usernameregexPatt.test(username)) {
+    setUsernameErrorMessage('Username must include letters, numbers or the following characters _.@');
     return false;
   } else {
     setUsernameErrorMessage('');
@@ -30,23 +34,24 @@ const Username: React.FC<IUsername> = (props: IUsername) => {
 
   return (
     <div
-      className="username-input"
+      className="username-inputfield"
     >
+      <div
+        className={"username-info-tab" + (!isValid && !isTouched ? "" : isValid && !usernameErrorMessage ? " valid" : " not-valid")}>
+        <div className="username-label">{'Username' + (usernameErrorMessage.replace('Username', ''))}</div>
+      </div>
       <input
-        className="uk-input"
+        className="uk-input username-input"
         type="text"
         name="Username"
-        placeholder="Username"
         autoComplete={"off"}
         required
         minLength={6}
         maxLength={18}
-        pattern="^[_.@A-Za-z0-9-]+$"
         onChange={
           event => usernameHandler(event.target.value)
         }
       />
-      <Message text={usernameErrorMessage} />
     </div>
   );
 }
