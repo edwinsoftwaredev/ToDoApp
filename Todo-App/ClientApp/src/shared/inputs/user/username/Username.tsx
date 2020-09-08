@@ -33,28 +33,25 @@ const Username: React.FC<IUsername> = (props: IUsername) => {
   };
 
   return (
-    <div>
+    <div
+      className="username-inputfield"
+    >
       <div
-        className="username-inputfield"
-      >
-        <div
-          className={"info-tab" + (!isValid && !isTouched ? "" : isValid && !usernameErrorMessage ? " valid" : " not-valid")}>
-          <div className="label">{'Username' + (usernameErrorMessage.replace('Username', ''))}</div>
-        </div>
-        <input
-          className="uk-input"
-          type="text"
-          name="Username"
-          autoComplete={"off"}
-          required
-          minLength={6}
-          maxLength={18}
-          onChange={
-            event => usernameHandler(event.target.value)
-          }
-        />
+        className={"username-info-tab" + (!isValid && !isTouched ? "" : isValid && !usernameErrorMessage ? " valid" : " not-valid")}>
+        <div className="username-label">{'Username' + (usernameErrorMessage.replace('Username', ''))}</div>
       </div>
-      {/*<Message text={usernameErrorMessage} />*/}
+      <input
+        className="uk-input username-input"
+        type="text"
+        name="Username"
+        autoComplete={"off"}
+        required
+        minLength={6}
+        maxLength={18}
+        onChange={
+          event => usernameHandler(event.target.value)
+        }
+      />
     </div>
   );
 }
