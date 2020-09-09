@@ -9,9 +9,9 @@
 
   .uk-input.username-input {
     align-self: start;
-    border: 1px solid lightgray;
+    border: 1px solid slategray;
     border-top: 0;
-    transition: ease-out 120ms;
+    transition: ease-in 120ms;
     font-size: 1.5em;
   }
 
@@ -21,17 +21,15 @@
     display: flex;
     position: relative;
     background-clip: content-box;
-    border: 0.1em solid white;
-    border-left: 0;
-    border-bottom: 0;
-    border-right: 0;
-    background-color: lightgray;
 
     .username-label {
-      color: darkslategray;
-      border: 1px solid lightgray;
+      background-color: slategray;
+      color: white;
+      border: 1px solid slategray;
       border-bottom: 0;
       width: 45%;
+      min-height: 1.5em;
+      max-height: 100%;
       font-size: 1.2em;
       font-weight: 500;
       overflow: hidden;
@@ -39,35 +37,67 @@
       padding: 0 0 0 0.5em;
       z-index: 2;
       position: relative;
+
+      div {
+        word-break: break-all;
+      }
     }
 
     &:after {
       background-color: white;
-      width: 55%;
-      border: 1px solid lightgray;
+      height: 100%;
+      width: 100%;
+      border: 1px solid slategray;
       border-top: 0;
       border-right: 0;
       border-left: 0;
       content: "";
-      position: relative;
+      position: absolute;
       display: inline;
       box-sizing: border-box;
     }
   }
 
   .username-info-tab.not-valid {
-    background-color: pink;
-
     .username-label {
-      transition: ease-out 0ms;
-      color: red;
+      background-color: pink;
+      transition: ease-out 250ms;
       border-color: red;
+      color: red;
       width: 100%;
+
+      div {
+        animation: username-label-error 900ms;
+        animation-fill-mode: forwards;
+        animation-timing-function: ease-out;
+      }
+
+      @keyframes username-label-error {
+        0% {
+          font-size: 0.1em;
+          opacity: 0;
+        }
+
+        20% {
+          font-size: 0.1em;
+        }
+
+        50% {
+          font-size: 1em;
+        }
+
+        55% {
+          opacity: 0;
+        }
+
+        100% {
+          opacity: 1;
+        }
+      }
     }
 
     &:after {
-      transition: ease-out 0ms;
-      width: 0%;
+      transition: ease-out 250ms;
       border-color: red;
     }
 
@@ -77,11 +107,11 @@
   }
 
   .username-info-tab.valid {
-    background-color: mediumspringgreen;
     .username-label {
+      background-color: mediumspringgreen;
       transition: ease-out 250ms;
-      color: green;
       border-color: green;
+      color: green;
       width: 45%;
     }
 
