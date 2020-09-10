@@ -1,5 +1,5 @@
 import React, {useState, Dispatch} from 'react';
-import ValidatedTextInput from '../../validated-input/text';
+import ValidatedTextInput from '../../validated-input/ValidatedTextInput';
 import './Username.scss';
 
 const validate = (
@@ -37,7 +37,7 @@ const Username: React.FC<IUsername> = (props: IUsername) => {
         value={(value: string) => usernameHandler(value)}
         isValid={isValid}
         message={usernameErrorMessage}
-        others={{maxLength: 20, minLength: 6, autocomplete: 'off'}} />
+        others={{maxLength: 20, minLength: 6, autoComplete: 'off'}} />
     </div>
   );
 }
