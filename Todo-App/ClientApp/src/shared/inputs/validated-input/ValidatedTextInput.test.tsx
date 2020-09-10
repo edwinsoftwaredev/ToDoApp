@@ -76,4 +76,32 @@ describe('ValidatedTextInput component', () => {
       </div>"
     `);
   });
+
+  test('should be valid when isValid is set to true and touched', () => {
+    const mockProps = {
+      isValid: true,
+      message: '',
+      name: 'MOCKNAME',
+      others: {
+        autoComplete: 'off',
+        maxLength: 20,
+        minLength: 6,
+      },
+      value: (value: string) => {},
+    };
+
+    const {container} = render(<ValidatedTextInput {...mockProps} />);
+    const input = screen.getByRole('textbox') as HTMLInputElement;
+    fireEvent.change(input, {target: {value: 'TOUCHED'}});
+
+    expect(pretty(container.innerHTML)).toMatchInlineSnapshot(`
+      "<div class=\\"validated-input-text valid\\">
+        <div class=\\"message-bar\\">
+          <div class=\\"message\\">
+            <div>MOCKNAME </div>
+          </div>
+        </div><input class=\\"uk-input\\" type=\\"text\\" name=\\"MOCKNAME\\" autocomplete=\\"off\\" maxlength=\\"20\\" minlength=\\"6\\">
+      </div>"
+    `);
+  });
 });
