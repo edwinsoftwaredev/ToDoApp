@@ -1,6 +1,6 @@
 import React, {useState, Dispatch} from 'react';
+import ValidatedTextInput from '../../validated-input/text';
 import './Username.scss';
-import Message from '../../../message/Message';
 
 const validate = (
   username: string,
@@ -8,10 +8,10 @@ const validate = (
 ): boolean => {
   const usernameregexPatt = new RegExp('^[_.@A-Za-z0-9-]+$');
   if (!username) {
-    setUsernameErrorMessage('Username is required');
+    setUsernameErrorMessage('is required');
     return false;
   } if (!usernameregexPatt.test(username)) {
-    setUsernameErrorMessage('Username must include letters, numbers or the following characters _.@');
+    setUsernameErrorMessage('must include either letters, numbers or the following characters _.@');
     return false;
   } else {
     setUsernameErrorMessage('');
@@ -22,36 +22,22 @@ const validate = (
 const Username: React.FC<IUsername> = (props: IUsername) => {
   const [username, setUsername] = useState('');
   const [isValid, setIsValid] = useState(false);
-  const [isTouched, setIsTouched] = useState(false);
   const [usernameErrorMessage, setUsernameErrorMessage] = useState('');
 
   const usernameHandler = (username: string) => {
-    setIsTouched(true);
     setIsValid(validate(username, setUsernameErrorMessage));
     isValid ? setUsername(username) : setUsername('');
     props.username(username);
   };
 
   return (
-    <div
-      className="username-inputfield"
-    >
-      <div
-        className={"username-info-tab" + (!isValid && !isTouched ? "" : isValid && !usernameErrorMessage ? " valid" : " not-valid")}>
-        <div className="username-label">{'Username' + (usernameErrorMessage.replace('Username', ''))}</div>
-      </div>
-      <input
-        className="uk-input username-input"
-        type="text"
-        name="Username"
-        autoComplete={"off"}
-        required
-        minLength={6}
-        maxLength={18}
-        onChange={
-          event => usernameHandler(event.target.value)
-        }
-      />
+    <div>
+      <ValidatedTextInput
+        name='Username'
+        value={(value: string) => usernameHandler(value)}
+        isValid={isValid}
+        message={usernameErrorMessage}
+        others={{maxLength: 20, minLength: 6, autocomplete: 'off'}} />
     </div>
   );
 }
