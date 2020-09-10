@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import './text.scss';
+import './ValidatedTextInput.scss';
 
 const ValidatedTextInput: React.FC<IValidatedTextInput> = (props: any) => {
 
