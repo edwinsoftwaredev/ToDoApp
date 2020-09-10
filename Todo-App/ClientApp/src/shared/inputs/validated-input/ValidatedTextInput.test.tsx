@@ -12,7 +12,7 @@ describe('ValidatedTextInput component', () => {
     const mockProps = {
       isValid: false,
       message: '',
-      name: 'Username',
+      name: 'MOCKNAME',
       others: {
         autoComplete: 'off',
         maxLength: 20,
@@ -24,11 +24,36 @@ describe('ValidatedTextInput component', () => {
     render(<ValidatedTextInput {...mockProps} />);
   });
 
+  test('should return input value to callback', () => {
+    let mockInputValue = 'NOTTHISVALUE';
+    const mockClbkFunc = (value: string) => {
+      mockInputValue = value;
+    };
+
+    const mockProps = {
+      isValid: false, // <-- not needed to return input value
+      message: 'MOCKERROR',
+      name: 'MOCKNAME',
+      others: {
+        autoComplete: 'off',
+        maxLength: 20,
+        minLength: 6,
+      },
+      value: mockClbkFunc,
+    };
+
+    render(<ValidatedTextInput {...mockProps} />);
+
+    const input = screen.getByRole('textbox') as HTMLInputElement;
+    fireEvent.change(input, {target: {value: 'THISVALUE'}});
+    expect(mockInputValue).toBe('THISVALUE');
+  });
+
   test('should not be valid when isValid is set to false, message is setted and touched', () => {
     const mockProps = {
       isValid: false,
       message: 'MOCKMESSAGEERROR',
-      name: 'Username',
+      name: 'MOCKNAME',
       others: {
         autoComplete: 'off',
         maxLength: 20,
@@ -45,9 +70,9 @@ describe('ValidatedTextInput component', () => {
       "<div class=\\"validated-input-text not-valid\\">
         <div class=\\"message-bar\\">
           <div class=\\"message\\">
-            <div>Username MOCKMESSAGEERROR</div>
+            <div>MOCKNAME MOCKMESSAGEERROR</div>
           </div>
-        </div><input class=\\"uk-input\\" type=\\"text\\" name=\\"Username\\" autocomplete=\\"off\\" maxlength=\\"20\\" minlength=\\"6\\">
+        </div><input class=\\"uk-input\\" type=\\"text\\" name=\\"MOCKNAME\\" autocomplete=\\"off\\" maxlength=\\"20\\" minlength=\\"6\\">
       </div>"
     `);
   });
