@@ -6,11 +6,11 @@ const validate = (
   value: string,
   setMessage: (message: string) => void
 ): boolean => {
-  const usernameregexPatt = new RegExp('^[_.@A-Za-z0-9-]+$');
+  const usernameregexPatt = new RegExp(/^[_.@A-Za-z0-9-]+$/);
   if (!value) {
     setMessage('is required');
     return false;
-  } if (!usernameregexPatt.test(value)) {
+  } else if (!usernameregexPatt.test(value)) {
     setMessage('must include either letters, numbers or the following characters _.@');
     return false;
   } else {
