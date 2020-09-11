@@ -10,15 +10,14 @@ describe('ValidatedTextInput component', () => {
 
   test('should render', () => {
     const mockProps = {
-      isValid: false,
-      message: '',
+      isValid: {},
       name: 'MOCKNAME',
       others: {
         autoComplete: 'off',
         maxLength: 20,
         minLength: 6,
       },
-      value: (value: string) => {},
+      value: {},
     };
 
     render(<ValidatedTextInput {...mockProps} />);
@@ -31,8 +30,7 @@ describe('ValidatedTextInput component', () => {
     };
 
     const mockProps = {
-      isValid: false, // <-- not needed to return input value
-      message: 'MOCKERROR',
+      isValid: (value: string, setMessage: (message: string) => void) => true,
       name: 'MOCKNAME',
       others: {
         autoComplete: 'off',
@@ -50,9 +48,15 @@ describe('ValidatedTextInput component', () => {
   });
 
   test('should not be valid when isValid is set to false, message is setted and touched', () => {
+    const mockMessage = 'MOCKMESSAGEERROR';
+
+    const mockValidate = (value: string, setMessage: (message: string) => void) => {
+      setMessage(mockMessage);
+      return false;
+    };
+
     const mockProps = {
-      isValid: false,
-      message: 'MOCKMESSAGEERROR',
+      isValid: mockValidate,
       name: 'MOCKNAME',
       others: {
         autoComplete: 'off',
@@ -79,8 +83,7 @@ describe('ValidatedTextInput component', () => {
 
   test('should be valid when isValid is set to true and touched', () => {
     const mockProps = {
-      isValid: true,
-      message: '',
+      isValid: (value: string, setMessage: (message: string) => void) => true,
       name: 'MOCKNAME',
       others: {
         autoComplete: 'off',
