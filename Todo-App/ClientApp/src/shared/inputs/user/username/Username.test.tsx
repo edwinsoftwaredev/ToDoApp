@@ -58,9 +58,8 @@ describe('Username input component', () => {
 
     expect(mockProps())
       .toMatchObject({
-        isValid: false,
-        message: '',
         name: 'Username',
+        isValid: {},
         others: {
           autoComplete: 'off',
           maxLength: 20,
@@ -90,13 +89,13 @@ describe('Username input component', () => {
   test('should return username when input is not empty', () => {
     const mockUsername = 'iamtheadmin';
     let usernameReturned = 'shouldbemock';
+    const mockClbkFunc = (username: string) => {
+      usernameReturned = username;
+    };
     render
       (
         <Username
-          username={
-            (username: string) => {usernameReturned = username}
-          }
-        />
+          username={(username: string) => mockClbkFunc(username)} />
       );
 
     const input = screen.getByRole('textbox') as HTMLInputElement;
@@ -122,8 +121,7 @@ describe('Username input component', () => {
 
     expect(mockProps())
       .toMatchObject({
-        isValid: true,
-        message: '',
+        isValid: {},
         name: 'Username',
         others: {
           autoComplete: 'off',
@@ -150,7 +148,7 @@ describe('Username input component', () => {
     fireEvent.change(input, {target: {value: ''}});
     expect(mockProps())
       .toMatchObject({
-        isValid: false,
+        isValid: {},
         name: 'Username',
         others: {
           autoComplete: 'off',
@@ -158,12 +156,6 @@ describe('Username input component', () => {
           minLength: 6
         },
         value: {}
-      });
-
-    expect(mockProps())
-      .not
-      .toMatchObject({
-        message: ''
       });
   });
 });
