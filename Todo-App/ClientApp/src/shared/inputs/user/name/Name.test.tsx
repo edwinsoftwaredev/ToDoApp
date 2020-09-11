@@ -13,7 +13,9 @@ describe('Name component', () => {
     mockProps.mockReturnValue(props);
 
     const valueHandler = (value: string) => {
-      props.value(value);
+      // this is a callback function.
+      // isValid is placed in Name component
+      props.isValid(value, (message: string) => {}) ? props.value(value) : props.value('');
     };
 
     return (
@@ -47,6 +49,7 @@ describe('Name component', () => {
         isValid: {},
         others: {
           autoComplete: 'off',
+          maxLength: 200,
         },
         value: {}
       });
@@ -61,5 +64,18 @@ describe('Name component', () => {
     const input = screen.getByRole('textbox') as HTMLInputElement;
     fireEvent.change(input, {target: {value: 'THISVALUE'}});
     expect(mockValue).toBe('THISVALUE');
+  });
+
+  test('should not return value when input is not valid', () => {
+    let mockValue = 'NOTTHISVALUE';
+    render(
+      <Name
+        name={(value: string) => mockValue = value}
+      />
+    );
+
+    const input = screen.getByRole('textbox') as HTMLInputElement;
+    fireEvent.change(input, {target: {value: 'THISHASAN@'}});
+    expect(mockValue).toBe('');
   });
 });
