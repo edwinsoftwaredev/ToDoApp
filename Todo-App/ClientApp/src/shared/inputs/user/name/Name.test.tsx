@@ -36,6 +36,7 @@ describe('Name component', () => {
 
   afterEach(() => {
     mockProps.mockClear();
+    mockSetMessage.mockClear();
   });
 
   test('should render and implements ValidatedTextInput', () => {
@@ -81,7 +82,7 @@ describe('Name component', () => {
     expect(mockValue).toBe('');
   });
 
-  test('should set error message when input is not valid', () => {
+  test('should call setMessage when input is not valid', () => {
     render(
       <Name
         name={(value: string) => {}}
@@ -89,8 +90,21 @@ describe('Name component', () => {
     );
 
     const input = screen.getByRole('textbox') as HTMLInputElement;
-    fireEvent.change(input, {target: {valud: 'THISHASAN@'}});
-    expect(mockSetMessage).toHaveBeenCalledTimes(2);
+    fireEvent.change(input, {target: {value: 'THISHASAN@'}});
+    expect(mockSetMessage).toHaveBeenCalledTimes(1);
     expect(mockSetMessage).not.toHaveBeenLastCalledWith('');
+  });
+
+  test('should not call setMessage when input is valid', () => {
+    render(
+      <Name
+        name={(value: string) => {}}
+      />
+    );
+
+    const input = screen.getByRole('textbox') as HTMLInputElement;
+    fireEvent.change(input, {target: {value: 'THISISVALID'}});
+    expect(mockSetMessage).toHaveBeenCalledTimes(1);
+    expect(mockSetMessage).toHaveBeenLastCalledWith('');
   });
 });
