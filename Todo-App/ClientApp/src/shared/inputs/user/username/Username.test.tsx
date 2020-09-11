@@ -122,6 +122,7 @@ describe('Username input component', () => {
     const input = screen.getByRole('textbox') as HTMLInputElement;
     fireEvent.change(input, {target: {value: mockUsername}});
 
+    expect(mockSetMessage).toHaveBeenCalledTimes(1);
     expect(mockSetMessage).toHaveBeenCalledWith('');
   });
 
@@ -140,6 +141,9 @@ describe('Username input component', () => {
     fireEvent.change(input, {target: {value: 'willbeemptyinnextline'}});
     fireEvent.change(input, {target: {value: ''}});
 
-    expect(mockSetMessage).not.toHaveBeenNthCalledWith(2, '');
+    expect(mockSetMessage).toHaveBeenCalledTimes(2);
+    expect(mockSetMessage).not.toHaveBeenLastCalledWith('');
   });
+
+  // here should be added more test cases for input validation
 });
