@@ -1,33 +1,27 @@
-import React, {useState, Dispatch} from 'react';
+import React from 'react';
 import ValidatedTextInput from '../../validated-input/ValidatedTextInput';
 import './Username.scss';
 
 const validate = (
-  username: string,
-  setUsernameErrorMessage: Dispatch<React.SetStateAction<string>>,
+  value: string,
+  setMessage: (message: string) => void
 ): boolean => {
   const usernameregexPatt = new RegExp('^[_.@A-Za-z0-9-]+$');
-  if (!username) {
-    setUsernameErrorMessage('is required');
+  if (!value) {
+    setMessage('is required');
     return false;
-  } if (!usernameregexPatt.test(username)) {
-    setUsernameErrorMessage('must include either letters, numbers or the following characters _.@');
+  } if (!usernameregexPatt.test(value)) {
+    setMessage('must include either letters, numbers or the following characters _.@');
     return false;
   } else {
-    setUsernameErrorMessage('');
+    setMessage('');
     return true;
   }
 }
 
 const Username: React.FC<IUsername> = (props: IUsername) => {
-  const [username, setUsername] = useState('');
-  const [isValid, setIsValid] = useState(false);
-  const [usernameErrorMessage, setUsernameErrorMessage] = useState('');
-
-  const usernameHandler = (username: string) => {
-    setIsValid(validate(username, setUsernameErrorMessage));
-    isValid ? setUsername(username) : setUsername('');
-    props.username(username);
+  const usernameHandler = (value: string) => {
+    props.username(value);
   };
 
   return (
@@ -35,8 +29,7 @@ const Username: React.FC<IUsername> = (props: IUsername) => {
       <ValidatedTextInput
         name='Username'
         value={(value: string) => usernameHandler(value)}
-        isValid={isValid}
-        message={usernameErrorMessage}
+        isValid={validate}
         others={{maxLength: 20, minLength: 6, autoComplete: 'off'}} />
     </div>
   );

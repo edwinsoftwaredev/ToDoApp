@@ -4,24 +4,32 @@ import './ValidatedTextInput.scss';
 const ValidatedTextInput: React.FC<IValidatedTextInput> = (props: any) => {
 
   const [isTouched, setIsTouched] = useState(false);
+  const [isValid, setIsValid] = useState(false);
+  const [message, setMessage] = useState('');
 
   const textHandler = (value: string) => {
     setIsTouched(true);
-    props.value(value);
+
+    const validState = props.isValid(value, (message: string) => {
+      setMessage(message);
+    });
+
+    setIsValid(validState);
+    validState ? props.value(value) : props.value('');
   };
 
   return (
     <div
       className={
         'validated-input-text' +
-        (!isTouched && !props.submitted ? '' : props.isValid ? ' valid' : ' not-valid')
+        (!isTouched ? '' : isValid ? ' valid' : ' not-valid')
       }
     >
       <div
         className='message-bar'>
         <div className='message'>
           <div>
-            {props.name + ' ' + (props.message)}
+            {props.name + ' ' + (message)}
           </div>
         </div>
       </div>
@@ -40,8 +48,7 @@ const ValidatedTextInput: React.FC<IValidatedTextInput> = (props: any) => {
 
 export interface IValidatedTextInput {
   value: (value: string) => void;
-  isValid: boolean;
-  message: string;
+  isValid: (value: string, setMessage: (message: string) => void) => boolean;
   name: string;
   others: object;
 }

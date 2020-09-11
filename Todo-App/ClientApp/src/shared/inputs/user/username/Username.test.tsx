@@ -1,24 +1,37 @@
 import React from 'react';
 import {render, screen, fireEvent} from "@testing-library/react";
 import Username from "./Username";
-import Message, {IMessage} from '../../../message/Message';
+import ValidatedTextInput, {IValidatedTextInput} from '../../validated-input/ValidatedTextInput';
 
-jest.mock('../../../message/Message', () => {
+jest.mock('../../validated-input/ValidatedTextInput', () => {
   return jest.fn();
 });
 
 describe('Username input component', () => {
   const mockProps = jest.fn();
-  const mockMessage: React.FC<IMessage> = (props: any) => {
+  const mockTextInput: React.FC<IValidatedTextInput> = (props: any) => {
     // console.log(props);
 
     // this line is needed for spiying the values in props
     mockProps.mockReturnValue(props);
-    return null;
+
+    const textHandler = (value: string) => {
+      props.value(value);
+    };
+
+    return (
+      <div>
+        <input
+          onChange={
+            event => textHandler(event.target.value)
+          }
+        />
+      </div>
+    );
   };
 
   beforeEach(() => {
-    (Message as jest.Mock).mockImplementation(mockMessage);
+    (ValidatedTextInput as jest.Mock).mockImplementation(mockTextInput);
   });
 
   afterEach(() => {
@@ -33,7 +46,7 @@ describe('Username input component', () => {
   //
   // Functionality about the error message used by Message component to displayed it,
   // has to be tested in the components that implement Message Component!
-  test('should call/implement Message', () => {
+  test('should call/implement ValidatedTextInput', () => {
     render
       (
         <Username
@@ -43,7 +56,17 @@ describe('Username input component', () => {
         />
       );
 
-    expect(mockProps()).toEqual({text: ''});
+    expect(mockProps())
+      .toMatchObject({
+        name: 'Username',
+        isValid: {},
+        others: {
+          autoComplete: 'off',
+          maxLength: 20,
+          minLength: 6
+        },
+        value: {}
+      });
   });
 
   test('should not return username when input is empty', () => {
@@ -56,7 +79,7 @@ describe('Username input component', () => {
           } />
       );
 
-    const input = screen.getByPlaceholderText('Username') as HTMLInputElement;
+    const input = screen.getByRole('textbox') as HTMLInputElement;
     // the next two lines triggers the setState for username
     fireEvent.change(input, {target: {value: 'willbeemptyinnextline'}});
     fireEvent.change(input, {target: {value: ''}});
@@ -66,16 +89,16 @@ describe('Username input component', () => {
   test('should return username when input is not empty', () => {
     const mockUsername = 'iamtheadmin';
     let usernameReturned = 'shouldbemock';
+    const mockClbkFunc = (username: string) => {
+      usernameReturned = username;
+    };
     render
       (
         <Username
-          username={
-            (username: string) => {usernameReturned = username}
-          }
-        />
+          username={(username: string) => mockClbkFunc(username)} />
       );
 
-    const input = screen.getByPlaceholderText('Username') as HTMLInputElement;
+    const input = screen.getByRole('textbox') as HTMLInputElement;
     fireEvent.change(input, {target: {value: mockUsername}});
 
     expect(usernameReturned).toBe(mockUsername);
@@ -92,9 +115,21 @@ describe('Username input component', () => {
         />
       );
 
-    const input = screen.getByPlaceholderText('Username') as HTMLInputElement;
+
+    const input = screen.getByRole('textbox') as HTMLInputElement;
     fireEvent.change(input, {target: {value: mockUsername}});
-    expect(mockProps()).toEqual({text: ''});
+
+    expect(mockProps())
+      .toMatchObject({
+        isValid: {},
+        name: 'Username',
+        others: {
+          autoComplete: 'off',
+          maxLength: 20,
+          minLength: 6
+        },
+        value: {}
+      });
   });
 
   test('should setUsernameErrorMessage when input is empty', () => {
@@ -107,10 +142,20 @@ describe('Username input component', () => {
         />
       );
 
-    const input = screen.getByPlaceholderText('Username') as HTMLInputElement;
+    const input = screen.getByRole('textbox') as HTMLInputElement;
     // the next two lines do a input touch
     fireEvent.change(input, {target: {value: 'willbeemptyinnextline'}});
     fireEvent.change(input, {target: {value: ''}});
-    expect(mockProps()).not.toEqual({text: ''});
+    expect(mockProps())
+      .toMatchObject({
+        isValid: {},
+        name: 'Username',
+        others: {
+          autoComplete: 'off',
+          maxLength: 20,
+          minLength: 6
+        },
+        value: {}
+      });
   });
 });
