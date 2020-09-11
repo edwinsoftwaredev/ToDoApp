@@ -7,25 +7,27 @@ jest.mock('../../validated-input/ValidatedTextInput', () => {
   return jest.fn();
 });
 describe('Name component', () => {
-
   const mockProps = jest.fn();
-  const mockValidatedTextInput: React.FC<IValidatedTextInput> = (props: IValidatedTextInput) => {
-    mockProps.mockReturnValue(props);
+  const mockSetMessage = jest.fn().mockImplementation((message: string) => {
+  });
+  const mockValidatedTextInput: React.FC<IValidatedTextInput> =
+    (props: IValidatedTextInput) => {
+      mockProps.mockReturnValue(props);
 
-    const valueHandler = (value: string) => {
-      // this is a callback function.
-      // isValid is placed in Name component
-      props.isValid(value, (message: string) => {}) ? props.value(value) : props.value('');
+      const valueHandler = (value: string) => {
+        // this is a callback function.
+        // isValid is placed in Name component
+        props.isValid(value, mockSetMessage) ? props.value(value) : props.value('');
+      };
+
+      return (
+        <div>
+          <input
+            onChange={event => valueHandler(event.target.value)}
+          />
+        </div>
+      );
     };
-
-    return (
-      <div>
-        <input
-          onChange={event => valueHandler(event.target.value)}
-        />
-      </div>
-    );
-  };
 
   beforeEach(() => {
     (ValidatedTextInput as jest.Mock)
@@ -77,5 +79,18 @@ describe('Name component', () => {
     const input = screen.getByRole('textbox') as HTMLInputElement;
     fireEvent.change(input, {target: {value: 'THISHASAN@'}});
     expect(mockValue).toBe('');
+  });
+
+  test('should set error message when input is not valid', () => {
+    render(
+      <Name
+        name={(value: string) => {}}
+      />
+    );
+
+    const input = screen.getByRole('textbox') as HTMLInputElement;
+    fireEvent.change(input, {target: {valud: 'THISHASAN@'}});
+    expect(mockSetMessage).toHaveBeenCalledTimes(2);
+    expect(mockSetMessage).not.toHaveBeenLastCalledWith('');
   });
 });
