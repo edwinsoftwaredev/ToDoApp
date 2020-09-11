@@ -1,7 +1,7 @@
 import React from 'react';
 import Name from './Name';
 import ValidatedTextInput, {IValidatedTextInput} from '../../validated-input/ValidatedTextInput';
-import {render} from '@testing-library/react';
+import {render, screen, fireEvent} from '@testing-library/react';
 
 jest.mock('../../validated-input/ValidatedTextInput', () => {
   return jest.fn();
@@ -50,5 +50,16 @@ describe('Name component', () => {
         },
         value: {}
       });
+  });
+
+  test('should return value when input is valid', () => {
+    let mockValue = 'NOTTHISVALUE';
+    render(
+      <Name name={(value: string) => mockValue = value} />
+    );
+
+    const input = screen.getByRole('textbox') as HTMLInputElement;
+    fireEvent.change(input, {target: {value: 'THISVALUE'}});
+    expect(mockValue).toBe('THISVALUE');
   });
 });
