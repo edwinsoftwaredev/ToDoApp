@@ -65,4 +65,18 @@ describe('Email input component', () => {
     fireEvent.change(input, {target: {value: ''}});
     expect(mockValue).toBe('');
   });
+
+  test('should call setMessage when input is required', () => {
+    render(
+      <Email
+        email={(value: string) => {}}
+      />
+    );
+
+    const input = screen.getByRole('textbox') as HTMLInputElement;
+    fireEvent.change(input, {target: {value: 'realemail@email.com'}});
+    fireEvent.change(input, {target: {value: ''}});
+    expect(mockSetMessage).toHaveBeenCalledTimes(2);
+    expect(mockSetMessage).not.toHaveBeenLastCalledWith('');
+  });
 });
