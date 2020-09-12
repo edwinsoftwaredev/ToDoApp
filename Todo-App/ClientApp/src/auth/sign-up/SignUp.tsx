@@ -7,31 +7,7 @@ import Message from '../../shared/message/Message';
 import Username from '../../shared/inputs/user/username/Username';
 import Name from '../../shared/inputs/user/name/Name';
 import Email from '../../shared/inputs/user/email/Email';
-
-const passwordHandler = (
-  password: string,
-  setPasswordErrorMessage: Dispatch<React.SetStateAction<string>>,
-  userObj: object,
-  setUserObj: Dispatch<React.SetStateAction<{}>>
-) => {
-  if (!password) {
-    setPasswordErrorMessage('Password is required');
-  } else {
-    setUserObj({...userObj, password: password});
-    setPasswordErrorMessage('');
-  }
-}
-
-const confirmPasswordHandler = (
-  confirmPassword: string,
-  setConfirmPasswordErrorMessage: Dispatch<React.SetStateAction<string>>,
-) => {
-  if (!confirmPassword) {
-    setConfirmPasswordErrorMessage('Confirm Password is required');
-  } else {
-    setConfirmPasswordErrorMessage('');
-  }
-}
+import Password from '../../shared/inputs/user/password/Password';
 
 const SignUp: React.FC = (): JSX.Element => {
 
@@ -53,19 +29,7 @@ const SignUp: React.FC = (): JSX.Element => {
   }
 
   // form inputs validation states
-  const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
-  const [confirmPasswordErrorMessage, setConfirmPasswordErrorMessage] = useState('');
 
-  const passwordRegex =
-    new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{6,60})');
-
-  const passwordChangeHandler = (password: string) => {
-    if (!passwordRegex.test(password) && password) {
-      setPasswordErrorMessage('Password must match the pattern');
-    } else {
-      setPasswordErrorMessage('');
-    }
-  };
 
   // check spread operator and in which cases is important immutability
   return (
@@ -83,15 +47,9 @@ const SignUp: React.FC = (): JSX.Element => {
             <Email
               email={(email: string) => setUserObj({...userObj, email: email})}
             />
-            <input
-              className="uk-input"
-              type="password"
-              name="Password"
-              placeholder="Password"
-              onChange={event => passwordChangeHandler(event.target.value)}
-              required
+            <Password
+              password={(password: string) => setUserObj({...userObj, password: password})}
             />
-            <Message text={passwordErrorMessage} />
             <input
               className="uk-input"
               type="password"
