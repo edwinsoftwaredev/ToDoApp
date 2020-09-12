@@ -4,8 +4,12 @@ import './Email.scss';
 
 const validate =
   (value: string, setMessage: (message: string) => void): boolean => {
+    const emailRegexp = new RegExp(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
     if (!value) {
       setMessage('is required');
+      return false;
+    } else if (!emailRegexp.test(value)) {
+      setMessage('is not a valid email address');
       return false;
     } else {
       setMessage('');

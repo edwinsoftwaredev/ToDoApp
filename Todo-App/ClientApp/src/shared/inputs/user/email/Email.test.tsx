@@ -79,4 +79,18 @@ describe('Email input component', () => {
     expect(mockSetMessage).toHaveBeenCalledTimes(2);
     expect(mockSetMessage).not.toHaveBeenLastCalledWith('');
   });
+
+  test('should not return input when it is not valid', () => {
+    let mockValue = '';
+
+    render(
+      <Email
+        email={(value: string) => {mockValue = value}}
+      />
+    );
+
+    const input = screen.getByRole('textbox') as HTMLInputElement;
+    fireEvent.change(input, {target: {value: 'realemailemail.com'}});
+    expect(mockValue).toBe('');
+  });
 });
