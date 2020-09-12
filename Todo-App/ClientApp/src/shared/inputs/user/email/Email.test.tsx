@@ -93,4 +93,17 @@ describe('Email input component', () => {
     fireEvent.change(input, {target: {value: 'realemailemail.com'}});
     expect(mockValue).toBe('');
   });
+
+  test('should call setMessage when input is not valid', () => {
+    render(
+      <Email
+        email={(value: string) => {}}
+      />
+    );
+
+    const input = screen.getByRole('textbox') as HTMLInputElement;
+    fireEvent.change(input, {target: {value: 'realemail@emailcom'}});
+    expect(mockSetMessage).toHaveBeenCalledTimes(1);
+    expect(mockSetMessage).not.toHaveBeenLastCalledWith('');
+  });
 });
