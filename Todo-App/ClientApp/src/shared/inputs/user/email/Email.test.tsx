@@ -1,6 +1,6 @@
 import React from 'react';
 import ValidatedTextInput, {IValidatedTextInput} from '../../validated-input/ValidatedTextInput';
-import {render} from '@testing-library/react';
+import {render, screen, fireEvent} from '@testing-library/react';
 import Email from './Email';
 
 jest.mock('../../validated-input/ValidatedTextInput', () => {
@@ -49,5 +49,20 @@ describe('Email input component', () => {
       others: {},
       value: {}
     })
+  });
+
+  test('should not return input when it is empty', () => {
+    let mockValue = '';
+
+    render(
+      <Email
+        email={(value: string) => {mockValue = value}}
+      />
+    );
+
+    const input = screen.getByRole('textbox') as HTMLInputElement;
+    fireEvent.change(input, {target: {value: 'realemail@email.com'}});
+    fireEvent.change(input, {target: {value: ''}});
+    expect(mockValue).toBe('');
   });
 });

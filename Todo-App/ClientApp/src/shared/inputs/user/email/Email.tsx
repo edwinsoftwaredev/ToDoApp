@@ -4,7 +4,13 @@ import './Email.scss';
 
 const validate =
   (value: string, setMessage: (message: string) => void): boolean => {
-    return true;
+    if (!value) {
+      setMessage('is required');
+      return false;
+    } else {
+      setMessage('');
+      return true;
+    }
   };
 
 const Email: React.FC<IEmail> = (props: IEmail) => {
@@ -18,7 +24,8 @@ const Email: React.FC<IEmail> = (props: IEmail) => {
         isValid={validate}
         value={valueHandler}
         others={{
-          autoComplete: 'off'
+          autoComplete: 'off',
+          type: 'Email'
         }}
       />
     </div>
