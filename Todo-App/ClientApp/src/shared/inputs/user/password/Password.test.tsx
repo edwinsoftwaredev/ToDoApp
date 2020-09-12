@@ -1,5 +1,5 @@
 import React from 'react';
-import {render} from '@testing-library/react';
+import {render, screen, fireEvent} from '@testing-library/react';
 import Password from './Password';
 import ValidatedTextInput, {IValidatedTextInput} from '../../validated-input/ValidatedTextInput';
 
@@ -26,6 +26,8 @@ describe('Password component tests', () => {
   });
 
   afterEach(() => {
+    mockProps.mockClear();
+    mockSetMessage.mockClear();
   });
 
   test('should render and implements ValidatedTextInput', () => {
@@ -39,5 +41,20 @@ describe('Password component tests', () => {
       value: {},
       others: {}
     });
+  });
+
+  test('should not return value and call setMessage when input is required', () => {
+    let mockInput = 'NOTTHISVALUE';
+    render(
+      <Password password={(password: string) => mockInput = password} />
+    );
+
+    const input = screen.getByRole('textbox') as HTMLInputElement;
+    fireEvent.change(input, {target: {value: 'MOCKPASSWORD'}});
+    fireEvent.change(input, {target: {value: ''}}); // now it is empty
+
+    expect(mockSetMessage).toHaveBeenCalledTimes(1);
+    expect(mockSetMessage).not.toHaveBeenCalledWith('');
+    expect(mockInput).toBe('');
   });
 });

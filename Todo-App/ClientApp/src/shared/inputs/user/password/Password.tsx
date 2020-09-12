@@ -6,7 +6,12 @@ const validated = (
   value: string,
   setMessage: (message: string) => void
 ): boolean => {
-  return false;
+  if (!value) {
+    setMessage('is required');
+    return false;
+  }
+
+  return true;
 }
 
 const Password: React.FC<IPassword> = (props: IPassword) => {
