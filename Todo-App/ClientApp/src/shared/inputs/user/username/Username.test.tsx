@@ -9,6 +9,8 @@ jest.mock('../../validated-input/ValidatedTextInput', () => {
 
 describe('Username input component', () => {
   const mockProps = jest.fn();
+  const mockSetMessage = jest.fn().mockImplementation((message: string) => {
+  });
   const mockTextInput: React.FC<IValidatedTextInput> = (props: any) => {
     // console.log(props);
 
@@ -16,7 +18,7 @@ describe('Username input component', () => {
     mockProps.mockReturnValue(props);
 
     const textHandler = (value: string) => {
-      props.value(value);
+      props.isValid(value, mockSetMessage) ? props.value(value) : props.value('');
     };
 
     return (
@@ -36,6 +38,7 @@ describe('Username input component', () => {
 
   afterEach(() => {
     mockProps.mockClear();
+    mockSetMessage.mockClear();
   });
 
   // Message is called everytime Username is rendered.
@@ -119,17 +122,8 @@ describe('Username input component', () => {
     const input = screen.getByRole('textbox') as HTMLInputElement;
     fireEvent.change(input, {target: {value: mockUsername}});
 
-    expect(mockProps())
-      .toMatchObject({
-        isValid: {},
-        name: 'Username',
-        others: {
-          autoComplete: 'off',
-          maxLength: 20,
-          minLength: 6
-        },
-        value: {}
-      });
+    expect(mockSetMessage).toHaveBeenCalledTimes(1);
+    expect(mockSetMessage).toHaveBeenCalledWith('');
   });
 
   test('should setUsernameErrorMessage when input is empty', () => {
@@ -146,16 +140,10 @@ describe('Username input component', () => {
     // the next two lines do a input touch
     fireEvent.change(input, {target: {value: 'willbeemptyinnextline'}});
     fireEvent.change(input, {target: {value: ''}});
-    expect(mockProps())
-      .toMatchObject({
-        isValid: {},
-        name: 'Username',
-        others: {
-          autoComplete: 'off',
-          maxLength: 20,
-          minLength: 6
-        },
-        value: {}
-      });
+
+    expect(mockSetMessage).toHaveBeenCalledTimes(2);
+    expect(mockSetMessage).not.toHaveBeenLastCalledWith('');
   });
+
+  // here should be added more test cases for input validation
 });

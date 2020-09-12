@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import ValidatedTextInput from '../../validated-input/ValidatedTextInput';
 import './Name.scss';
 
@@ -6,15 +6,15 @@ const validate = (
   value: string,
   setMessage: (value: string) => void
 ): boolean => {
-  const nameRexExp = new RegExp('^[a-zA-Z]+$');
-
+  const nameRexExp = new RegExp(/^([a-zA-Z]+[ ]{0,1})+$/);
   if (!value) {
     setMessage('is required');
     return false;
-  } if (!nameRexExp.test(value)) {
-    setMessage('must contains only letter.');
+  } else if (!nameRexExp.test(value)) {
+    setMessage('must contains only letter and one space between two words.');
     return false;
   } else {
+    setMessage('');
     return true;
   }
 }
@@ -29,7 +29,7 @@ const Name: React.FC<IName> = (props: any) => {
       <ValidatedTextInput
         isValid={validate}
         name='Name'
-        value={(value: string) => nameHandler(value)}
+        value={(value: string) => nameHandler(value.trim())}
         others={{maxLength: 200, autoComplete: 'off'}} />
     </div>
   );

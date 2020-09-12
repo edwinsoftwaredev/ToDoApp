@@ -5,34 +5,8 @@ import {AuthService} from '../AuthService';
 import {AccountService} from '../AccountService';
 import Message from '../../shared/message/Message';
 import Username from '../../shared/inputs/user/username/Username';
-
-const nameHandler = (
-  name: string,
-  setNameErrorMessage: Dispatch<React.SetStateAction<string>>,
-  userObj: object,
-  setUserObj: Dispatch<React.SetStateAction<{}>>
-) => {
-  if (!name) {
-    setNameErrorMessage('Name is required');
-  } else {
-    setUserObj({...userObj, name: name});
-    setNameErrorMessage('');
-  }
-}
-
-const emailHandler = (
-  email: string,
-  setEmailErrorMessage: Dispatch<React.SetStateAction<string>>,
-  userObj: object,
-  setUserObj: Dispatch<React.SetStateAction<{}>>
-) => {
-  if (!email) {
-    setEmailErrorMessage('Email is required');
-  } else {
-    setUserObj({...userObj, email: email});
-    setEmailErrorMessage('');
-  }
-}
+import Name from '../../shared/inputs/user/name/Name';
+import Email from '../../shared/inputs/user/email/Email';
 
 const passwordHandler = (
   password: string,
@@ -67,6 +41,7 @@ const SignUp: React.FC = (): JSX.Element => {
   const [errorMessage, setErrorMessage] = useState('');
 
   const handleSubmit = (event: any) => {
+    // userObj must be validated
     AccountService.registerUser(userObj).then(() => {
       // redirecting to login component
       AuthService.getInstance().startAuthentication();
@@ -78,8 +53,6 @@ const SignUp: React.FC = (): JSX.Element => {
   }
 
   // form inputs validation states
-  const [nameErrorMessage, setNameErrorMessage] = useState('');
-  const [emailErrorMessage, setEmailErrorMessage] = useState('');
   const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
   const [confirmPasswordErrorMessage, setConfirmPasswordErrorMessage] = useState('');
 
@@ -104,34 +77,11 @@ const SignUp: React.FC = (): JSX.Element => {
             <Username
               username={(username: string) => setUserObj({...userObj, username: username})}
             />
-            <input
-              className="uk-input"
-              type="text"
-              name="Name"
-              placeholder="Name"
-              required
-              pattern="^[_.@A-Za-z0-9-]+$"
-              maxLength={200}
-              onChange={
-                event => nameHandler
-                  (
-                    event.target.value,
-                    setNameErrorMessage,
-                    userObj,
-                    setUserObj
-                  )
-              }
+            <Name
+              name={(name: string) => setUserObj({...userObj, name: name})}
             />
-            <input
-              className="uk-input"
-              type="email"
-              name="Email"
-              autoComplete={"off"}
-              required
-              placeholder="Email"
-              onChange={
-                event => setUserObj({...userObj, email: event.target.value})
-              }
+            <Email
+              email={(email: string) => setUserObj({...userObj, email: email})}
             />
             <input
               className="uk-input"
