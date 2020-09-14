@@ -6,8 +6,13 @@ const validate = (
   value: string,
   setMessage: (message: string) => void
 ): boolean => {
-  setMessage('');
-  return true;
+  if (!value) {
+    setMessage('is required');
+    return false;
+  } else {
+    setMessage('');
+    return true;
+  }
 };
 
 const ConfirmPassword: React.FC<IConfirmPassword> = (props: IConfirmPassword) => {

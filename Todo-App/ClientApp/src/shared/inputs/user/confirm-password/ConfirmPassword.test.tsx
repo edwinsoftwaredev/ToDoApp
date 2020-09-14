@@ -1,5 +1,5 @@
 import React from 'react';
-import {render} from '@testing-library/react';
+import {render, fireEvent, screen} from '@testing-library/react';
 import ConfirmPassword from './ConfirmPassword';
 import ValidatedTextInput, {IValidatedTextInput} from '../../validated-input/ValidatedTextInput';
 
@@ -48,5 +48,21 @@ describe('ConfirmPassword component tests', () => {
       value: {},
       others: {}
     });
+  });
+
+  test('should not return value and call setMessage when input is empty', () => {
+    let mockInput = 'NOTTHISVALUE';
+
+    render(
+      <ConfirmPassword confirmPassword={(value: string) => mockInput = value} />
+    );
+
+    const input = screen.getByRole('textbox') as HTMLInputElement;
+    fireEvent.change(input, {target: {value: 'ITWILLBEEMPTYNEXTLINE'}});
+    fireEvent.change(input, {target: {value: ''}});
+
+    expect(mockSetMessage).toHaveBeenCalledTimes(2); // 2 because when is empty setMessage('')
+    expect(mockSetMessage).not.toHaveBeenLastCalledWith('');
+    expect(mockInput).toBe('');
   });
 });
