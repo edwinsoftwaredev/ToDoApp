@@ -28,7 +28,7 @@ const Name: React.FC<IName> = (props: any) => {
     <div>
       <ValidatedTextInput
         isValid={validate}
-        name='Name'
+        name='Full Name'
         value={(value: string) => nameHandler(value.trim())}
         others={{maxLength: 200, autoComplete: 'off'}} />
     </div>
