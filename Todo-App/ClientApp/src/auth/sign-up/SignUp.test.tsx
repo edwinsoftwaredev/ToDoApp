@@ -3,19 +3,33 @@ import SignUp, * as SignUpUtils from './SignUp';
 import {render, screen, fireEvent} from '@testing-library/react';
 import {MemoryRouter} from 'react-router-dom';
 import {AuthService} from '../AuthService';
-import {AccountService} from '../AccountService';
-import {act} from 'react-dom/test-utils';
+import Email, {IEmail} from '../../shared/inputs/user/email/Email';
+import Name from '../../shared/inputs/user/name/Name';
+import Username from '../../shared/inputs/user/username/Username';
+import Password from '../../shared/inputs/user/password/Password';
 
+jest.mock('../../shared/inputs/user/email/Email');
+jest.mock('../../shared/inputs/user/name/Name');
+jest.mock('../../shared/inputs/user/username/Username');
+jest.mock('../../shared/inputs/user/password/Password');
 describe('SignUp Component', () => {
   let spyStartAuthentication: jest.SpyInstance<Promise<void>>;
   const authService: AuthService = AuthService.getInstance();
 
   beforeEach(() => {
     spyStartAuthentication = jest.spyOn(authService, 'startAuthentication');
+    (Email as jest.Mock).mockImplementation(() => null);
+    (Name as jest.Mock).mockImplementation(() => null);
+    (Username as jest.Mock).mockImplementation(() => null);
+    (Password as jest.Mock).mockImplementation(() => null);
   });
 
   afterEach(() => {
     spyStartAuthentication.mockClear();
+    (Email as jest.Mock).mockClear();
+    (Name as jest.Mock).mockClear();
+    (Username as jest.Mock).mockClear();
+    (Password as jest.Mock).mockClear();
   });
 
   test('should render', () => {
@@ -29,50 +43,16 @@ describe('SignUp Component', () => {
     expect(screen.getByRole('button', {name: 'Sign Up'})).toBeInTheDocument();
   });
 
-  test('should startAuthentication when submitted (after user has been store in backend)', async () => {
-    const mockFunc = (userObj: object): Promise<void> => {
-      return Promise.resolve();
-    };
-    // To mock a static method it must be assigned to mock function
-    // like next:
-    AccountService.registerUser = mockFunc;
+  test('should implement User form fields', () => {
+    render(
+      <MemoryRouter>
+        <SignUp />
+      </MemoryRouter>
+    );
 
-    // this has to happend after the static method was assigned to a mock function
-    let spyRegisterUser = jest.spyOn(AccountService, 'registerUser');
-
-    render(<MemoryRouter><SignUp /></MemoryRouter>);
-    fireEvent.click(screen.getByRole('button', {name: 'Sign Up'}));
-
-    await expect(spyRegisterUser).toHaveBeenCalledTimes(1);
-    await expect(spyStartAuthentication).toHaveBeenCalledTimes(1);
-
-    spyRegisterUser.mockClear();
-  });
-
-  test('should not startAuthentication. User was not succesfully submited', async () => {
-    const mockFunc = (userObj: object) => {
-      return Promise.reject({message: 'MOCK_SERVER_ERROR'});
-    };
-    AccountService.registerUser = mockFunc;
-    let spyRegisterUser = jest.spyOn(AccountService, 'registerUser');
-
-    render(<MemoryRouter><SignUp /></MemoryRouter>);
-    fireEvent.click(screen.getByRole('button', {name: 'Sign Up'}));
-
-    // !!Important note!!
-    // Although react-testing-library uses act() when it renders a component
-    // there are cases which requires act() to be used. Those cases include execution of
-    // async tasks which changes the state in react components like the ones in this test case.
-    // If act() is not executed a warning, about a react component state is logged.
-    //
-    // act():
-    // Wrap any code rendering and triggering updates to your components into
-    // Ensures that the behavior in your tests matches what happens in the browser...
-    // check docs
-    await act(async () => {
-      expect(spyRegisterUser).toHaveBeenCalledTimes(1);
-      expect(spyStartAuthentication).not.toHaveBeenCalled();
-    });
-    spyRegisterUser.mockClear();
+    expect(Email as jest.Mock).toHaveBeenCalledTimes(1);
+    expect(Name as jest.Mock).toHaveBeenCalledTimes(1);
+    expect(Username as jest.Mock).toHaveBeenCalledTimes(1);
+    expect(Password as jest.Mock).toHaveBeenCalledTimes(1);
   });
 });
