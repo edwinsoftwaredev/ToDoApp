@@ -1,4 +1,4 @@
-import React, {useState, Dispatch} from 'react';
+import React, {useState, useEffect} from 'react';
 import './SignUp.scss';
 import {AxiosError} from 'axios';
 import {AuthService} from '../AuthService';
@@ -11,13 +11,12 @@ import Password from '../../shared/inputs/user/password/Password';
 
 const SignUp: React.FC = (): JSX.Element => {
 
-  const [userObj, setUserObj] =
-    useState({});
+  const [userObj, setUserObj] = useState({});
+  const [disableForm, setDisableForm] = useState(true);
 
   const [errorMessage, setErrorMessage] = useState('');
 
   const handleSubmit = (event: any) => {
-    // userObj must be validated
     AccountService.registerUser(userObj).then(() => {
       // redirecting to login component
       AuthService.getInstance().startAuthentication();
@@ -28,43 +27,42 @@ const SignUp: React.FC = (): JSX.Element => {
     event.preventDefault();
   }
 
-  // form inputs validation states
-
+  useEffect(() => {
+    setDisableForm(!((userObj as any).username
+      && (userObj as any).name
+      && (userObj as any).email
+      && (userObj as any).password));
+  }, [userObj]);
 
   // check spread operator and in which cases is important immutability
   return (
-    <div className="container">
-      <h1 className="uk-heading-medium">TaskMan</h1>
+    <div className='container'>
+      <h1 className='uk-heading-medium'>TaskMan</h1>
       <div>
-        <form className="form" onSubmit={e => handleSubmit(e)}>
-          <div className="form-fields">
-            <Username
-              username={(username: string) => setUserObj({...userObj, username: username})}
+        <form className='form' onSubmit={e => handleSubmit(e)}>
+          <div className='form-fields'>
+            <Email
+              email={(email: string) => setUserObj({...userObj, email: email})}
             />
             <Name
               name={(name: string) => setUserObj({...userObj, name: name})}
             />
-            <Email
-              email={(email: string) => setUserObj({...userObj, email: email})}
+            <Username
+              username={(username: string) => setUserObj({...userObj, username: username})}
             />
             <Password
               password={(password: string) => setUserObj({...userObj, password: password})}
             />
-            <input
-              className="uk-input"
-              type="password"
-              name="Confirm Password"
-              required
-              placeholder="Confirm Password"
-              onChange={
-                event => setUserObj({...userObj, confirmPassword: event.target.value})
-              }
-            />
           </div>
-          <button className="uk-button uk-button-default" type="submit">Sign Up</button>
+          <Message text={errorMessage} />
+          <button
+            className={'uk-button uk-button-default btn-submit' + (disableForm ? '' : ' enabled')}
+            type={disableForm ? 'button' : 'submit'}
+            disabled={disableForm}>
+            Sign Up
+          </button>
         </form>
       </div>
-      <Message text={errorMessage} />
       <nav>
         <ul>
         </ul>
