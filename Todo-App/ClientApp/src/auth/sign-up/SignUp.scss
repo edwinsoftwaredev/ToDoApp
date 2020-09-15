@@ -14,54 +14,32 @@
   align-items: stretch;
   & > * {
 
+    margin-bottom: 10px;
+
     &:last-child {
       margin-bottom: 30px !important;
     }
   }
-
-  // https://alligator.io/css/styling-form-input-validity/
-  /*input {
-    &:invalid {
-      border-right: 3px solid;
-      border-right-color: red;
-    }
-
-    &:valid {
-      border-right: 3px solid;
-      border-right-color: green;
-    }
-  }*/
-
-  /*input {
-    line-height: 1.25em;
-    border-radius: 3px;
-    border: 1px solid lightgray;
-    color: dimgray;
-    outline: 0;
-    padding: 0.7em 0.5em;
-
-    &:hover {
-      border: 1px solid gray;
-    }
-
-    &:focus {
-      border: 1px solid gray;
-    }
-  }*/
 }
 
 .btn-submit {
-  line-height: 2.5em;
-  color: white;
-  background-color: limegreen;
+  font-size: 1.3em;
   font-weight: bold;
-  border-radius: 5px;
-  border: 1px solid limegreen;
+  text-transform: capitalize;
+  color: slategray !important;
+  border-color: slategray !important;
+
+  &.enabled {
+    color: slategray;
+    &:hover {
+      color: green !important;
+      cursor: pointer;
+      border-color: forestgreen !important;
+    }
+  }
 
   &:hover {
-    cursor: pointer;
-    background-color: forestgreen;
-    border: 1px solid forestgreen;
+    color: #999;
   }
 }
 
