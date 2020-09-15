@@ -48,7 +48,7 @@ describe('Name component', () => {
 
     expect(mockProps())
       .toMatchObject({
-        name: 'Name',
+        name: 'Full Name',
         isValid: {},
         others: {
           autoComplete: 'off',
