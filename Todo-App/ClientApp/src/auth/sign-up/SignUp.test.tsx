@@ -40,12 +40,16 @@ describe('SignUp Component', () => {
     expect(screen.getByRole('button', {name: 'Sign Up'})).toBeInTheDocument();
   });
 
-  test('should implement User form fields', async () => {
-    render(
+  test('should implement User form fields', () => {
+    const {container} = render(
       <MemoryRouter>
         <SignUp />
       </MemoryRouter>
     );
+
+    const inputs = container.getElementsByClassName('uk-input') as HTMLCollectionOf<HTMLInputElement>;
+
+    expect(inputs.length).toBe(4);
 
     expect(spyEmail).toHaveBeenCalledTimes(1);
     expect(spyName).toHaveBeenCalledTimes(1);

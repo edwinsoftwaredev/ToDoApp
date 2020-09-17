@@ -28,10 +28,12 @@ const SignUp: React.FC = (): JSX.Element => {
   }
 
   useEffect(() => {
-    setDisableForm(!((userObj as any).username
-      && (userObj as any).name
-      && (userObj as any).email
-      && (userObj as any).password));
+    setDisableForm(
+      !((userObj as any).username
+        && (userObj as any).name
+        && (userObj as any).email
+        && (userObj as any).password
+      ));
   }, [userObj]);
 
   // check spread operator and in which cases is important immutability
