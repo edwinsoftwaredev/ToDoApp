@@ -45,11 +45,15 @@ describe('Password component tests', () => {
 
   test('should not return value and call setMessage when input is not at leat 6 chars long', () => {
     let mockInput = 'NOTTHISVALUE';
-    render(
+    const {container} = render(
       <Password password={(password: string) => mockInput = password} />
     );
 
-    const input = screen.getByRole('textbox') as HTMLInputElement;
+    const input = (container
+      .getElementsByTagName('input') as HTMLCollectionOf<HTMLInputElement>)
+      .item(0) as HTMLInputElement;
+
+
     // input is not at least 6 chars long
     fireEvent.change(input, {target: {value: 'NOTLO'}});
     expect(mockSetMessage).toHaveBeenCalledTimes(1);
@@ -59,11 +63,16 @@ describe('Password component tests', () => {
 
   test('should not return value and call setMessage when input doesnt contain 1 Uppercase', () => {
     let mockInput = 'NOTTHISVALUE';
-    render(
+    const {container} = render(
       <Password password={(password: string) => mockInput = password} />
     );
 
-    const input = screen.getByRole('textbox') as HTMLInputElement;
+    const input = (
+      container
+        .getElementsByTagName('input') as HTMLCollectionOf<HTMLInputElement>
+    ).item(0) as HTMLInputElement;
+
+
     // input is not at least 6 chars long
     fireEvent.change(input, {target: {value: 'nouppercase'}});
     expect(mockSetMessage).toHaveBeenCalledTimes(1);
@@ -74,11 +83,14 @@ describe('Password component tests', () => {
 
   test('should not return value and call setMessage when input doesnt contain 1 Lowecase', () => {
     let mockInput = 'NOTTHISVALUE';
-    render(
+    const {container} = render(
       <Password password={(password: string) => mockInput = password} />
     );
 
-    const input = screen.getByRole('textbox') as HTMLInputElement;
+    const input = (
+      container
+        .getElementsByTagName('input') as HTMLCollectionOf<HTMLInputElement>
+    ).item(0) as HTMLInputElement;
     // input is not at least 6 chars long
     fireEvent.change(input, {target: {value: 'NOLOWERCASE'}});
     expect(mockSetMessage).toHaveBeenCalledTimes(1);
@@ -88,11 +100,14 @@ describe('Password component tests', () => {
 
   test('should not return value and call setMessage when input doesnt contain 1 Special char', () => {
     let mockInput = 'NOTTHISVALUE';
-    render(
+    const {container} = render(
       <Password password={(password: string) => mockInput = password} />
     );
 
-    const input = screen.getByRole('textbox') as HTMLInputElement;
+    const input = (
+      container
+        .getElementsByTagName('input') as HTMLCollectionOf<HTMLInputElement>
+    ).item(0) as HTMLInputElement;
     // input is not at least 6 chars long
     fireEvent.change(input, {target: {value: 'NoSpecialChar'}});
     expect(mockSetMessage).toHaveBeenCalledTimes(1);
@@ -102,11 +117,14 @@ describe('Password component tests', () => {
 
   test('should not return value and call setMessage when input doesnt contain 1 number', () => {
     let mockInput = 'NOTTHISVALUE';
-    render(
+    const {container} = render(
       <Password password={(password: string) => mockInput = password} />
     );
 
-    const input = screen.getByRole('textbox') as HTMLInputElement;
+    const input = (
+      container
+        .getElementsByTagName('input') as HTMLCollectionOf<HTMLInputElement>
+    ).item(0) as HTMLInputElement;
     // input is not at least 6 chars long
     fireEvent.change(input, {target: {value: 'No$Number'}});
     expect(mockSetMessage).toHaveBeenCalledTimes(1);
@@ -116,11 +134,14 @@ describe('Password component tests', () => {
 
   test('should not return value and call setMessage when input is more than 20 chars long', () => {
     let mockInput = 'NOTTHISVALUE';
-    render(
+    const {container} = render(
       <Password password={(password: string) => mockInput = password} />
     );
 
-    const input = screen.getByRole('textbox') as HTMLInputElement;
+    const input = (
+      container
+        .getElementsByTagName('input') as HTMLCollectionOf<HTMLInputElement>
+    ).item(0) as HTMLInputElement;
     // input is not at least 6 chars long
     fireEvent.change(input, {target: {value: 'ToMuchCharacters!@#$%^&'}});
     expect(mockSetMessage).toHaveBeenCalledTimes(1);
@@ -130,11 +151,14 @@ describe('Password component tests', () => {
 
   test('should return value and not call setMessage when input is valid', () => {
     let mockInput = 'NOTTHISVALUE';
-    render(
+    const {container} = render(
       <Password password={(password: string) => mockInput = password} />
     );
 
-    const input = screen.getByRole('textbox') as HTMLInputElement;
+    const input = (
+      container
+        .getElementsByTagName('input') as HTMLCollectionOf<HTMLInputElement>
+    ).item(0) as HTMLInputElement;
     // input is not at least 6 chars long
     fireEvent.change(input, {target: {value: '0aABc&'}});
     expect(mockSetMessage).toHaveBeenCalledTimes(1);
@@ -144,11 +168,14 @@ describe('Password component tests', () => {
 
   test('should not return value and call setMessage when input is required', () => {
     let mockInput = 'NOTTHISVALUE';
-    render(
+    const {container} = render(
       <Password password={(password: string) => mockInput = password} />
     );
 
-    const input = screen.getByRole('textbox') as HTMLInputElement;
+    const input = (
+      container
+        .getElementsByTagName('input') as HTMLCollectionOf<HTMLInputElement>
+    ).item(0) as HTMLInputElement;
     fireEvent.change(input, {target: {value: 'MOCKPASSWORD'}});
     fireEvent.change(input, {target: {value: ''}}); // now it is empty
 
