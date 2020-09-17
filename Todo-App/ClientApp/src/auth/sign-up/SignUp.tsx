@@ -41,7 +41,7 @@ const SignUp: React.FC = (): JSX.Element => {
     <div className='container'>
       <h1 className='uk-heading-medium'>TaskMan</h1>
       <div>
-        <form className='form' onSubmit={e => handleSubmit(e)}>
+        <form className='form' onSubmit={e => disableForm ? null : handleSubmit(e)}>
           <div className='form-fields'>
             <Email
               email={(email: string) => setUserObj({...userObj, email: email})}
