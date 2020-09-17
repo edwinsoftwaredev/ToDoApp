@@ -95,4 +95,42 @@ describe('SignUp Component', () => {
     expect(submitButton).toHaveProperty('disabled');
     expect(spyRegisterUser).not.toHaveBeenCalled();
   });
+
+  test('should submit when form is valid', () => {
+    const {container} = render(
+      <MemoryRouter>
+        <SignUp />
+      </MemoryRouter>
+    );
+
+
+    const inputs = container
+      .getElementsByTagName('input') as HTMLCollectionOf<HTMLInputElement>;
+
+    fireEvent.change(
+      inputs.namedItem('Email') as HTMLInputElement, {target: {value: 'mock@mocking.com'}}
+    );
+    fireEvent.change(
+      inputs.namedItem('Full Name') as HTMLInputElement, {target: {value: 'Mock Mockings'}}
+    );
+    fireEvent.change(
+      inputs.namedItem('Username') as HTMLInputElement, {target: {value: 'Mockjester'}}
+    );
+    fireEvent.change(
+      inputs.namedItem('Password') as HTMLInputElement, {target: {value: 'THi$IsN0t@Pass'}}
+    );
+
+    const submitButton = screen
+      .getByText('Sign Up') as HTMLInputElement;
+    const forms = container
+      .getElementsByTagName('form') as HTMLCollectionOf<HTMLFormElement>;
+
+    fireEvent.submit(forms.item(0) as HTMLFormElement);
+
+    expect(forms.length).toBe(1);
+    expect(submitButton).toHaveClass('enabled');
+    expect(submitButton).toHaveProperty('type', 'submit');
+    expect(submitButton.disabled).toBe(false);
+    expect(spyRegisterUser).toHaveBeenCalledTimes(1);
+  });
 });
