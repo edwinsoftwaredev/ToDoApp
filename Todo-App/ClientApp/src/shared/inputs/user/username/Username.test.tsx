@@ -65,8 +65,6 @@ describe('Username input component', () => {
         isValid: {},
         others: {
           autoComplete: 'off',
-          maxLength: 20,
-          minLength: 6
         },
         value: {}
       });

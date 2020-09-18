@@ -13,6 +13,9 @@ const validate = (
   } else if (!usernameregexPatt.test(value)) {
     setMessage('must include either letters, numbers or the following characters _.@');
     return false;
+  } else if (value.length < 6 || value.length > 20) {
+    setMessage('must have at least 6 characters and not more than 20 characters');
+    return false;
   } else {
     setMessage('');
     return true;
@@ -30,7 +33,7 @@ const Username: React.FC<IUsername> = (props: IUsername) => {
         name='Username'
         value={(value: string) => usernameHandler(value)}
         isValid={validate}
-        others={{maxLength: 20, minLength: 6, autoComplete: 'off'}} />
+        others={{autoComplete: 'off'}} />
     </div>
   );
 }
