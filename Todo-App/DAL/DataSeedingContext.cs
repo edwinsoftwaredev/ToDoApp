@@ -12,7 +12,7 @@ namespace Todo_App.DAL
         public static void Initialize(IdDbContext context,
                 RoleManager<Role> roleManager)
         {
-            // use code with caution
+            // use code with precaution
             context.Database.Migrate();
 
             if (context.Roles.Any())

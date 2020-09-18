@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Net.Http.Headers;
 using Todo_App.DAL;
 using Todo_App.Model.Auth;
 using Todo_App.Services.Models;
@@ -22,6 +23,7 @@ namespace Todo_App
 
         IConfiguration Configuration { get; }
         string ConnStringIdentityServer { get; }
+        private const string allowedCorsOriginsName = "AllowedCorsOrigins";
 
         public Startup(IConfiguration configuration)
         {
@@ -44,6 +46,19 @@ namespace Todo_App
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddCors(options => {
+                    options.AddPolicy(
+                            name: allowedCorsOriginsName,
+                            builder => {
+                                builder.WithOrigins("http://localhost:3000")
+                                    .WithHeaders(
+                                        HeaderNames.ContentType
+                                    );
+                            }
+                        );
+                });
+
             services.AddControllers(options => options.Filters.Add(new HttpResponseExceptionFilter()))
                 .ConfigureApiBehaviorOptions(options =>
                 {
@@ -183,6 +198,8 @@ namespace Todo_App
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(allowedCorsOriginsName);
 
             // https://identityserver4.readthedocs.io/en/latest/topics/startup.html
             // app.UseAuthentication(); <-- It's not needed when we add the IdentityServer middleware to the pipeline
