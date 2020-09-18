@@ -26,11 +26,12 @@
   font-size: 1.3em;
   font-weight: bold;
   text-transform: capitalize;
-  color: slategray !important;
-  border-color: slategray !important;
+  color: lightgray !important;
+  border-color: lightgray !important;
 
   &.enabled {
-    color: slategray;
+    color: slategray !important;
+    border-color: slategray !important;
     &:hover {
       color: green !important;
       cursor: pointer;

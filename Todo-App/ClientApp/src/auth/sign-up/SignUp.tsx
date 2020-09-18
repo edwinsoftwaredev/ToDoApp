@@ -17,12 +17,14 @@ const SignUp: React.FC = (): JSX.Element => {
   const [errorMessage, setErrorMessage] = useState('');
 
   const handleSubmit = (event: any) => {
-    AccountService.registerUser(userObj).then(() => {
-      // redirecting to login component
-      AuthService.getInstance().startAuthentication();
-    }).catch((error: AxiosError) => {
-      setErrorMessage(error.message);
-    });
+    if (!disableForm) {
+      AccountService.registerUser(userObj).then(() => {
+        // redirecting to login component
+        AuthService.getInstance().startAuthentication();
+      }).catch((error: AxiosError) => {
+        setErrorMessage(error.message);
+      });
+    }
     // avoids redirection on submit because of default behavior
     event.preventDefault();
   }
