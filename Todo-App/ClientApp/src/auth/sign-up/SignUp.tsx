@@ -3,6 +3,7 @@ import './SignUp.scss';
 import {AxiosError} from 'axios';
 import {AuthService} from '../AuthService';
 import {AccountService} from '../AccountService';
+import {useHistory} from 'react-router-dom';
 import Message from '../../shared/message/Message';
 import Username from '../../shared/inputs/user/username/Username';
 import Name from '../../shared/inputs/user/name/Name';
@@ -28,6 +29,10 @@ const SignUp: React.FC = (): JSX.Element => {
     // avoids redirection on submit because of default behavior
     event.preventDefault();
   }
+
+  const history = useHistory();
+
+  const handleRoute = () => history.push('/signin');
 
   useEffect(() => {
     setDisableForm(
@@ -64,6 +69,13 @@ const SignUp: React.FC = (): JSX.Element => {
             type={disableForm ? 'button' : 'submit'}
             disabled={disableForm}>
             Sign Up
+          </button>
+          <button
+            className={'uk-button uk-button-default btn-history'}
+            type={'button'}
+            onClick={handleRoute}
+          >
+            Sign In
           </button>
         </form>
       </div>
