@@ -28,9 +28,7 @@ namespace Todo_App.Services.Models
 
         public async Task Create(User user, string password)
         {
-            var userValidator = new UserValidator<User>();
-            userValidator.Describer.InvalidEmail(user.Email);
-            this._userManager.UserValidators.Add(userValidator);
+            // https://www.jerriepelser.com/blog/check-for-spammy-email-when-registering-user/
 
             if (!RegexUtilities.IsValidEmail(user.Email))
                 throw new HttpResponseException

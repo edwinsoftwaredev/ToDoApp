@@ -98,6 +98,38 @@ namespace Todo_App.Tests.IntegrationTests {
         }
 
         [Fact]
+        public async void CreateUser_UserEmailIsNotValid_UserIsNotStored()
+        {
+            var mockUser = new UserVM
+            {
+                UserName = "User",
+                Password = "1Password.",
+                Email = "user.email.com"
+            };
+
+            var client = GetHostBuilder(this._factory).CreateClient();
+
+            var content = this.GetContent<UserVM>(mockUser);
+            var result = await client.PostAsync("/api/user", content);
+
+            var resultObject = JsonConvert
+                .DeserializeObject<HttpResponseException>(result.Content.ReadAsStringAsync().Result);
+            Assert.IsType<HttpResponseException>(resultObject);
+            Assert.Equal(HttpStatusCode.InternalServerError, result.StatusCode);
+
+            var selectCmd = _connection.CreateCommand();
+            selectCmd.CommandText = "Select * from user where username = 'user'";
+
+            using (var reader = selectCmd.ExecuteReader())
+            {
+                reader.Read();
+                Assert.Throws<InvalidOperationException>(() => reader.GetString(reader.GetOrdinal("Email")));
+            }
+
+            _connection.Dispose();
+        }
+
+        [Fact]
         public async void CreateUser_UserIsValid_UserIsStored()
         {
             var mockUser = new UserVM
@@ -119,6 +151,7 @@ namespace Todo_App.Tests.IntegrationTests {
             {
                 reader.Read();
                 Assert.Equal("user", reader.GetString(reader.GetOrdinal("UserName")));
+                Assert.Equal("user@email.com", reader.GetString(reader.GetOrdinal("Email")));
             }
 
             selectCmd.CommandText = $"Select * from Role where Name = '{RoleConstants.USER_ROLE}'";
