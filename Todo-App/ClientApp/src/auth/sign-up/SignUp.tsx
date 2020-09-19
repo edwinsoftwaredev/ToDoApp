@@ -40,7 +40,7 @@ const SignUp: React.FC = (): JSX.Element => {
 
   // check spread operator and in which cases is important immutability
   return (
-    <div className='container'>
+    <div className='signup'>
       <h1 className='uk-heading-medium'>TaskMan</h1>
       <div>
         <form className='form' onSubmit={e => disableForm ? null : handleSubmit(e)}>
