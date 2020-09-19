@@ -3,6 +3,7 @@ import './SignUp.scss';
 import {AxiosError} from 'axios';
 import {AuthService} from '../AuthService';
 import {AccountService} from '../AccountService';
+import {useHistory} from 'react-router-dom';
 import Message from '../../shared/message/Message';
 import Username from '../../shared/inputs/user/username/Username';
 import Name from '../../shared/inputs/user/name/Name';
@@ -29,6 +30,10 @@ const SignUp: React.FC = (): JSX.Element => {
     event.preventDefault();
   }
 
+  const history = useHistory();
+
+  const handleRoute = () => history.push('/signin');
+
   useEffect(() => {
     setDisableForm(
       !((userObj as any).username
@@ -40,7 +45,7 @@ const SignUp: React.FC = (): JSX.Element => {
 
   // check spread operator and in which cases is important immutability
   return (
-    <div className='container'>
+    <div className='signup'>
       <h1 className='uk-heading-medium'>TaskMan</h1>
       <div>
         <form className='form' onSubmit={e => disableForm ? null : handleSubmit(e)}>
@@ -64,6 +69,13 @@ const SignUp: React.FC = (): JSX.Element => {
             type={disableForm ? 'button' : 'submit'}
             disabled={disableForm}>
             Sign Up
+          </button>
+          <button
+            className={'uk-button uk-button-default btn-history'}
+            type={'button'}
+            onClick={handleRoute}
+          >
+            Sign In
           </button>
         </form>
       </div>
