@@ -39,6 +39,20 @@
         color: #999;
       }
     }
+
+    .btn-history {
+      margin-top: 10px;
+      font-size: 1.3em;
+      font-weight: bold;
+      text-transform: capitalize;
+      color: slategray !important;
+      border-color: slategray !important;
+      &:hover {
+        color: gray !important;
+        cursor: pointer;
+        border-color: gray !important;
+      }
+    }
   }
 }
 
