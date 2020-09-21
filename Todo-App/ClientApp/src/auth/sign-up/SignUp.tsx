@@ -14,7 +14,6 @@ const SignUp: React.FC = (): JSX.Element => {
 
   const [userObj, setUserObj] = useState({});
   const [disableForm, setDisableForm] = useState(true);
-
   const [errorMessage, setErrorMessage] = useState('');
 
   const handleSubmit = (event: any) => {
@@ -69,7 +68,7 @@ const SignUp: React.FC = (): JSX.Element => {
           Sign Up
           </button>
         <button
-          className={'uk-button uk-button-default btn-history'}
+          className={'uk-button uk-button-default btn-route-link'}
           type={'button'}
           onClick={handleRoute}
         >
