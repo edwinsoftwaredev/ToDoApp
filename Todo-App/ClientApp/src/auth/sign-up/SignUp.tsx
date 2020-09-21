@@ -46,43 +46,36 @@ const SignUp: React.FC = (): JSX.Element => {
   // check spread operator and in which cases is important immutability
   return (
     <div className='signup'>
-      <h1 className='uk-heading-medium'>TaskMan</h1>
-      <div>
-        <form className='form' onSubmit={e => disableForm ? null : handleSubmit(e)}>
-          <div className='form-fields'>
-            <Email
-              email={(email: string) => setUserObj({...userObj, email: email})}
-            />
-            <Name
-              name={(name: string) => setUserObj({...userObj, name: name})}
-            />
-            <Username
-              username={(username: string) => setUserObj({...userObj, username: username})}
-            />
-            <Password
-              password={(password: string) => setUserObj({...userObj, password: password})}
-            />
-          </div>
-          <Message text={errorMessage} />
-          <button
-            className={'uk-button uk-button-default btn-submit' + (disableForm ? '' : ' enabled')}
-            type={disableForm ? 'button' : 'submit'}
-            disabled={disableForm}>
-            Sign Up
+      <form className='form' onSubmit={e => disableForm ? null : handleSubmit(e)}>
+        <div className='form-fields'>
+          <Email
+            email={(email: string) => setUserObj({...userObj, email: email})}
+          />
+          <Name
+            name={(name: string) => setUserObj({...userObj, name: name})}
+          />
+          <Username
+            username={(username: string) => setUserObj({...userObj, username: username})}
+          />
+          <Password
+            password={(password: string) => setUserObj({...userObj, password: password})}
+          />
+        </div>
+        <Message text={errorMessage} />
+        <button
+          className={'uk-button uk-button-default btn-submit' + (disableForm ? '' : ' enabled')}
+          type={disableForm ? 'button' : 'submit'}
+          disabled={disableForm}>
+          Sign Up
           </button>
-          <button
-            className={'uk-button uk-button-default btn-history'}
-            type={'button'}
-            onClick={handleRoute}
-          >
-            Sign In
+        <button
+          className={'uk-button uk-button-default btn-history'}
+          type={'button'}
+          onClick={handleRoute}
+        >
+          Sign In
           </button>
-        </form>
-      </div>
-      <nav>
-        <ul>
-        </ul>
-      </nav>
+      </form>
     </div>
   );
 }
