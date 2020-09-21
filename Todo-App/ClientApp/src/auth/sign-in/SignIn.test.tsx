@@ -63,11 +63,11 @@ describe('SignIn Component', () => {
       container.getElementsByTagName('input') as HTMLCollectionOf<HTMLInputElement>;
 
     fireEvent.change(
-      inputs.namedItem('Username') as HTMLInputElement, 'THISISNOTAUSERNAME'
+      inputs.namedItem('Username') as HTMLInputElement, {target: {value: 'THISISNOTAUSERNAME'}}
     );
 
     fireEvent.change(
-      inputs.namedItem('Password') as HTMLInputElement, 'THISISNOTAPASSWORD'
+      inputs.namedItem('Password') as HTMLInputElement, {target: {value: 'THISISNOTAPASSWORD'}}
     );
 
     const submitButton = screen.getByText('Sign In') as HTMLButtonElement;
@@ -79,6 +79,34 @@ describe('SignIn Component', () => {
     expect(submitButton).not.toHaveProperty('type', 'submit');
     expect(submitButton).toHaveProperty('disabled');
     expect(spyLoginUser).not.toHaveBeenCalled();
+  });
+
+  test('should submit when form is valid and call loginUser', () => {
+    const {container} = render(
+      <MemoryRouter>
+        <SignIn />
+      </MemoryRouter>
+    );
+
+    const inputs =
+      container.getElementsByTagName('input') as HTMLCollectionOf<HTMLInputElement>;
+
+    fireEvent.change(
+      inputs.namedItem('Username') as HTMLInputElement, {target: {value: 'Mockjester'}}
+    );
+    fireEvent.change(
+      inputs.namedItem('Password') as HTMLInputElement, {target: {value: 'THi$IsN0t@Pass'}}
+    );
+
+    const submitButton = screen.getByText('Sign In') as HTMLButtonElement;
+    const forms = container.getElementsByTagName('form') as HTMLCollectionOf<HTMLFormElement>;
+    fireEvent.submit(forms.item(0) as HTMLFormElement);
+
+    expect(forms.length).toBe(1);
+    expect(submitButton).toHaveClass('enabled');
+    expect(submitButton).toHaveProperty('type', 'submit');
+    expect(submitButton.disabled).toBe(false);
+    expect(spyLoginUser).toHaveBeenCalledTimes(1);
   });
 });
 
