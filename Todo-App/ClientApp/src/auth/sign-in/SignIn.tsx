@@ -55,14 +55,14 @@ const SignIn: React.FC = (): JSX.Element => {
           className={'uk-button uk-button-default btn-submit' + (disableForm ? '' : ' enabled')}
           type={disableForm ? 'button' : 'submit'}
           disabled={disableForm}>
-          Sign Up
+          Sign In
           </button>
         <button
           className={'uk-button uk-button-default btn-route-link'}
           type={'button'}
           onClick={handleRoute}
         >
-          Sign In
+          Sign Up
           </button>
       </form>
     </div>
