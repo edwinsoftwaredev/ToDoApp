@@ -12,9 +12,11 @@ describe('SignIn Component', () => {
   });
 
   test('should render', () => {
-    const signInSpy = jest.spyOn(SignInUtils, 'default');
-    render(<MemoryRouter><SignIn /></MemoryRouter>);
-    expect(signInSpy).toHaveBeenCalledTimes(1);
+    render(
+      <MemoryRouter>
+        <SignIn />
+      </MemoryRouter>
+    );
   });
 });
 
