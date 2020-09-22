@@ -13,8 +13,8 @@ export class AccountService {
    * Login a user
    * @return {Promise<void>}
    */
-  public static loginUser(loginData: any): Promise<void> {
-    return Axios.post(`${process.env.REACT_APP_API_SERVER_URL}api/login`, loginData);
+  public static authenticateUser(loginData: any): Promise<void> {
+    return Axios.post(`${process.env.REACT_APP_API_SERVER_URL}api/authentication`, loginData);
   }
 
 

@@ -9,18 +9,18 @@ import {AccountService} from '../../auth/AccountService';
 describe('SignIn Component', () => {
   let spyUsername: jest.SpyInstance<any>;
   let spyPassword: jest.SpyInstance<any>;
-  let spyLoginUser: jest.SpyInstance<any>;
+  let spyAuthenticateUser: jest.SpyInstance<any>;
 
   beforeEach(() => {
     spyPassword = jest.spyOn(Password, 'default');
     spyUsername = jest.spyOn(Username, 'default');
-    spyLoginUser = jest.spyOn(AccountService, 'loginUser');
+    spyAuthenticateUser = jest.spyOn(AccountService, 'authenticateUser');
   });
 
   afterEach(() => {
     spyUsername.mockClear();
     spyPassword.mockClear();
-    spyLoginUser.mockClear();
+    spyAuthenticateUser.mockClear();
   });
 
   test('should render', () => {
@@ -78,7 +78,7 @@ describe('SignIn Component', () => {
     expect(submitButton).not.toHaveClass('enabled');
     expect(submitButton).not.toHaveProperty('type', 'submit');
     expect(submitButton).toHaveProperty('disabled');
-    expect(spyLoginUser).not.toHaveBeenCalled();
+    expect(spyAuthenticateUser).not.toHaveBeenCalled();
   });
 
   test('should submit when form is valid and call loginUser', () => {
@@ -106,7 +106,7 @@ describe('SignIn Component', () => {
     expect(submitButton).toHaveClass('enabled');
     expect(submitButton).toHaveProperty('type', 'submit');
     expect(submitButton.disabled).toBe(false);
-    expect(spyLoginUser).toHaveBeenCalledTimes(1);
+    expect(spyAuthenticateUser).toHaveBeenCalledTimes(1);
   });
 });
 

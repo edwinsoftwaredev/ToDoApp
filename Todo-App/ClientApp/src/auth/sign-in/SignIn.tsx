@@ -14,7 +14,7 @@ const SignIn: React.FC = (): JSX.Element => {
 
   const handleSubmit = (event: any) => {
     if (!disableForm) {
-      AccountService.loginUser(loginData)
+      AccountService.authenticateUser(loginData)
         .then(() => {
           // after login this has to something
         })
