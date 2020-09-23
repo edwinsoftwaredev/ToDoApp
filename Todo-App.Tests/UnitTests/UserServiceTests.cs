@@ -52,7 +52,7 @@ namespace Todo_App.Tests.UnitTests
         }
 
         [Fact]
-        public void CreateUser_UserAndPasswordValid_Void()
+        public async void CreateUser_UserAndPasswordValid_Void()
         {
             var mockUserStore = Mock.Of<IUserStore<User>>();
 
@@ -74,12 +74,11 @@ namespace Todo_App.Tests.UnitTests
                 Email = "user@email.com" // validation in done in the service class
             };
 
-            var result = userService.Create(mockUserVM as User, mockUserVM.Password);
-            // IsFaulted returns true if the task has thrown an unhandled exception
-            //
-            // ThrowsAsync throws an exception which means that the task isFaulted when the
-            // function(var result) has not thrown a HttpResponseException
-            Assert.True((Assert.ThrowsAsync<HttpResponseException>(() => result).IsFaulted));
+            // if succeeded the method returns Task<Void>, that is the reason we are just
+            // testing if it does not throw an exception.
+            var ex = await Record.ExceptionAsync(() => userService.Create(mockUserVM as User, mockUserVM.Password));
+            Assert.Null(ex);
+
             mockUserManager
                 .Verify(um => um.CreateAsync(It.IsAny<User>(), It.IsAny<string>()), Times.Once());
         }
