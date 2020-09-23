@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using Todo_App.Controllers.Auth;
+using Todo_App.Controllers;
 using Todo_App.Model.Auth;
 using Todo_App.Model.Auth.VM;
 using Todo_App.Services.Models.Interfaces;
