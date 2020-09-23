@@ -1,7 +1,6 @@
 using System.Net.Mime;
 using System.Reflection;
 using IdentityServer4.Configuration;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -14,6 +13,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Net.Http.Headers;
 using Todo_App.DAL;
 using Todo_App.Model.Auth;
+using Todo_App.Services;
+using Todo_App.Services.Interfaces;
 using Todo_App.Services.Models;
 using Todo_App.Services.Models.Interfaces;
 
