@@ -16,7 +16,7 @@ namespace Todo_App.Services.Models
         private readonly IIdentityServerInteractionService _identityServerInteractionService;
 
         public UserService(UserManager<User> userManager,
-                IIdentityServerInteractionService identityServerInteractionService) : base()
+                IIdentityServerInteractionService identityServerInteractionService)
         {
             _userManager = userManager;
             _identityServerInteractionService = identityServerInteractionService;
