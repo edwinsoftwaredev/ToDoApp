@@ -5,7 +5,7 @@ using Todo_App.Model.Auth;
 using Todo_App.Model.Auth.VM;
 using Todo_App.Services.Models.Interfaces;
 
-namespace Todo_App.Controllers.Auth
+namespace Todo_App.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
