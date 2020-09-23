@@ -1,6 +1,7 @@
 using System.Net.Mime;
 using System.Reflection;
 using IdentityServer4.Configuration;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -76,6 +77,8 @@ namespace Todo_App
 
             // *** adding other services *** //
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddHttpContextAccessor();
 
             // *** ****** ***** ******** *** //
 
