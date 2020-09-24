@@ -1,4 +1,4 @@
-import Axios from 'axios';
+import Axios, {AxiosResponse} from 'axios';
 
 export class AccountService {
   /**
@@ -13,7 +13,7 @@ export class AccountService {
    * Login a user
    * @return {Promise<void>}
    */
-  public static authenticateUser(loginData: any): Promise<void> {
+  public static authenticateUser(loginData: any): Promise<AxiosResponse<any>> {
     return Axios.post(`${process.env.REACT_APP_API_SERVER_URL}api/authentication`, loginData);
   }
 

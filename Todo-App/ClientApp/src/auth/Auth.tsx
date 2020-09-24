@@ -5,6 +5,7 @@ import SignUp from './sign-up/SignUp';
 import {AuthService} from './AuthService';
 import {useQuery} from '../shared/utils';
 import './Auth.scss';
+import AuthCodes from './auth-codes/AuthCodes';
 
 /*
  * returns SignIn if the url is valid otherwise ConnectingAuthorizationServer
@@ -25,8 +26,11 @@ const Auth: React.FC = (): JSX.Element => {
       <header><h1 className='title'>TaskMan</h1></header>
       <Switch>
         <Route path="/signin" children={<SignInComponent />} />
-        <Route path="/signup">
+        <Route exact path="/signup">
           <SignUp />
+        </Route>
+        <Route path='/auth/codes'>
+          <AuthCodes />
         </Route>
       </Switch>
     </div>

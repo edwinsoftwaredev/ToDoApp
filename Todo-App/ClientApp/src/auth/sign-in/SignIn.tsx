@@ -4,19 +4,31 @@ import Username from '../../shared/inputs/user/username/Username';
 import Password from '../../shared/inputs/user/password/Password';
 import {useHistory} from 'react-router-dom';
 import {AccountService} from '../AccountService';
-import {AxiosError} from 'axios';
+import {AxiosError, AxiosResponse} from 'axios';
 import Message from '../../shared/message/Message';
+import {useQuery} from '../../shared/utils';
 
 const SignIn: React.FC = (): JSX.Element => {
-  const [loginData, setLoginData] = useState({});
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [disableForm, setDisableForm] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
 
+  const history = useHistory();
+  const handleRoute = () => history.push('/signup');
+  const returnUrl = useQuery().get('returnUrl');
+
   const handleSubmit = (event: any) => {
     if (!disableForm) {
-      AccountService.authenticateUser(loginData)
-        .then(() => {
-          // after login this has to something
+      AccountService.authenticateUser({
+        username: username,
+        password: password,
+        returnUrl: returnUrl
+      })
+        .then((result: AxiosResponse<any>) => {
+          // after login this has to call redirects to auth-callback
+          console.log(result.data);
+          window.location = result.data.redirectUrl;
         })
         .catch((error: AxiosError) => {
           setErrorMessage(error.message);
@@ -26,28 +38,24 @@ const SignIn: React.FC = (): JSX.Element => {
     event.preventDefault();
   };
 
-  const history = useHistory();
-
-  const handleRoute = () => history.push('/signup');
-
   useEffect(() => {
     // here loginData is evaluated to check if it
     // contains username and password.
     setDisableForm(
-      !((loginData as any).username
-        && (loginData as any).password
+      !(username
+        && password
       ));
-  }, [loginData])
+  }, [disableForm, username, password])
 
   return (
     <div className='signin'>
       <form className='form' onSubmit={e => disableForm ? null : handleSubmit(e)}>
         <div className='form-fields'>
           <Username
-            username={(username: string) => setLoginData({...loginData, username: username})}
+            username={(username: string) => setUsername(username)}
           />
           <Password
-            password={(password: string) => setLoginData({...loginData, password: password})}
+            password={(password: string) => setPassword(password)}
           />
         </div>
         <Message text={errorMessage} />
