@@ -26,8 +26,12 @@ namespace Todo_App.Services
         }
 
         // https://docs.microsoft.com/en-us/aspnet/core/security/authentication/identity
-        public async Task<SignInResult> Authenticate(LoginData loginData) {
-            if (this._signInManager.IsSignedIn(this._httpContextAcessor.HttpContext.User)) {
+        public async Task<SignInResult> Authenticate(LoginData loginData)
+        {
+            this._logger.LogInformation("An attemp to sign in user: " + loginData.Username + " was executed.");
+
+            if (this._signInManager.IsSignedIn(this._httpContextAcessor.HttpContext.User))
+            {
                 return SignInResult.Failed;
             }
 
@@ -39,12 +43,7 @@ namespace Todo_App.Services
                         true
                     );
 
-            if (result.Succeeded) {
-                _logger.LogInformation("User logged in.");
-                return result;
-            }
-
-            return SignInResult.Failed;
+            return result;
         }
     }
 }
