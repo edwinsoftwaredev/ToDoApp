@@ -17,6 +17,7 @@ using Todo_App.Services;
 using Todo_App.Services.Interfaces;
 using Todo_App.Services.Models;
 using Todo_App.Services.Models.Interfaces;
+using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 
 namespace Todo_App
 {
@@ -49,7 +50,7 @@ namespace Todo_App
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddCors(options => {
+            /*services.AddCors(options => {
                     options.AddPolicy(
                             name: allowedCorsOriginsName,
                             builder => {
@@ -59,7 +60,7 @@ namespace Todo_App
                                     );
                             }
                         );
-                });
+                });*/
 
             services.AddControllers(options => options.Filters.Add(new HttpResponseExceptionFilter()))
                 .ConfigureApiBehaviorOptions(options =>
@@ -135,8 +136,8 @@ namespace Todo_App
 
                     options.UserInteraction = new UserInteractionOptions
                     {
-                        LoginUrl = "http://localhost:3000/signin", // This must be the Server URL! -- Im testing now
-                        LogoutUrl = "http://localhost:3000/signout", // This must be the Server URL! -- Im testing now
+                        LoginUrl = "https://localhost:5001/signin", // This must be the real Server URL! -- Im testing now
+                        LogoutUrl = "https://localhost:5001/signout", // This must be the real Server URL! -- Im testing now
                         LoginReturnUrlParameter = "returnUrl"
                     };
                 })
@@ -185,6 +186,10 @@ namespace Todo_App
                 });
             });*/
 
+            services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = "ClientApp/build";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -213,6 +218,16 @@ namespace Todo_App
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+
+            app.UseSpa(spa =>
+            {
+                spa.Options.SourcePath = "ClientApp";
+
+                if (env.IsDevelopment())
+                {
+                    spa.UseReactDevelopmentServer(npmScript: "start");
+                }
+            });
         }
     }
 }
