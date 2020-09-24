@@ -5,9 +5,11 @@ namespace Todo_App.Model.Auth.VM {
     /// This interface is made for user logins
     /// </remarks>
     public class LoginData {
-        public string Username {get; set;}
+        [Required]
+        public string Username { get; set; }
         [Required]
         [MinLength(6), MaxLength(60)]
-        public string Password {get; set;}
+        public string Password { get; set; }
+        public string returnUrl { get; set; }
     }
 }
