@@ -1,5 +1,9 @@
 using System.Threading.Tasks;
+using IdentityServer4.Models;
+using IdentityServer4.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Todo_App.Controllers;
 using Todo_App.Model.Auth.VM;
@@ -15,21 +19,27 @@ namespace Todo_App.Tests.UnitTests
         {
             var mockLoginData = new LoginData {
                 Username = "THISUSERFAILS",
-                Password = "1Password!"
+                Password = "1Password!",
+                returnUrl = "NOTVALID"
             };
 
+            var mockLogger = Mock.Of<ILogger<AuthenticationController>>();
+            var mockIdentityServerInteractionService =
+                Mock.Of<IIdentityServerInteractionService>();
             var mockAuthenticationService = new Mock<IAuthenticationService>();
 
             mockAuthenticationService
                 .Setup(aus => aus.Authenticate(It.IsAny<LoginData>()))
-                .Returns(Task.Run(() => SignInResult.Failed));
+                .Returns(Task.Run(() => Microsoft.AspNetCore.Identity.SignInResult.Failed));
 
             var authenticationController =
-                new AuthenticationController(mockAuthenticationService.Object);
+                new AuthenticationController(
+                        mockAuthenticationService.Object,
+                        mockLogger,
+                        mockIdentityServerInteractionService);
 
             var result = await authenticationController.Authenticate(mockLoginData);
-
-            Assert.False(result.Succeeded);
+            Assert.IsType<NotFoundResult>(result);
             mockAuthenticationService
                 .Verify(aus => aus.Authenticate(It.IsAny<LoginData>()), Times.Once);
         }
@@ -39,21 +49,28 @@ namespace Todo_App.Tests.UnitTests
         {
             var mockLoginData = new LoginData {
                 Username = "THISUSERSUCCEED",
-                Password = "1Password!"
+                Password = "1Password!",
+                returnUrl = "https://localhost:5001/?client_id=1234"
             };
 
+            var mockLogger = Mock.Of<ILogger<AuthenticationController>>();
+            var mockIdentityServerInteractionService =
+                Mock.Of<IIdentityServerInteractionService>();
             var mockAuthenticationService = new Mock<IAuthenticationService>();
 
             mockAuthenticationService
                 .Setup(aus => aus.Authenticate(It.IsAny<LoginData>()))
-                .Returns(Task.Run(() => SignInResult.Success));
+                .Returns(Task.Run(() => Microsoft.AspNetCore.Identity.SignInResult.Success));
 
             var authenticationController =
-                new AuthenticationController(mockAuthenticationService.Object);
+                new AuthenticationController(
+                        mockAuthenticationService.Object,
+                        mockLogger,
+                        mockIdentityServerInteractionService);
 
             var result = await authenticationController.Authenticate(mockLoginData);
 
-            Assert.True(result.Succeeded);
+            Assert.IsType<OkObjectResult>(result);
             mockAuthenticationService
                 .Verify(aus => aus.Authenticate(It.IsAny<LoginData>()), Times.Once);
         }
