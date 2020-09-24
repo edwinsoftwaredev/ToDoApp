@@ -17,7 +17,7 @@ export class AuthService {
       redirect_uri: process.env.REACT_APP_REDIRECT_URI,
       response_type: 'code',
       scope: 'openid profile TodoAppApi.TodoAppUser',
-      popup_redirect_uri: process.env.REACT_APP_REDIRECT_LOGOUT
+      post_logout_redirect_uri: process.env.REACT_APP_REDIRECT_LOGOUT
     };
 
     this._userManager = new UserManager(userManagerSettings);
@@ -51,6 +51,13 @@ export class AuthService {
           this.redirectLogNetErrorAuthService(error.message);
         }
       });
+  }
+
+  /**
+   * requests tokens and return the Authenticated User
+   */
+  async completeAuthentication(): Promise<OidcUser | void> {
+    return this._userManager.signinRedirectCallback();
   }
 
   public static isUserLoggedInSelector = createSelector(
