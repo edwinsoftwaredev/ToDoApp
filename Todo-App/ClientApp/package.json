@@ -30,7 +30,7 @@
     "uikit": "^3.5.7"
   },
   "scripts": {
-    "start": "node_modules/.bin/rimraf ./build && react-scripts start",
+    "start": "rimraf ./build && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --verbose --watchAll --testMatch '**/src/**/*.test.tsx'",
     "eject": "react-scripts eject"
