@@ -6,7 +6,7 @@ export class AccountService {
    * @return {Promise<void>}
    */
   public static registerUser(userObj: object): Promise<void> {
-    return Axios.post(`${process.env.REACT_APP_API_SERVER_URL}api/user`, userObj);
+    return Axios.post(`${process.env.REACT_APP_API_SERVER_URL}/api/user`, userObj);
   }
 
   /**
@@ -14,7 +14,7 @@ export class AccountService {
    * @return {Promise<void>}
    */
   public static authenticateUser(loginData: any): Promise<AxiosResponse<any>> {
-    return Axios.post(`${process.env.REACT_APP_API_SERVER_URL}api/authentication`, loginData);
+    return Axios.post(`${process.env.REACT_APP_API_SERVER_URL}/api/authentication`, loginData);
   }
 
 
@@ -22,6 +22,6 @@ export class AccountService {
    * Deletes a user. Only authenticated user are able to delete their own accout.
    */
   public static deleteUser(userName: string): Promise<void> {
-    return Axios.delete(`${process.env.REACT_APP_API_SERVER_URL}api/user?id=${userName}`);
+    return Axios.delete(`${process.env.REACT_APP_API_SERVER_URL}/api/user?id=${userName}`);
   }
 }
