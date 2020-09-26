@@ -1,4 +1,6 @@
 using System.Threading.Tasks;
+using IdentityServer4.Services;
+using IdentityServer4.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -14,13 +16,16 @@ namespace Todo_App.Controllers {
     {
         private readonly IAuthenticationService _authenticationService;
         private readonly ILogger<AuthenticationController> _logger;
+        private readonly IIdentityServerInteractionService _interactionService;
 
         public AuthenticationController(
                 IAuthenticationService authenticationService,
-                ILogger<AuthenticationController> logger)
+                ILogger<AuthenticationController> logger,
+                IIdentityServerInteractionService interactionService)
         {
             this._authenticationService = authenticationService;
             this._logger = logger;
+            this._interactionService = interactionService;
         }
 
         /**
@@ -40,11 +45,16 @@ namespace Todo_App.Controllers {
                 return BadRequest();
             }
 
+            var context = await this._interactionService
+                .GetAuthorizationContextAsync(loginData.returnUrl);
+
+            this._logger.LogInformation("context: " + context);
+
             var result = await this._authenticationService.Authenticate(loginData);
 
             if (result.Succeeded) {
                 this._logger.LogInformation("user: " + loginData.Username + " has been signed." );
-                return Ok();
+                return Ok(new {redirectUrl = loginData.returnUrl});
             }
 
             if (!result.Succeeded && result.IsLockedOut && result.IsNotAllowed)
