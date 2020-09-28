@@ -4,8 +4,10 @@ import {
   createReducer,
   ActionReducerMapBuilder,
   AnyAction,
+  applyMiddleware,
 } from '@reduxjs/toolkit';
 import {RootState, rootReducer} from '../reducers/RootReducer';
+import {createEpicMiddleware} from 'redux-observable';
 
 export default class Store {
 
@@ -17,8 +19,11 @@ export default class Store {
   // This class generates a singleton redux store instance
   // It's possible to create many stores with redux.
   private constructor() {
+    const epicMiddleware = createEpicMiddleware();
     this._store = configureStore({
-      reducer: rootReducer
+      reducer: rootReducer,
+      middleware: [epicMiddleware], // configureStore will automatically pass those to applyMiddleware.
+      devTools: true
     });
 
     this._injectReducer =
