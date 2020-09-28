@@ -1,4 +1,4 @@
-import {Slice, createSlice} from '@reduxjs/toolkit';
+import {Slice, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {User as OidcUser} from 'oidc-client';
 import {AuthService} from './AuthService';
 
@@ -20,8 +20,9 @@ const authSlice: Slice<OidcUser | {}> = createSlice({
   name: 'oidcUser',
   initialState: authenticatedUser,
   reducers: {
-    identifyUser: (state: OidcUser | {}) => {
-      state = authenticatedUser;
+    identifyUser: (state: OidcUser | {}, action: PayloadAction<OidcUser>) => {
+      state = action.payload;
+      return state;
     }
   }
 });
