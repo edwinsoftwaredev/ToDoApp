@@ -27,8 +27,7 @@ const SignIn: React.FC = (): JSX.Element => {
       })
         .then((result: AxiosResponse<any>) => {
           // after login this has to call redirects to auth-callback
-          console.log(result.data);
-          window.location = result.data.redirectUrl;
+          window.location.assign(result.data.redirectUrl);
         })
         .catch((error: AxiosError) => {
           setErrorMessage(error.message);
