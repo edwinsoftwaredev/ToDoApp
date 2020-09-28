@@ -95,15 +95,6 @@ export class AuthService {
     // To avoid unexpected side effects the reducer must be pure <-- just values not calculated values.
     const isUserLoggedIn: boolean = useSelector(AuthService.isUserLoggedInSelector);
 
-    useEffect(() => {
-      if (!isUserLoggedIn) {
-        // _instance in static in this class and
-        // privateRoute is in this class
-        // that is why it is possible to use this line of code
-        AuthService._instance.startAuthentication();
-      }
-    }, [isUserLoggedIn]);
-
     return isUserLoggedIn ? guardedRoute : AuthService.NotAuthenticated();
   };
 
