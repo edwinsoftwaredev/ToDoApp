@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {createSlice, PayloadAction, createSelector, Action} from '@reduxjs/toolkit';
 import {RootState} from '../reducers/RootReducer';
 import {useSelector, useDispatch} from 'react-redux';
@@ -56,7 +56,7 @@ export const TestComponent: React.FC = () => {
   const value = useSelector(stateSelector);
   const dispatch = useDispatch();
 
-  const [val, setVal] = useState(value);
+  // const [val, setVal] = useState(value);
 
   const incrementEachSecond = () => {
     setInterval(() => {
@@ -69,7 +69,7 @@ export const TestComponent: React.FC = () => {
   };
 
   useEffect(() => {
-    setVal(value);
+    // setVal(value);
     /**
      * to get values programmatically or save a state
      * the code must be placed in useEffect.

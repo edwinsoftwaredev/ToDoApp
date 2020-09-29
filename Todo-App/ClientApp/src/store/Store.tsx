@@ -4,7 +4,6 @@ import {
   createReducer,
   ActionReducerMapBuilder,
   AnyAction,
-  applyMiddleware,
 } from '@reduxjs/toolkit';
 import {RootState, rootReducer} from '../reducers/RootReducer';
 import {createEpicMiddleware} from 'redux-observable';
