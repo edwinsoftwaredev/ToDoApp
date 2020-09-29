@@ -1,4 +1,4 @@
-import {combineReducers, Slice, createSlice, Action, AnyAction} from '@reduxjs/toolkit';
+import {combineReducers, Slice, createSlice} from '@reduxjs/toolkit';
 import authSlice from '../auth/AuthSlice';
 import {combineEpics, ActionsObservable, StateObservable} from 'redux-observable';
 import {catchError} from 'rxjs/operators';
@@ -12,7 +12,7 @@ interface IAppInitialState {
 const initialSlice: Slice<IAppInitialState> = createSlice({
   name: 'app',
   initialState: {
-    appName: 'TodoApp',
+    appName: 'Task Manager',
   } as IAppInitialState,
   reducers: {
     // no reducers
@@ -25,8 +25,7 @@ type Actions = SaveUserActions | TestComponentActions; // SaveUserActions | othe
 // https://redux-observable.js.org/docs/basics/SettingUpTheMiddleware.html
 export const rootEpic =
   (action$: ActionsObservable<Actions>,
-    store$: StateObservable<any>,
-    dependencies: any
+    store$: StateObservable<any>
   ) => combineEpics(
     setUserEpic,
     valueEpic
