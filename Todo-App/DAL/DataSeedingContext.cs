@@ -62,6 +62,9 @@ namespace Todo_App.DAL
                     RequirePkce = true, // default is false
                     AllowPlainTextPkce = false, // default is false
                     RequireConsent = false, // this is a firstParty client
+                    PostLogoutRedirectUris = {
+                        "https://localhost:5001/authentication/signout"
+                    },
                     AllowedScopes =
                     {
                         "TodoAppApi.TodoAppUser", // This is name of an ApiResource scope
