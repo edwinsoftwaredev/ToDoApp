@@ -11,6 +11,7 @@ import {AuthService} from './auth/AuthService';
 import {User as OidcUser} from 'oidc-client';
 import {saveUser} from './auth/auth-codes/AuthCodes';
 import {useDispatch, useSelector} from 'react-redux';
+import {AccountService} from './auth/AccountService';
 
 function AppContainer(): JSX.Element {
   const authService = AuthService.getInstance();
@@ -22,19 +23,22 @@ function AppContainer(): JSX.Element {
   const isUserLoggedIn = useSelector(AuthService.isUserLoggedInSelector);
 
   useEffect(() => {
-    if (
-      location.pathname !== '/signin' &&
-      location.pathname !== '/auth/codes' &&
-      !isUserLoggedIn
-    ) {
-      authService.getUser().then((user: OidcUser | null) => {
-        if (user) {
-          dispatch(saveUser(user));
-        } else {
-          authService.startAuthentication();
-        }
-      });
-    }
+    AccountService.getAntiForgeryToken().then(() => {
+      if (
+        location.pathname !== '/authentication/signin' &&
+        location.pathname !== '/auth/codes' &&
+        location.pathname !== '/authentication/signout' &&
+        !isUserLoggedIn
+      ) {
+        authService.getUser().then((user: OidcUser | null) => {
+          if (user) {
+            dispatch(saveUser(user));
+          } else {
+            authService.startAuthentication();
+          }
+        });
+      }
+    });
   }, [authService, dispatch, isUserLoggedIn, location.pathname]);
 
   return (
@@ -44,12 +48,7 @@ function AppContainer(): JSX.Element {
           <Home />
         </PrivateRoute>
         <Auth />
-        {/*<Route path='/'>
-            <TestComponent />
-          </Route>*/}
       </Switch>
-      {/*<header className="App-header">
-        </header>*/}
     </div>
   );
 }
