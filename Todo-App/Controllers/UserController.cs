@@ -20,6 +20,7 @@ namespace Todo_App.Controllers
 
         [HttpPost]
         [AllowAnonymous]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateUser(UserVM userVM)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
