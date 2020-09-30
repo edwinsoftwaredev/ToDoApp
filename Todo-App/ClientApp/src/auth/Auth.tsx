@@ -6,6 +6,7 @@ import {AuthService} from './AuthService';
 import {useQuery} from '../shared/utils';
 import './Auth.scss';
 import AuthCodes from './auth-codes/AuthCodes';
+import SignOut from './sign-out/SignOut';
 
 /*
  * returns SignIn if the url is valid otherwise ConnectingAuthorizationServer
@@ -23,14 +24,17 @@ const SignInComponent: React.FC = (): JSX.Element => {
 const Auth: React.FC = (): JSX.Element => {
   return (
     <div className='Auth'>
-      <header><h1 className='title'>TaskMan</h1></header>
+      <header><h1 className='title'>Task Manager</h1></header>
       <Switch>
-        <Route path="/signin" children={<SignInComponent />} />
+        <Route path="/authentication/signin" children={<SignInComponent />} />
         <Route exact path="/signup">
           <SignUp />
         </Route>
         <Route path='/auth/codes'>
           <AuthCodes />
+        </Route>
+        <Route path='/authentication/signout'>
+          <SignOut />
         </Route>
       </Switch>
     </div>
