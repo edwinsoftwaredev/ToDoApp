@@ -1,17 +1,25 @@
 using System.Threading.Tasks;
 using IdentityServer4.Services;
-using IdentityServer4.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Todo_App.Model.Auth.VM;
 using Todo_App.Services.Interfaces;
 
+/**
+ * This Controllers is based on the configuration of the following resources:
+ *
+ * https://docs.microsoft.com/en-us/aspnet/core/security/authentication/identity
+ * https://identityserver4.readthedocs.io/en/latest/topics/signout.html
+ * https://github.com/IdentityServer/IdentityServer4.Quickstart.UI/blob/main/Quickstart/Account/AccountController.cs
+ * https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.identity.signinmanager-1?view=aspnetcore-3.1
+ */
 namespace Todo_App.Controllers {
 
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]
+    [ValidateAntiForgeryToken]
     public class AuthenticationController : ControllerBase
     {
         private readonly IAuthenticationService _authenticationService;
@@ -32,12 +40,13 @@ namespace Todo_App.Controllers {
          * this method only works when login or the complete ui is separated from
          * server.
          */
-        [HttpPost]
+        [HttpPost("signin")]
         [AllowAnonymous]
-        public async Task<IActionResult> Authenticate(
+        public async Task<IActionResult> SignIn(
                 LoginData loginData
             )
         {
+
             // the client or ui has to send the returnUrl.
             // this method makes ids4 aware of all the parameters and values
             // in the returnUrl.
@@ -47,8 +56,6 @@ namespace Todo_App.Controllers {
 
             var context = await this._interactionService
                 .GetAuthorizationContextAsync(loginData.returnUrl);
-
-            this._logger.LogInformation("context: " + context);
 
             var result = await this._authenticationService.Authenticate(loginData);
 
@@ -86,6 +93,18 @@ namespace Todo_App.Controllers {
             }
 
             return NotFound();
+        }
+
+        [HttpPost("signout")]
+        public async Task<IActionResult> SignOut()
+        {
+            if (User?.Identity.IsAuthenticated == true)
+            {
+                await this._authenticationService.SignOut();
+                return Ok();
+            }
+
+            return BadRequest();
         }
     }
 }
