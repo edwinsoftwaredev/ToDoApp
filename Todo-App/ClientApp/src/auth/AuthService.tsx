@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react';
-import {UserManagerSettings, UserManager, User as OidcUser} from 'oidc-client';
+import React from 'react';
+import {UserManagerSettings, UserManager, User as OidcUser, SignoutResponse} from 'oidc-client';
 import {AxiosError} from 'axios';
 import {RootState} from '../reducers/RootReducer';
 import {createSelector} from '@reduxjs/toolkit';
@@ -59,6 +59,14 @@ export class AuthService {
   async completeAuthentication(): Promise<OidcUser | void> {
     return this._userManager.signinRedirectCallback();
   }
+
+  startSignOut = async (): Promise<SignoutResponse | void> => {
+    return this._userManager.signoutRedirect();
+  };
+
+  completeSignOut = async (): Promise<SignoutResponse> => {
+    return this._userManager.signoutRedirectCallback();
+  };
 
   public static isUserLoggedInSelector = createSelector(
     (state: RootState) => state.oidcUser,
