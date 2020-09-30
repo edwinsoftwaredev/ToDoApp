@@ -17,6 +17,7 @@ using Todo_App.Services.Interfaces;
 using Todo_App.Services.Models;
 using Todo_App.Services.Models.Interfaces;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.AspNetCore.Antiforgery;
 
 namespace Todo_App
 {
@@ -47,10 +48,13 @@ namespace Todo_App
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-            services.AddControllers(options => options.Filters.Add(new HttpResponseExceptionFilter()))
-                .ConfigureApiBehaviorOptions(options =>
-                {
+            services.AddControllersWithViews(options =>
+            {
+                // this filters are applied globally
+                options.Filters.Add(new HttpResponseExceptionFilter());
+                options.Filters.Add(new ValidateAntiForgeryTokenAttribute());
+            }).ConfigureApiBehaviorOptions(options =>
+               {
                     options.InvalidModelStateResponseFactory = context =>  {
                         /*
                          * these lines change the results type to a serializable type (JSON)
@@ -75,6 +79,11 @@ namespace Todo_App
                     })
                 .AddEntityFrameworkStores<IdDbContext>()
                 .AddDefaultTokenProviders();
+
+            services.AddAntiforgery(options => {
+                // this is the header name when the token is used to make a request
+                options.HeaderName = "X-XSRF-TOKEN";
+            });
 
             var migrationAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
 
@@ -122,9 +131,10 @@ namespace Todo_App
 
                     options.UserInteraction = new UserInteractionOptions
                     {
-                        LoginUrl = "https://localhost:5001/signin", // This must be the real Server URL! -- Im testing now
-                        LogoutUrl = "https://localhost:5001/signout", // This must be the real Server URL! -- Im testing now
-                        LoginReturnUrlParameter = "returnUrl"
+                        // because these paths are local they must start with a leadind slash
+                        LoginUrl = "https://localhost:5001/authentication/signin", // This must be the real Server URL! -- Im testing now
+                        LogoutUrl = "https://localhost:5001/authentication/signout", // This must be the real Server URL! -- Im testing now
+                        LoginReturnUrlParameter = "returnUrl",
                     };
                 })
                 .AddConfigurationStore(options =>
@@ -179,7 +189,9 @@ namespace Todo_App
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(
+                IApplicationBuilder app,
+                IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
