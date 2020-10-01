@@ -6,6 +6,7 @@ riderModule.iml
 .idea/
 /.vs/
 node_modules/
+Todo-App/ClientApp/
 
 ## important files (e.g keys, codes, ...)
 tempkey.rsa
