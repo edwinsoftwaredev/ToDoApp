@@ -15,7 +15,7 @@ const SignIn: React.FC = (): JSX.Element => {
   const [errorMessage, setErrorMessage] = useState('');
 
   const history = useHistory();
-  const handleRoute = () => history.push('/signup');
+  const handleRoute = () => history.push('/authentication/signup');
   const returnUrl = useQuery().get('returnUrl');
 
   const handleSubmit = (event: any) => {

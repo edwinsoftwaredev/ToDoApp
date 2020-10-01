@@ -31,7 +31,7 @@ const SignUp: React.FC = (): JSX.Element => {
 
   const history = useHistory();
 
-  const handleRoute = () => history.push('/signin');
+  const handleRoute = () => history.push('/authentication/signin');
 
   useEffect(() => {
     setDisableForm(

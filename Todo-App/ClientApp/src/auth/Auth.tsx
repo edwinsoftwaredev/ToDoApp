@@ -27,7 +27,7 @@ const Auth: React.FC = (): JSX.Element => {
       <header><h1 className='title'>Task Manager</h1></header>
       <Switch>
         <Route path="/authentication/signin" children={<SignInComponent />} />
-        <Route exact path="/signup">
+        <Route path="/authentication/signup">
           <SignUp />
         </Route>
         <Route path='/auth/codes'>

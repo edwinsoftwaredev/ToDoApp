@@ -28,6 +28,7 @@ function AppContainer(): JSX.Element {
         location.pathname !== '/authentication/signin' &&
         location.pathname !== '/auth/codes' &&
         location.pathname !== '/authentication/signout' &&
+        location.pathname !== '/authentication/signup' &&
         !isUserLoggedIn
       ) {
         authService.getUser().then((user: OidcUser | null) => {
