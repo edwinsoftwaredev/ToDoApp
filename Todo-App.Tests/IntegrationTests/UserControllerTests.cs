@@ -5,7 +5,9 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using IdentityServer4.EntityFramework.DbContexts;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Data.Sqlite;
@@ -39,9 +41,12 @@ namespace Todo_App.Tests.IntegrationTests {
             // this is just to make the state valid
             var mockUser = new UserVM
             {
+                UserName = "TestingUser",
                 Password = "password", // in controller it is checked by ModelState.IsValid
                 Email = "user@email.com" // in controller it is checked by ModelState.IsValid
             };
+
+            var mockAntiforgery = Mock.Of<AutoValidateAntiforgeryTokenAttribute>();
 
             var mockUserService = Mock.Of<IUserService>();
             var secuence = new MockSequence();
@@ -58,6 +63,15 @@ namespace Todo_App.Tests.IntegrationTests {
                         });
                 })
                 .CreateClient();
+
+
+            // extracting and sending csrf token on every request
+            var xsrfRequest = await client.GetAsync("/api/xsrftoken");
+            var resultCookies = xsrfRequest.Headers.GetValues("Set-Cookie").ToArray();
+            var xsrftoken = Array
+                .Find<string>(resultCookies, cookie => cookie.StartsWith("X-XSRF-TOKEN"));
+            xsrftoken = xsrftoken.Split("=")[1].Split(";")[0];
+            client.DefaultRequestHeaders.Add("X-XSRF-TOKEN", xsrftoken);
 
             var content = this.GetContent<UserVM>(mockUser);
             var result = await client.PostAsync("/api/user", content);
@@ -78,6 +92,14 @@ namespace Todo_App.Tests.IntegrationTests {
             var client = GetHostBuilder(this._factory).CreateClient();
 
             var content = this.GetContent<UserVM>(mockUser);
+
+            var xsrfRequest = await client.GetAsync("/api/xsrftoken");
+            var resultCookies = xsrfRequest.Headers.GetValues("Set-Cookie").ToArray();
+            var xsrftoken = Array
+                .Find<string>(resultCookies, cookie => cookie.StartsWith("X-XSRF-TOKEN"));
+            xsrftoken = xsrftoken.Split("=")[1].Split(";")[0];
+
+            client.DefaultRequestHeaders.Add("x-xsrf-token", xsrftoken);
             var result = await client.PostAsync("/api/user", content);
 
             var resultObject = JsonConvert
@@ -110,6 +132,13 @@ namespace Todo_App.Tests.IntegrationTests {
             var client = GetHostBuilder(this._factory).CreateClient();
 
             var content = this.GetContent<UserVM>(mockUser);
+            var xsrfRequest = await client.GetAsync("/api/xsrftoken");
+            var resultCookies = xsrfRequest.Headers.GetValues("Set-Cookie").ToArray();
+            var xsrftoken = Array
+                .Find<string>(resultCookies, cookie => cookie.StartsWith("X-XSRF-TOKEN"));
+            xsrftoken = xsrftoken.Split("=")[1].Split(";")[0];
+
+            client.DefaultRequestHeaders.Add("x-xsrf-token", xsrftoken);
             var result = await client.PostAsync("/api/user", content);
 
             var resultObject = JsonConvert
@@ -142,7 +171,15 @@ namespace Todo_App.Tests.IntegrationTests {
             var client = GetHostBuilder(this._factory).CreateClient();
 
             var content = this.GetContent<UserVM>(mockUser);
+            var xsrfRequest = await client.GetAsync("/api/xsrftoken");
+            var resultCookies = xsrfRequest.Headers.GetValues("Set-Cookie").ToArray();
+            var xsrftoken = Array
+                .Find<string>(resultCookies, cookie => cookie.StartsWith("X-XSRF-TOKEN"));
+            xsrftoken = xsrftoken.Split("=")[1].Split(";")[0];
+
+            client.DefaultRequestHeaders.Add("x-xsrf-token", xsrftoken);
             var result = await client.PostAsync("/api/user", content);
+
             Assert.Equal(HttpStatusCode.OK, result.StatusCode);
             var selectCmd = _connection.CreateCommand();
             selectCmd.CommandText = "Select * from User where UserName = 'user'";
@@ -175,6 +212,7 @@ namespace Todo_App.Tests.IntegrationTests {
                     {
                         builder.ConfigureTestServices(services =>
                             {
+
                                 var descriptor = services.SingleOrDefault(d =>
                                           d.ServiceType == typeof(DbContextOptions<IdDbContext>));
 
@@ -199,8 +237,12 @@ namespace Todo_App.Tests.IntegrationTests {
                                             .GetRequiredService<IdDbContext>();
                                         var roleManager = scopedServices
                                             .GetRequiredService<RoleManager<Role>>();
+                                        var configurationDbContext =
+                                            scopedServices.GetRequiredService<ConfigurationDbContext>();
 
-                                        DataSeedingContext.Initialize(context, roleManager);
+                                        DataSeedingContext.Initialize(context,
+                                                roleManager,
+                                                configurationDbContext);
                                     }
                                     catch(Exception ex)
                                     {
