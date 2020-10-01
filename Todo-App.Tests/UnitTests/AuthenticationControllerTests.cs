@@ -1,7 +1,5 @@
 using System.Threading.Tasks;
-using IdentityServer4.Models;
 using IdentityServer4.Services;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -38,7 +36,7 @@ namespace Todo_App.Tests.UnitTests
                         mockLogger,
                         mockIdentityServerInteractionService);
 
-            var result = await authenticationController.Authenticate(mockLoginData);
+            var result = await authenticationController.SignIn(mockLoginData);
             Assert.IsType<NotFoundResult>(result);
             mockAuthenticationService
                 .Verify(aus => aus.Authenticate(It.IsAny<LoginData>()), Times.Once);
@@ -68,7 +66,7 @@ namespace Todo_App.Tests.UnitTests
                         mockLogger,
                         mockIdentityServerInteractionService);
 
-            var result = await authenticationController.Authenticate(mockLoginData);
+            var result = await authenticationController.SignIn(mockLoginData);
 
             Assert.IsType<OkObjectResult>(result);
             mockAuthenticationService
