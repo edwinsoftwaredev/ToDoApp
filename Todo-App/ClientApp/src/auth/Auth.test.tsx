@@ -25,7 +25,7 @@ describe('Auth component', () => {
 
   test('should render SignIn. URL is valid', () => {
     const urlToEncode = 'https://localhost:5001/callback?client_id=T&redirect_uri=h&response_type=c&scope=o&state=f&code_challenge=E&code_challenge_method=S&response_mode=q';
-    const url = '/signin?returnUrl=' + encodeURIComponent(urlToEncode);
+    const url = '/authentication/signin?returnUrl=' + encodeURIComponent(urlToEncode);
 
     render(
       <MemoryRouter initialEntries={[url]}>
@@ -40,7 +40,7 @@ describe('Auth component', () => {
 
   test('should not render SignIn. URL is not valid', () => {
     const urlToEncode = '';
-    const url = '/signin?returnUrl=' + encodeURIComponent(urlToEncode);
+    const url = '/authentication/signin?returnUrl=' + encodeURIComponent(urlToEncode);
 
     render(
       <MemoryRouter initialEntries={[url]}>
