@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Todo_App.Model.Auth.VM {
     /// <remarks>
-    /// This interface is made for user logins
+    /// This class is made for user logins
     /// </remarks>
     public class LoginData {
         [Required]
