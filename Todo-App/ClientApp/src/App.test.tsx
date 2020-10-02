@@ -1,5 +1,5 @@
 import React from 'react';
-import {render, screen} from '@testing-library/react';
+import {render, screen, waitForDomChange, waitForElement, wait} from '@testing-library/react';
 import App from './App';
 import Store from './store/Store';
 import {Provider} from 'react-redux';
@@ -7,6 +7,8 @@ import {AuthService} from './auth/AuthService';
 import {createSelector} from '@reduxjs/toolkit';
 import {RootState} from './reducers/RootReducer';
 import * as  Home from './home/Home';
+import {MemoryRouter} from 'react-router-dom';
+import {AccountService} from './auth/AccountService';
 
 const store = Store.getInstance();
 
@@ -16,6 +18,8 @@ describe('App Component', () => {
   let isUserLoggedInSpy: jest.SpyInstance<any>;
   let homeComponentSpy: jest.SpyInstance<any>;
   let notAuthenticatedComponentSpy: jest.SpyInstance<any>;
+  let getAntiForgeryTokenSpy: jest.SpyInstance<any>;
+  let getUserSpy: jest.SpyInstance<any>;
 
   const authService: AuthService = AuthService.getInstance();
 
@@ -24,15 +28,31 @@ describe('App Component', () => {
     isUserLoggedInSpy = jest.spyOn(AuthService, 'isUserLoggedInSelector');
     notAuthenticatedComponentSpy = jest.spyOn(AuthService, 'NotAuthenticated')
     homeComponentSpy = jest.spyOn(Home, 'default');
+    getAntiForgeryTokenSpy = jest.spyOn(AccountService, 'getAntiForgeryToken');
+    getUserSpy = jest.spyOn(authService, 'getUser');
   });
 
   afterEach(() => {
     isUserLoggedInSpy.mockClear();
     startAuthenticationSpy.mockClear();
     notAuthenticatedComponentSpy.mockClear();
+    getAntiForgeryTokenSpy.mockClear();
+    getUserSpy.mockClear();
   });
 
-  test('should not render guarded route. User is not authenticated', () => {
+  test('should get antiforgery token', () => {
+    render(
+      <Provider store={store}>
+        <MemoryRouter initialEntries={['/']}>
+          <App />
+        </MemoryRouter>
+      </Provider>
+    );
+
+    expect(getAntiForgeryTokenSpy).toHaveBeenCalledTimes(1);
+  });
+
+  test('should not render guarded route. User is not authenticated', async () => {
     const mockedIsUserLoggedIn = false;
 
     // isUserLoggedInSpy recives a createSelector instance
@@ -45,18 +65,35 @@ describe('App Component', () => {
       );
     })());
 
-    render(<Provider store={store}><App /></Provider>);
+    getAntiForgeryTokenSpy.mockImplementation(() => {
+      return Promise.resolve();
+    });
+
+    getUserSpy.mockImplementation(() => {
+      return Promise.resolve<null>(null);
+    });
+
+    render(
+      <Provider store={store}>
+        <MemoryRouter initialEntries={['/']}>
+          <App />
+        </MemoryRouter>
+      </Provider>
+    );
     // notice that I am not using ' instead I am using /
     // / is use to matching a regex
     // ' is use to matching a string
     // expect(screen.getByText(/You are not logged in./i)).toBeInTheDocument();
-    expect(isUserLoggedInSpy).toHaveBeenCalledTimes(2); // the call is outside the useEffect
+
+    await wait(() => {}); // just waiting for the other functions to be called
+    expect(getUserSpy).toHaveBeenCalledTimes(1);
+    expect(isUserLoggedInSpy).toHaveBeenCalled(); // the call is outside the useEffect
     expect(startAuthenticationSpy).toHaveBeenCalledTimes(1);
     expect(homeComponentSpy).not.toHaveBeenCalled();
     expect(notAuthenticatedComponentSpy).toHaveBeenCalledTimes(1);
   });
 
-  test('should render guarded route. User is authenticated', () => {
+  test('should render guarded route. User is authenticated', async () => {
     const mockedIsUserLoggedIn = true;
 
     isUserLoggedInSpy.mockImplementation((() => {
@@ -66,8 +103,17 @@ describe('App Component', () => {
       );
     })());
 
-    render(<Provider store={store}><App /></Provider>);
-    expect(isUserLoggedInSpy).toHaveBeenCalledTimes(2); // the call is outside the useEffect
+    render(
+      <Provider store={store}>
+        <MemoryRouter initialEntries={['/']}>
+          <App />
+        </MemoryRouter>
+      </Provider>
+    );
+
+    await wait(() => {});
+    expect(getUserSpy).not.toHaveBeenCalled();
+    expect(isUserLoggedInSpy).toHaveBeenCalled(); // the call is outside the useEffect
     expect(startAuthenticationSpy).not.toHaveBeenCalled();
     expect(homeComponentSpy).toHaveBeenCalled();
     expect(notAuthenticatedComponentSpy).not.toHaveBeenCalled();
