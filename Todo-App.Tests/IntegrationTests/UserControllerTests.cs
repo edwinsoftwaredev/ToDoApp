@@ -115,8 +115,6 @@ namespace Todo_App.Tests.IntegrationTests {
                 reader.Read();
                 Assert.Throws<InvalidOperationException>(() => reader.GetString(reader.GetOrdinal("UserName")));
             }
-
-            _connection.Dispose();
         }
 
         [Fact]
@@ -154,8 +152,6 @@ namespace Todo_App.Tests.IntegrationTests {
                 reader.Read();
                 Assert.Throws<InvalidOperationException>(() => reader.GetString(reader.GetOrdinal("Email")));
             }
-
-            _connection.Dispose();
         }
 
         [Fact]
@@ -203,7 +199,7 @@ namespace Todo_App.Tests.IntegrationTests {
 
         //
         // Summary:
-        //      returns a WebApplicationFactory with out mocked services
+        //      returns a WebApplicationFactory without mocked services
         //
         private static WebApplicationFactory<Startup> GetHostBuilder(WebApplicationFactory<Todo_App.Startup> factory)
         {
