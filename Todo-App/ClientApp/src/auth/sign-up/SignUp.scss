@@ -18,39 +18,18 @@
     }
 
     .btn-submit {
-      font-size: 1.3em;
-      font-weight: bold;
-      text-transform: capitalize;
-      color: lightgray !important;
-      border-color: lightgray !important;
-
       &.enabled {
-        color: slategray !important;
-        border-color: slategray !important;
+        color: green !important;
+        border-color: forestgreen !important;
         &:hover {
-          color: green !important;
           cursor: pointer;
-          border-color: forestgreen !important;
+          background-color: #d7ffd9 !important;
         }
-      }
-
-      &:hover {
-        color: #999;
       }
     }
 
     .btn-route-link {
       margin-top: 10px;
-      font-size: 1.3em;
-      font-weight: bold;
-      text-transform: capitalize;
-      color: slategray !important;
-      border-color: slategray !important;
-      &:hover {
-        color: gray !important;
-        cursor: pointer;
-        border-color: gray !important;
-      }
     }
   }
 }

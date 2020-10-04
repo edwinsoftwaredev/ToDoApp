@@ -59,7 +59,7 @@ const SignIn: React.FC = (): JSX.Element => {
         </div>
         <Message text={errorMessage} />
         <button
-          className={'uk-button uk-button-default btn-submit' + (disableForm ? '' : ' enabled')}
+          className={'uk-button uk-button-default btn-submit' + (disableForm ? ' disabled' : ' enabled')}
           type={disableForm ? 'button' : 'submit'}
           disabled={disableForm}>
           Sign In
