@@ -12,7 +12,7 @@ interface IAppInitialState {
 const initialSlice: Slice<IAppInitialState> = createSlice({
   name: 'app',
   initialState: {
-    appName: 'Task Manager',
+    appName: 'Todos Manager',
   } as IAppInitialState,
   reducers: {
     // no reducers
