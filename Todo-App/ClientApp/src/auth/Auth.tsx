@@ -24,7 +24,7 @@ const SignInComponent: React.FC = (): JSX.Element => {
 const Auth: React.FC = (): JSX.Element => {
   return (
     <div className='Auth'>
-      <header><h1 className='title'>Task Manager</h1></header>
+      <header><h1 className='title'>Todos Manager</h1></header>
       <Switch>
         <Route path="/authentication/signin" children={<SignInComponent />} />
         <Route path="/authentication/signup">
