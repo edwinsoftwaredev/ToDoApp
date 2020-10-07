@@ -10,7 +10,7 @@ import {AccountService} from '../auth/AccountService';
  * that doesn't mean it has to be placed here.
  */
 const MenuList = (props: any): JSX.Element => {
-  const [prevTarget, setPrevTarget] = useState();
+  const [prevTarget, setPrevTarget] = useState<HTMLLIElement>();
   const [selectedTarget, setSelectedTarget] = useState();
 
   const handleTargetSelection = (target: HTMLLIElement, route: string) => {
@@ -34,52 +34,54 @@ const MenuList = (props: any): JSX.Element => {
   }, [prevTarget, selectedTarget]);
 
   return (
-    <nav>
+    <nav >
       <ol>
         <li
           onClick={event => handleTargetSelection(event.currentTarget, 'feature')}
         >
           <div><i className='bx bxs-bookmark-star bx-md'></i></div>
-          <div>Featured Todos</div>
+          <div className='title'>Featured Todos</div>
         </li>
         <li
           onClick={event => handleTargetSelection(event.currentTarget, 'calendar')}
         >
           <div><i className='bx bx-calendar-check bx-md'></i></div>
-          <div>Calendar</div>
+          <div className='title'>Calendar</div>
         </li>
         <li
           onClick={event => handleTargetSelection(event.currentTarget, 'account')}
         >
           <div><i className='bx bxs-user-detail bx-md'></i></div>
-          <div>Account</div>
+          <div className='title'>Account</div>
         </li>
         <li
           onClick={event => handleTargetSelection(event.currentTarget, 'signout')}
         >
           <div><i className='bx bx-log-out bx-md'></i></div>
-          <div>Sign Out</div>
+          <div className='title'>Sign Out</div>
         </li>
       </ol>
     </nav>
   );
 };
 
-const SideMenu: React.FC = () => {
+const SideMenu = (props: any): JSX.Element => {
+  const [shrink, setShrink] = useState<boolean>(false);
+
   const handleRoute = (route: string) => {
+    console.log(route);
+  };
+
+  const handleClick = () => {
+    setShrink(!shrink);
+    return props.shrink(shrink);
   };
 
   return (
-    <div className='SideMenu'>
+    <div className={'SideMenu'}>
       <section className='side-menu-section'>
-        <div className='title-bar'>
-          <div className='title'>
-            <span>Todos Manager</span>
-          </div>
-          <div className='btn-menu-shrink'>
-            <button className={'uk-button uk-button-default'}>
-              <i className='bx bx-arrow-from-right bx-md'></i>
-            </button>
+        <div className='date-picture-weather-container'>
+          <div className='date-picture-weather'>
           </div>
         </div>
         <MenuList handleRoute={handleRoute} />
@@ -89,6 +91,7 @@ const SideMenu: React.FC = () => {
 };
 
 const Home: React.FC = (): JSX.Element => {
+  const [shrink, setShrink] = useState();
   const authService = AuthService.getInstance();
 
   const handleLogout = () => {
@@ -98,9 +101,13 @@ const Home: React.FC = (): JSX.Element => {
     });
   };
 
+  const handleShrink = (isShrinked: boolean) => {
+    setShrink(isShrinked);
+  };
+
   return (
-    <div className='Home'>
-      <SideMenu />
+    <div className={'Home' + (shrink ? ' shrink' : '')}>
+      <SideMenu shrink={handleShrink} />
       <div className='container'>
         <main className='home-main'>
           <header>
