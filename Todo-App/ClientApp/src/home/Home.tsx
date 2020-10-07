@@ -65,16 +65,10 @@ const MenuList = (props: any): JSX.Element => {
   );
 };
 
-const SideMenu = (props: any): JSX.Element => {
-  const [shrink, setShrink] = useState<boolean>(false);
+const SideMenu = (): JSX.Element => {
 
   const handleRoute = (route: string) => {
     console.log(route);
-  };
-
-  const handleClick = () => {
-    setShrink(!shrink);
-    return props.shrink(shrink);
   };
 
   return (
@@ -82,6 +76,20 @@ const SideMenu = (props: any): JSX.Element => {
       <section className='side-menu-section'>
         <div className='date-picture-weather-container'>
           <div className='date-picture-weather'>
+            <div className='widgets-container'>
+              <div className='day-date'>
+                Wed, 10th
+              </div>
+              <div className='month-year'>
+                Oct, 2020
+              </div>
+              <div className='weather-status'>
+                Scattered Clouds
+              </div>
+              <div className='weather-stat'>
+                40 F°
+              </div>
+            </div>
           </div>
         </div>
         <MenuList handleRoute={handleRoute} />
@@ -91,7 +99,9 @@ const SideMenu = (props: any): JSX.Element => {
 };
 
 const Home: React.FC = (): JSX.Element => {
-  const [shrink, setShrink] = useState();
+  const [latitude, setLatitude] = useState();
+  const [longitude, setLongitude] = useState();
+
   const authService = AuthService.getInstance();
 
   const handleLogout = () => {
@@ -101,13 +111,18 @@ const Home: React.FC = (): JSX.Element => {
     });
   };
 
-  const handleShrink = (isShrinked: boolean) => {
-    setShrink(isShrinked);
-  };
+  // weather api key: a1b571b1a8f6cf0d584cd7b9d3a76464
+
+  navigator.geolocation.getCurrentPosition((position: Position) => {
+    setLatitude(position.coords.latitude);
+    setLongitude(position.coords.longitude);
+  }, ((posError: PositionError) => {
+    console.log(posError);
+  }), {enableHighAccuracy: true} as PositionOptions);
 
   return (
-    <div className={'Home' + (shrink ? ' shrink' : '')}>
-      <SideMenu shrink={handleShrink} />
+    <div className={'Home'}>
+      <SideMenu />
       <div className='container'>
         <main className='home-main'>
           <header>
