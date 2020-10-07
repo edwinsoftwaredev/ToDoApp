@@ -11,6 +11,7 @@
     box-sizing: border-box;
     min-width: 20vw;
     max-width: 20vw;
+    background-color: slategray;
 
     .side-menu-section {
       padding-top: 2em;
@@ -18,9 +19,67 @@
 
       .date-picture-weather-container {
         .date-picture-weather {
-          border: 1px solid #73e8ff;
-          margin: 1em 0 1em 1em;
+          border: 1px solid white;
+          margin: 1em 1em 1em 1em;
           padding-top: 56.25%; // aspect ratio 16:9
+          position: relative;
+
+          .widgets-container {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-image: url('../shared/assets/Scattered Clouds/scattered-clouds-day.jpg');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            grid-template-rows: 1fr 1fr 1fr;
+            align-items: center;
+            overflow: hidden;
+
+            .day-date {
+              grid-column: 1;
+              grid-row: 1;
+              color: white;
+              font-size: 14pt;
+              font-weight: 450;
+              text-align: left;
+              padding-left: 0.5em;
+            }
+
+            .month-year {
+              grid-column: 1;
+              grid-row: 2;
+              color: white;
+              font-size: 14pt;
+              font-weight: 450;
+              text-align: left;
+              padding-left: 0.5em;
+            }
+
+            .weather-status {
+              grid-column: 1;
+              grid-row: 3;
+              color: white;
+              font-size: 14pt;
+              font-weight: 450;
+              text-align: left;
+              padding-left: 0.5em;
+            }
+
+            .weather-stat {
+              grid-column: 2;
+              grid-row: 3;
+              color: white;
+              font-size: 18pt;
+              font-weight: 450;
+              text-align: right;
+              padding-right: 0.5em;
+            }
+          }
         }
         width: 100%;
         box-sizing: border-box;
@@ -28,7 +87,7 @@
 
       nav {
         ol {
-          padding-left: 1em;
+          padding-left: 0;
           list-style: none;
 
           li {
@@ -43,11 +102,6 @@
             &:hover {
               transition: background-color 200ms;
               background-color: rgba(193,213,224,0.2) !important;
-
-              div {
-                transition: color 200ms;
-                color: #e0e0e0;
-              }
             }
 
             & + * {
@@ -56,8 +110,8 @@
 
             div {
               font-size: 1.5em;
-              font-weight: 600;
-              color: #c1d5e0;
+              font-weight: 400;
+              color: white;
               line-height: 0;
               text-align: center;
             }
@@ -68,10 +122,10 @@
             }
 
             &.selected {
-              border-left: 3px solid lightblue;
-              background-color: rgba(193,213,224,0.2) !important;
+              border-left: 4px solid lightblue;
+              background-color: rgba(193,213,224,0.3) !important;
               div {
-                color: #73e8ff;
+                font-weight: 600;
               }
             }
           }
