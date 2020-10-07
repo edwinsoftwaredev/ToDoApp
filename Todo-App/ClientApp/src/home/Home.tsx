@@ -5,6 +5,7 @@ import {RootState} from '../reducers/RootReducer';
 import './Home.scss';
 import {AuthService} from '../auth/AuthService';
 import {AccountService} from '../auth/AccountService';
+import Axios, {AxiosResponse, AxiosError} from 'axios';
 /**
  * this component contains the code requiered to logout,
  * that doesn't mean it has to be placed here.
@@ -66,28 +67,74 @@ const MenuList = (props: any): JSX.Element => {
 };
 
 const SideMenu = (): JSX.Element => {
+  const [weatherDesc, setWeatherDesc] = useState<string>('');
+  const [weatherTemp, setWeatherTemp] = useState<string>('0');
+  const [weatherBgClass, setWeatherBgClass] = useState<string>('');
+
+  navigator.geolocation.getCurrentPosition((position: Position) => {
+    const lat = position.coords.latitude;
+    const lon = position.coords.longitude;
+    const apiUrl = process.env.REACT_APP_API_WEATHER_KEY;
+
+    if (!weatherDesc) {
+      Axios
+        .get(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=imperial&appid=${apiUrl}`)
+        .then((response: AxiosResponse) => {
+          setWeatherDesc(response.data.weather[0].description);
+          setWeatherTemp(response.data.main.temp);
+          let wbgclass = '';
+          wbgclass = response.data.weather[0].description.replace(' ', '-');
+          wbgclass =
+            response
+              .data
+              .weather[0]
+              .icon
+              .includes('d') ? wbgclass + '-d' : wbgclass + '-n';
+          setWeatherBgClass(wbgclass);
+        }).catch((error: AxiosError) => {
+          console.log(error.message);
+        });
+    }
+
+  }, ((posError: PositionError) => {
+    console.log(posError);
+  }), {enableHighAccuracy: true} as PositionOptions);
 
   const handleRoute = (route: string) => {
     console.log(route);
   };
+
+  const date = new Date().toString().split(' ');
+  let actualDate = date[2];
+  let grade = 'th';
+  if (actualDate.includes('1', 1)) {
+    grade = 'st';
+  }
+  if (actualDate.includes('1', 1)) {
+    grade = 'nd';
+  }
+  if (actualDate.includes('1', 1)) {
+    grade = 'rd';
+  }
+  actualDate = (actualDate.includes('0', 0) ? actualDate[1] : actualDate);
 
   return (
     <div className={'SideMenu'}>
       <section className='side-menu-section'>
         <div className='date-picture-weather-container'>
           <div className='date-picture-weather'>
-            <div className='widgets-container'>
+            <div className={'widgets-container ' + weatherBgClass}>
               <div className='day-date'>
-                Wed, 10th
+                {date[0] + ', ' + actualDate + grade}
               </div>
               <div className='month-year'>
-                Oct, 2020
+                {date[1] + ', ' + date[3]}
               </div>
               <div className='weather-status'>
-                Scattered Clouds
+                {weatherDesc}
               </div>
               <div className='weather-stat'>
-                40 F°
+                {Number.parseInt(weatherTemp as string)}F°
               </div>
             </div>
           </div>
@@ -99,8 +146,6 @@ const SideMenu = (): JSX.Element => {
 };
 
 const Home: React.FC = (): JSX.Element => {
-  const [latitude, setLatitude] = useState();
-  const [longitude, setLongitude] = useState();
 
   const authService = AuthService.getInstance();
 
@@ -110,15 +155,6 @@ const Home: React.FC = (): JSX.Element => {
       authService.startSignOut();
     });
   };
-
-  // weather api key: a1b571b1a8f6cf0d584cd7b9d3a76464
-
-  navigator.geolocation.getCurrentPosition((position: Position) => {
-    setLatitude(position.coords.latitude);
-    setLongitude(position.coords.longitude);
-  }, ((posError: PositionError) => {
-    console.log(posError);
-  }), {enableHighAccuracy: true} as PositionOptions);
 
   return (
     <div className={'Home'}>
