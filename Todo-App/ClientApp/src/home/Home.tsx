@@ -10,10 +10,12 @@ const Home: React.FC = (): JSX.Element => {
         <main className='home-main'>
           <section className='feature-section'>
             <div className='feature-section-inner'>
+              feature todos - weather widget mobile
             </div>
           </section>
           <section className='today-todos-section'>
             <div className='today-todos-section-inner'>
+              All todos
             </div>
           </section>
         </main>
