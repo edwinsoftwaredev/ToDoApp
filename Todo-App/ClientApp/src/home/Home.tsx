@@ -1,131 +1,13 @@
-import React, {useState, useEffect} from 'react';
-import logo from '../logo.svg';
-import {useSelector} from 'react-redux';
-import {RootState} from '../reducers/RootReducer';
+import React, {useState} from 'react';
 import './Home.scss';
-import {AuthService} from '../auth/AuthService';
-import {AccountService} from '../auth/AccountService';
-import WeatherWidget from './weather-widget/WeatherWidget';
-
-const MenuList = (props: any): JSX.Element => {
-  const [prevTarget, setPrevTarget] = useState<HTMLLIElement>();
-  const [selectedTarget, setSelectedTarget] = useState();
-
-  const handleTargetSelection = (target: HTMLLIElement, route: string) => {
-    if (!prevTarget) {
-      target.classList.add('selected');
-      setPrevTarget(target);
-      setSelectedTarget(target);
-      return props.handleRoute(route);
-    }
-
-    setSelectedTarget(target);
-    return props.handleRoute(route);
-  };
-
-  useEffect(() => {
-    if (prevTarget !== selectedTarget) {
-      (prevTarget as HTMLLIElement).classList.remove('selected');
-      setPrevTarget(selectedTarget);
-      (selectedTarget as HTMLLIElement).classList.add('selected');
-    }
-  }, [prevTarget, selectedTarget]);
-
-  return (
-    <nav className={props.screenWidth < 767 ? ' smart-screen-list' : ''}>
-      <ol>
-        <li
-          onClick={event => handleTargetSelection(event.currentTarget, 'feature')}
-        >
-          <div><i className='bx bxs-bookmark-star bx-md'></i></div>
-          <div className='title'>Featured Todos</div>
-        </li>
-        <li
-          onClick={event => handleTargetSelection(event.currentTarget, 'calendar')}
-        >
-          <div><i className='bx bx-calendar-check bx-md'></i></div>
-          <div className='title'>Calendar</div>
-        </li>
-        <li
-          onClick={event => handleTargetSelection(event.currentTarget, 'account')}
-        >
-          <div><i className='bx bxs-user-detail bx-md'></i></div>
-          <div className='title'>Account</div>
-        </li>
-        <li
-          onClick={event => handleTargetSelection(event.currentTarget, 'signout')}
-        >
-          <div><i className='bx bx-log-out bx-md'></i></div>
-          <div className='title'>Sign Out</div>
-        </li>
-      </ol>
-    </nav>
-  );
-};
-
-const Menu = (props: any): JSX.Element => {
-  const handleRoute = (route: string) => {
-    console.log(route);
-  };
-
-  return (
-    <div className={'SideMenu'}>
-      <section className='side-menu-section'>
-        <div className={'smart-screen-weather-widget'}>
-          <WeatherWidget />
-        </div>
-        <MenuList screenWidth={props.screenWidth} handleRoute={handleRoute} />
-      </section>
-    </div>
-  );
-};
+import Menu from './menu/Menu';
 
 const Home: React.FC = (): JSX.Element => {
-  const [width, setWidth] = useState(window.innerWidth);
-
-  const resizeListener = () => {
-    setWidth(window.innerWidth);
-  };
-
-  window.addEventListener('resize', resizeListener);
-
-  const authService = AuthService.getInstance();
-
-  const handleLogout = () => {
-    // first delete auth cookie, the startSignOut from IdentityServer
-    AccountService.deleteAuthCookie().then(() => {
-      authService.startSignOut();
-    });
-  };
-
   return (
     <div className={'Home'}>
-      <Menu screenWidth={width} />
+      <Menu />
       <div className='container'>
         <main className='home-main'>
-          <header>
-            <h1 className='title'>
-              {useSelector((state: RootState) => state.app.appName)}
-            </h1>
-          </header>
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.tsx</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          <br />
-          <button
-            className={'uk-button uk-button-default'}
-            onClick={handleLogout}>
-            Sign Out
-          </button>
         </main>
       </div>
     </div>
