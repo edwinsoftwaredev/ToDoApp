@@ -105,12 +105,18 @@ const WeatherWidget: React.FC = () => {
           setWeatherTemp(response.data.main.temp);
           convertWeatherDesc(response);
         }).catch((error: AxiosError) => {
+          setWeatherBgClass('clear-sky-d');
+          setWeatherTemp('');
+          setWeatherDesc('');
           console.log(error.message);
         });
     }
 
   }, ((posError: PositionError) => {
     console.log(posError);
+    setWeatherBgClass('clear-sky-d');
+    setWeatherTemp('');
+    setWeatherDesc('');
   }), {enableHighAccuracy: true} as PositionOptions);
 
   return (
@@ -128,8 +134,8 @@ const WeatherWidget: React.FC = () => {
               {weatherDesc}
             </div>
             <div className='weather-stat'>
-              {Math.round(Number.parseFloat(weatherTemp as string))} °F
-              </div>
+              {Number.isNaN(Math.round(Number.parseFloat(weatherTemp as string))) ? '' : Math.round(Number.parseFloat(weatherTemp as string)) + '°F'}
+            </div>
           </div>
         </div>
       </div>
