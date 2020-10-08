@@ -14,15 +14,62 @@
     flex-grow: 1;
 
     .home-main {
-      padding-top: 2em;
+      padding: 2em;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: flex-start;
+      height: 100%;
+      box-sizing: border-box;
+
       .title {
         font-weight: 600;
         color: darkslategray;
       }
-
       @media only screen and (max-width: 767px) {
-        width: 100%;
-        position: relative;
+        overflow: auto;
+        padding-bottom: 13vh;
+      }
+
+      .feature-section {
+        order: 1;
+        flex-grow: 1;
+        height: 100%;
+        width: auto;
+        max-width: 50%;
+        box-sizing: border-box;
+        padding: 1em;
+        @media only screen and (max-width: 767px) {
+          width: 100%;
+          max-width: 100%;
+        }
+
+        .feature-section-inner {
+          border: 3px solid #1ab2ff;
+          height: 100%;
+          background-color: slategray;
+        }
+      }
+
+      .today-todos-section {
+        flex-grow: 1;
+        order: 2;
+        height: 100%;
+        width: auto;
+        max-width: 50%;
+        box-sizing: border-box;
+        padding: 1em;
+        @media only screen and (max-width: 767px) {
+          width: 100%;
+          max-width: 100%;
+        }
+
+        .today-todos-section-inner {
+          border: 3px solid #1ab2ff;
+          height: 100%;
+          background-color: slategray;
+        }
       }
     }
   }

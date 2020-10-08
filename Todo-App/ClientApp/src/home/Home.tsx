@@ -8,6 +8,14 @@ const Home: React.FC = (): JSX.Element => {
       <Menu />
       <div className='container'>
         <main className='home-main'>
+          <section className='feature-section'>
+            <div className='feature-section-inner'>
+            </div>
+          </section>
+          <section className='today-todos-section'>
+            <div className='today-todos-section-inner'>
+            </div>
+          </section>
         </main>
       </div>
     </div>
