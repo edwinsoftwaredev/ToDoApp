@@ -71,6 +71,77 @@ const SideMenu = (): JSX.Element => {
   const [weatherTemp, setWeatherTemp] = useState<string>('0');
   const [weatherBgClass, setWeatherBgClass] = useState<string>('');
 
+  const convertWeatherDesc = (response: AxiosResponse<any>) => {
+    let wbgclass = '';
+    let description = response.data.weather[0].description;
+    const rain: string[] = [
+      'light rain',
+      'moderate rain',
+      'heavy intensity rain',
+      'very heavy rain',
+      'extreme rain',
+      'freezing rain',
+      'light intensity shower rain',
+      'heavy intensity shower rain',
+      'ragged shower rain'
+    ];
+
+    const snow: string[] = [
+      'light snow',
+      'Heavy snow',
+      'Sleet',
+      'Light shower sleet',
+      'Shower sleet',
+      'Light rain and snow',
+      'Rain and snow',
+      'Light shower snow',
+      'Shower snow',
+      'Heavy shower snow'
+    ];
+
+    const atmosphere: string[] = [
+      'Smoke',
+      'Haze',
+      'sand/ dust whirls',
+      'fog',
+      'sand',
+      'dust',
+      'volcanic ash',
+      'squalls',
+      'tornado'
+    ];
+
+    const clouds: string[] = [
+      'few clouds',
+      'overcast clouds'
+    ];
+
+    if (rain.includes(description)) {
+      description = 'rain';
+    }
+
+    if (snow.includes(description)) {
+      description = 'snow';
+    }
+
+    if (atmosphere.includes(description)) {
+      description = 'mist';
+    }
+
+    if (clouds.includes(description)) {
+      description = 'scattered clouds';
+    }
+
+    wbgclass = description.replace(' ', '-');
+    wbgclass =
+      response
+        .data
+        .weather[0]
+        .icon
+        .includes('d') ? wbgclass + '-d' : wbgclass + '-n';
+    setWeatherBgClass(wbgclass);
+  };
+
   navigator.geolocation.getCurrentPosition((position: Position) => {
     const lat = position.coords.latitude;
     const lon = position.coords.longitude;
@@ -82,15 +153,7 @@ const SideMenu = (): JSX.Element => {
         .then((response: AxiosResponse) => {
           setWeatherDesc(response.data.weather[0].description);
           setWeatherTemp(response.data.main.temp);
-          let wbgclass = '';
-          wbgclass = response.data.weather[0].description.replace(' ', '-');
-          wbgclass =
-            response
-              .data
-              .weather[0]
-              .icon
-              .includes('d') ? wbgclass + '-d' : wbgclass + '-n';
-          setWeatherBgClass(wbgclass);
+          convertWeatherDesc(response);
         }).catch((error: AxiosError) => {
           console.log(error.message);
         });
@@ -134,7 +197,7 @@ const SideMenu = (): JSX.Element => {
                 {weatherDesc}
               </div>
               <div className='weather-stat'>
-                {Number.parseInt(weatherTemp as string)}F°
+                {Math.round(Number.parseFloat(weatherTemp as string))}F°
               </div>
             </div>
           </div>
