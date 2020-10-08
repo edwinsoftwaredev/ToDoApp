@@ -12,164 +12,51 @@
     min-width: 20vw;
     max-width: 20vw;
     background-color: slategray;
+    @media only screen and (max-width: 767px) {
+      position: fixed;
+      min-width: 100vw;
+      bottom: 0;
+    }
 
     .side-menu-section {
       padding-top: 2em;
       width: 100%;
-
-      .date-picture-weather-container {
-        .date-picture-weather {
-          border: 1px solid white;
-          margin: 1em 1em 1em 1em;
-          padding-top: 56.25%; // aspect ratio 16:9
-          position: relative;
-
-          .scattered-clouds-d {
-             background-image: url('../shared/assets/Scattered Clouds/scattered-clouds-day.jpg');
-          }
-
-          .scattered-clouds-n {
-             background-image: url('../shared/assets/Scattered Clouds/scattered-clouds-night.jpg');
-          }
-
-          .clear-sky-d {
-             background-image: url('../shared/assets/Clear Sky/clear-sky-day.jpg');
-          }
-
-          .clear-sky-n {
-             background-image: url('../shared/assets/Clear Sky/clear-sky-night.jpg');
-          }
-
-          .few-clouds-d {
-             background-image: url('../shared/assets/Few Clouds/few-clouds-day.jpg');
-          }
-
-          .few-clouds-n {
-             background-image: url('../shared/assets/Few Clouds/few-clouds-night.jpg');
-          }
-
-          .broken-clouds-d {
-             background-image: url('../shared/assets/Broken Clouds/broken-clouds-day.jpg');
-          }
-
-          .broken-clouds-n {
-             background-image: url('../shared/assets/Broken Clouds/broken-clouds-night.jpg');
-          }
-
-          .shower-rain-d {
-             background-image: url('../shared/assets/Shower Rain/shower-rain-day.jpg');
-          }
-
-          .shower-rain-n {
-             background-image: url('../shared/assets/Shower Rain/shower-rain-night.jpg');
-          }
-
-          .rain-d {
-             background-image: url('../shared/assets/Rain/rain-day.jpg');
-          }
-
-          .rain-n {
-             background-image: url('../shared/assets/Rain/rain-night.jpg');
-          }
-
-          .thunderstorm-d {
-             background-image: url('../shared/assets/Thunderstorm/thunderstorm-day.png');
-          }
-
-          .thunderstorm-n {
-             background-image: url('../shared/assets/Thunderstorm/thunderstorm-night.jpg');
-          }
-
-          .snow-d {
-             background-image: url('../shared/assets/Snow/snow-day.jpg');
-          }
-
-          .snow-n {
-             background-image: url('../shared/assets/Snow/snow-night.jpg');
-          }
-
-          .mist-d {
-             background-image: url('../shared/assets/Mist/mist-day.jpg');
-          }
-
-          .mist-n {
-             background-image: url('../shared/assets/Mist/mist-night.jpg');
-          }
-
-          .widgets-container {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: cover;
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            grid-template-rows: 1fr 1fr 1fr;
-            align-items: center;
-            overflow: hidden;
-
-            .day-date {
-              grid-column: 1;
-              grid-row: 1;
-              color: white;
-              font-size: 2em;
-              font-weight: 450;
-              text-align: left;
-              padding-left: 0.5em;
-            }
-
-            .month-year {
-              grid-column: 1;
-              grid-row: 2;
-              color: white;
-              font-size: 2em;
-              font-weight: 450;
-              text-align: left;
-              padding-left: 0.5em;
-            }
-
-            .weather-status {
-              grid-column: 1;
-              grid-row: 3;
-              color: white;
-              font-size: 2em;
-              font-weight: 450;
-              text-transform: capitalize;
-              text-align: left;
-              padding-left: 0.5em;
-            }
-
-            .weather-stat {
-              grid-column: 2;
-              grid-row: 3;
-              color: white;
-              font-size: 2.5em;
-              font-weight: 450;
-              text-align: right;
-              padding-right: 0.5em;
-            }
-          }
-        }
-        width: 100%;
-        box-sizing: border-box;
+      @media only screen and (max-width: 767px) {
+        padding-top: 0;
+        height: 10vh;
       }
 
       nav {
+        @media only screen and (max-width: 767px) {
+          height: 100%;
+        }
+
         ol {
           padding-left: 0;
           list-style: none;
+          @media only screen and (max-width: 767px) {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-auto-flow: row;
+            column-gap: 1vw;
+            padding: 0;
+            margin: 0;
+            height: 100%;
+            align-items: center;
+          }
 
           li {
-            height: 4em;
+            height: 3vw;
             cursor: pointer;
             align-items: center;
             display: flex;
             flex-flow: row nowrap;
             border-left: 1px solid transparent;
             padding-left: 1.3em;
+            @media only screen and (max-width: 767px) {
+              padding: 0;
+              height: 100%;
+            }
 
             &:hover {
               transition: background-color 200ms;
@@ -178,14 +65,27 @@
 
             & + * {
               margin-top: 1em;
+              @media only screen and (max-width: 767px) {
+                margin-top: 0;
+              }
             }
 
             div {
-              font-size: 1.5em;
+              font-size: 1.2vw;
               font-weight: 400;
               color: white;
               line-height: 0;
               text-align: center;
+              @media only screen and (max-width: 767px) {
+                margin: auto;
+              }
+            }
+
+            i {
+              font-size: 1.6vw !important;
+              @media only screen and (max-width: 767px) {
+                font-size: 10vw !important;
+              }
             }
 
             .title {
@@ -198,6 +98,9 @@
               background-color: rgba(193,213,224,0.3) !important;
               div {
                 font-weight: 600;
+              }
+              @media only screen and (max-width: 767px) {
+                border-left: 0;
               }
             }
           }
@@ -220,13 +123,26 @@
         color: darkslategray;
       }
 
-      /*@media only screen and (max-width: 767px) {
+      @media only screen and (max-width: 767px) {
         width: 100%;
         position: relative;
-      }*/
+      }
     }
   }
 
-  &.shrink {
+  .smart-screen-weather-widget {
+    @media only screen and (max-width: 767px) {
+      display: none;
+    }
+  }
+
+  .smart-screen-list {
+    ol {
+      li {
+        .title {
+          display: none;
+        }
+      }
+    }
   }
 }
