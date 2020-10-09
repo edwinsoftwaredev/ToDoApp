@@ -1,0 +1,35 @@
+.FeatureSection {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  .heading {
+    margin-top: 0.5em;
+    font-weight: 600;
+    color: slategray;
+  }
+
+  .feature-todos {
+    overflow: auto;
+    &::-webkit-scrollbar {
+      @media only screen and (min-width: 767px) {
+        width: 0.5em;
+      }
+    }
+    &::-webkit-scrollbar-thumb {
+      @media only screen and (min-width: 767px) {
+        background-color: slategray;
+      }
+    }
+    &::-webkit-scrollbar-track {
+      @media only screen and (min-width: 767px) {
+        background-color: lightgray;
+      }
+    }
+  }
+
+  .not-smart {
+    @media only screen and (min-width: 767px) {
+      display: none;
+    }
+  }
+}
