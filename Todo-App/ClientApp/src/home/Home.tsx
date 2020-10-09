@@ -1,6 +1,7 @@
-import React, {useState} from 'react';
+import React from 'react';
 import './Home.scss';
 import Menu from './menu/Menu';
+import FeatureSection from './feature-section/FeatureSection';
 
 const Home: React.FC = (): JSX.Element => {
   return (
@@ -10,7 +11,7 @@ const Home: React.FC = (): JSX.Element => {
         <main className='home-main'>
           <section className='feature-section'>
             <div className='feature-section-inner'>
-              feature todos - weather widget mobile
+              <FeatureSection />
             </div>
           </section>
           <section className='today-todos-section'>
