@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import './WeatherWidget.scss';
 import Axios, {AxiosResponse, AxiosError} from 'axios';
 
-const WeatherWidget: React.FC = () => {
+const WeatherWidget: React.FC<any> = () => {
   const [weatherDesc, setWeatherDesc] = useState<string>('');
   const [weatherTemp, setWeatherTemp] = useState<string>('0');
   const [weatherBgClass, setWeatherBgClass] = useState<string>('');
