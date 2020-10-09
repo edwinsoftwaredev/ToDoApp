@@ -39,16 +39,15 @@
         width: auto;
         max-width: 50%;
         box-sizing: border-box;
-        padding: 1em;
+        padding: 0.5em;
         @media only screen and (max-width: 767px) {
           width: 100%;
           max-width: 100%;
         }
 
         .feature-section-inner {
-          border: 3px solid #1ab2ff;
           height: 100%;
-          background-color: slategray;
+          background-color: white;
         }
       }
 
@@ -59,16 +58,16 @@
         width: auto;
         max-width: 50%;
         box-sizing: border-box;
-        padding: 1em;
+        padding: 0.5em;
         @media only screen and (max-width: 767px) {
           width: 100%;
           max-width: 100%;
         }
 
         .today-todos-section-inner {
-          border: 3px solid #1ab2ff;
           height: 100%;
-          background-color: slategray;
+          background-color: white;
+          overflow: auto;
         }
       }
     }
