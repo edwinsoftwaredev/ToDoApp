@@ -5,6 +5,9 @@
       margin: 1em 1em 1em 1em;
       padding-top: 56.25%; // aspect ratio 16:9
       position: relative;
+      @media only screen and (max-width: 767px) {
+        margin: 0;
+      }
 
       .scattered-clouds-d {
          background-image: url('../../shared/assets/Scattered Clouds/scattered-clouds-day.jpg');
@@ -102,6 +105,9 @@
           font-weight: 450;
           text-align: left;
           padding-left: 0.5em;
+          @media only screen and (max-width: 767px) {
+            font-size: 8vw;
+          }
         }
 
         .month-year {
@@ -112,6 +118,9 @@
           font-weight: 450;
           text-align: left;
           padding-left: 0.5em;
+          @media only screen and (max-width: 767px) {
+            font-size: 8vw;
+          }
         }
 
         .weather-status {
@@ -123,6 +132,9 @@
           text-transform: capitalize;
           text-align: left;
           padding-left: 0.5em;
+          @media only screen and (max-width: 767px) {
+            font-size: 5.5vw;
+          }
         }
 
         .weather-stat {
@@ -133,6 +145,9 @@
           font-weight: 450;
           text-align: right;
           padding-right: 0.5em;
+          @media only screen and (max-width: 767px) {
+            font-size: 9vw;
+          }
         }
       }
     }
