@@ -1,36 +1,23 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import './Menu.scss';
 import {AuthService} from '../../auth/AuthService';
 import {AccountService} from '../../auth/AccountService';
 import WeatherWidget from '../weather-widget/WeatherWidget';
+import {useLocation, useHistory} from 'react-router-dom';
 
 const MenuList = (props: any): JSX.Element => {
-  const [prevTarget, setPrevTarget] = useState<HTMLLIElement>();
-  const [selectedTarget, setSelectedTarget] = useState();
+  const [signingOut, setSigningOut] = useState(false);
   const authService = AuthService.getInstance();
 
-  const handleTargetSelection = (target: HTMLLIElement, route?: string) => {
-    if (!prevTarget) {
-      target.classList.add('selected');
-      setPrevTarget(target);
-      setSelectedTarget(target);
-      return route ? props.handleRoute(route) : null;
-    }
+  const location = useLocation();
 
-    setSelectedTarget(target);
+  const handleTargetSelection = (route?: string) => {
+    setSigningOut(false);
     return route ? props.handleRoute(route) : null;
   };
 
-  useEffect(() => {
-    if (prevTarget !== selectedTarget) {
-      (prevTarget as HTMLLIElement).classList.remove('selected');
-      setPrevTarget(selectedTarget);
-      (selectedTarget as HTMLLIElement).classList.add('selected');
-    }
-  }, [prevTarget, selectedTarget]);
-
-  const handleSignOut = (target: HTMLLIElement) => {
-    handleTargetSelection(target);
+  const handleSignOut = () => {
+    setSigningOut(true);
     // first delete auth cookie, the startSignOut from IdentityServer
     AccountService.deleteAuthCookie().then(() => {
       authService.startSignOut();
@@ -41,25 +28,29 @@ const MenuList = (props: any): JSX.Element => {
     <nav className={'smart-screen-list'}>
       <ol>
         <li
-          onClick={event => handleTargetSelection(event.currentTarget, 'feature')}
+          className={(location.pathname === '/' && !signingOut ? ' selected' : '')}
+          onClick={() => handleTargetSelection('/')}
         >
           <div><i className='bx bxs-bookmark-star bx-md'></i></div>
           <div className='title'>Featured Todos</div>
         </li>
         <li
-          onClick={event => handleTargetSelection(event.currentTarget, 'calendar')}
+          className={(location.pathname === '/calendar' && !signingOut ? ' selected' : '')}
+          onClick={() => handleTargetSelection('/calendar')}
         >
           <div><i className='bx bx-calendar-check bx-md'></i></div>
           <div className='title'>Calendar</div>
         </li>
         <li
-          onClick={event => handleTargetSelection(event.currentTarget, 'account')}
+          className={(location.pathname === '/account' && !signingOut ? ' selected' : '')}
+          onClick={() => handleTargetSelection('/account')}
         >
           <div><i className='bx bxs-user-detail bx-md'></i></div>
           <div className='title'>Account</div>
         </li>
         <li
-          onClick={event => handleSignOut(event.currentTarget)}
+          className={(signingOut ? ' selected' : '')}
+          onClick={() => handleSignOut()}
         >
           <div><i className='bx bx-log-out bx-md'></i></div>
           <div className='title'>Sign Out</div>
@@ -70,8 +61,9 @@ const MenuList = (props: any): JSX.Element => {
 };
 
 const Menu: React.FC<any> = (): JSX.Element => {
+  const history = useHistory();
   const handleRoute = (route: string) => {
-    console.log(route);
+    history.push(route);
   };
 
   return (
