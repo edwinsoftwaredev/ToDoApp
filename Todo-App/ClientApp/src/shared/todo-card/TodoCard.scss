@@ -28,8 +28,8 @@
         font-size: 1.8vw;
         color: white;
         background-color: transparent;
-        border: 0 !important;
-        padding: 0;
+        border: 0;
+        padding: 0 0.3em;
         @media only screen and (max-width: 767px) {
           font-size: 7vw;
         }
@@ -37,11 +37,13 @@
     }
 
     .todo-star {
+      margin-left: 0.5em;
       order: 2;
       i {
         font-size: 1.8vw;
         color: gold;
         cursor: pointer;
+        padding: 0.2em;
         @media only screen and (max-width: 767px) {
           font-size: 7vw;
         }
@@ -72,7 +74,7 @@
       text-align: left;
       padding: 0;
       &::-webkit-scrollbar {
-        width: 0.5em;
+        width: 0.4em;
       }
       &::-webkit-scrollbar-thumb {
         background-color: white;
@@ -92,7 +94,7 @@
     align-items: center;
     grid-row: 3;
 
-    .edit-btn {
+    .edit-btn-container {
       order: 1;
       flex-grow: 2;
       text-align: left;
@@ -101,8 +103,19 @@
         font-size: 1.8vw;
         color: white;
         cursor: pointer;
+        padding:0.2em;
+        box-sizing: border-box;
         @media only screen and (max-width: 767px) {
           font-size: 7vw;
+        }
+
+        &:hover {
+          border: 1px solid white;
+          background-color: lightslategray;
+        }
+
+        &.editing {
+          background: darkgray;
         }
       }
     }
@@ -124,10 +137,11 @@
         }
 
         &:focus {
-          outline: none;
+          outline: none !important;
         }
 
         &::-webkit-calendar-picker-indicator {
+          cursor: pointer;
           width: 100%;
           position: absolute;
           background-image: none;
@@ -136,6 +150,12 @@
           color: white !important;
         }
       }
+    }
+  }
+
+  .editing {
+    &:hover {
+      background-color: darkgray !important;
     }
   }
 }

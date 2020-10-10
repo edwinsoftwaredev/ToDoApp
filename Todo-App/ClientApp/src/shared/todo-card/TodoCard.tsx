@@ -34,19 +34,19 @@ const TodoCard: React.FC<ITodoCard> = (props: ITodoCard) => {
       <div className='header'>
         <div className='title'>
           <input
-            className='uk-input'
+            className={'uk-input' + (isEditing ? ' editing' : '')}
             type='text'
             value={title}
             onChange={event => handleTitle(event.target.value)}
             disabled={isEditing ? false : true} />
         </div>
-        <div className={'todo-star' + (!isFeatured ? ' not-featured' : '')}>
+        <div className={'todo-star' + (!isFeatured ? ' not-featured' : '') + (isEditing ? ' editing' : '')}>
           <i className='bx bxs-star' onClick={() => handleFeatured()}></i>
         </div>
       </div>
       <div className='description'>
         <textarea
-          className='uk-textarea'
+          className={'uk-textarea' + (isEditing ? ' editing' : '')}
           value={description}
           onChange={event => handleDescription(event.target.value)}
           disabled={isEditing ? false : true}
@@ -54,11 +54,14 @@ const TodoCard: React.FC<ITodoCard> = (props: ITodoCard) => {
         </textarea>
       </div>
       <div className='footer'>
-        <div className='edit-btn'>
-          <i className='bx bx-edit' onClick={() => handleEditing()}></i>
+        <div className='edit-btn-container'>
+          <i
+            className={'bx bx-edit' + (isEditing ? ' editing' : '')}
+            onClick={() => handleEditing()}></i>
         </div>
         <div className='todo-end-date'>
           <input
+            className={(isEditing ? ' editing' : '')}
             value={endDate}
             type='date'
             onChange={(event) => handleEndDate(event.target.value)}

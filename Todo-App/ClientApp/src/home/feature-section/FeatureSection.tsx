@@ -8,9 +8,9 @@ const FeatureSection: React.FC<any> = () => {
     todo: {
       title: 'Buying Bread',
       description:
-        'Seeing “wheat” on the packaging might suggest your loaf is packed with fiber' +
-        'and nutrients, but you’ll want to check the ingredient list to be sure. The' +
-        'only flour you should see listed is “whole wheat flour” or “100% whole wheat' +
+        'Seeing “wheat” on the packaging might suggest your loaf is packed with fiber ' +
+        'and nutrients, but you’ll want to check the ingredient list to be sure. The ' +
+        'only flour you should see listed is “whole wheat flour” or “100% whole wheat ' +
         'flour”—other flours are often stripped of nutrition.',
       isFeatured: true,
       endDate: '2020-10-09'
