@@ -4,6 +4,8 @@ import WeatherWidget from '../weather-widget/WeatherWidget';
 import TodoCard, {ITodoCard} from '../../shared/todo-card/TodoCard';
 
 const FeatureSection: React.FC<any> = () => {
+  const deleteHandler = (): void => {
+  };
   const todoCard: ITodoCard = {
     todo: {
       title: 'Buying Bread',
@@ -13,7 +15,9 @@ const FeatureSection: React.FC<any> = () => {
         'only flour you should see listed is “whole wheat flour” or “100% whole wheat ' +
         'flour”—other flours are often stripped of nutrition.',
       isFeatured: true,
-      endDate: '2020-10-09'
+      endDate: '2020-10-09',
+      checked: true,
+      deleteHandler: deleteHandler
     }
   };
 
