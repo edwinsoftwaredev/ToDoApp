@@ -2,6 +2,7 @@ import React from 'react';
 import './Home.scss';
 import Menu from './menu/Menu';
 import FeatureSection from './feature-section/FeatureSection';
+import TodosList from './todos-list/TodosList';
 import {Switch, Route} from 'react-router-dom';
 
 const Home: React.FC = (): JSX.Element => {
@@ -19,7 +20,7 @@ const Home: React.FC = (): JSX.Element => {
               </section>
               <section className='today-todos-section'>
                 <div className='today-todos-section-inner'>
-                  All todos
+                  <TodosList />
                 </div>
               </section>
             </Route>
