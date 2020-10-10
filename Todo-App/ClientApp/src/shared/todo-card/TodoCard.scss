@@ -4,12 +4,12 @@
   grid-template-rows: 1fr 10em 1fr;
   align-items: center;
   margin: 0.7em 5vw;
-  min-height: 20em;
-  height: 20em;
-  max-height: 20em;
+  min-height: 18em;
+  height: 18em;
+  max-height: 18em;
   border: 1px solid lightblue;
   background-color: slategray;
-  padding: 0 1em;
+  padding: 0.5em 0.8em;
   @media only screen and (max-width: 767px) {
     margin: 0.7em 0;
   }
@@ -33,12 +33,37 @@
         @media only screen and (max-width: 767px) {
           font-size: 7vw;
         }
+
+        &::placeholder {
+          color: lightgray;
+          font-style: italic;
+        }
+      }
+    }
+
+    .checkmark {
+      margin-left: 0.5em;
+      order: 2;
+      i {
+        font-size: 1.8vw;
+        color: lightgray;
+        cursor: pointer;
+        padding: 0.2em;
+        @media only screen and (max-width: 767px) {
+          font-size: 7vw;
+        }
+      }
+
+      &.checked {
+        i {
+          color: #66ff66 !important;
+        }
       }
     }
 
     .todo-star {
       margin-left: 0.5em;
-      order: 2;
+      order: 3;
       i {
         font-size: 1.8vw;
         color: gold;
@@ -85,6 +110,11 @@
       @media only screen and (max-width: 767px) {
         font-size: 4vw;
       }
+
+      &::placeholder {
+        color: lightgray;
+        font-style: italic;
+      }
     }
   }
 
@@ -96,8 +126,6 @@
 
     .edit-btn-container {
       order: 1;
-      flex-grow: 2;
-      text-align: left;
 
       i {
         font-size: 1.8vw;
@@ -110,8 +138,7 @@
         }
 
         &:hover {
-          border: 1px solid white;
-          background-color: lightslategray;
+          background-color: darkgray;
         }
 
         &.editing {
@@ -120,11 +147,33 @@
       }
     }
 
-    .todo-end-date {
+    .delete-btn {
       order: 2;
+      margin-left: 0.5em;
+      flex-grow: 2;
+      text-align: left;
+
+      i {
+        font-size: 1.8vw;
+        color: lightgray;
+        cursor: pointer;
+        padding:0.2em;
+        box-sizing: border-box;
+        @media only screen and (max-width: 767px) {
+          font-size: 7vw;
+        }
+
+        &.editing {
+          color: #ff6666 !important;
+        }
+      }
+    }
+
+    .todo-end-date {
+      order: 3;
       position: relative;
       input[type='date'] {
-        font-size: 1.5vw;
+        font-size: 1.2vw;
         color: white;
         font-weight: 480;
         background-color: transparent;
@@ -133,7 +182,7 @@
         font-family: unset;
         text-align: right;
         @media only screen and (max-width: 767px) {
-          font-size: 5vw;
+          font-size: 4vw;
         }
 
         &:focus {
