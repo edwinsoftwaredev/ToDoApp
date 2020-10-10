@@ -90,7 +90,7 @@ const WeatherWidget: React.FC<any> = () => {
   if (actualDate.includes('1', 1)) {
     grade = 'rd';
   }
-  actualDate = (actualDate.includes('0', 0) ? actualDate[1] : actualDate);
+  actualDate = (actualDate[0] === '0' ? actualDate[1] : actualDate);
 
   navigator.geolocation.getCurrentPosition((position: Position) => {
     const lat = position.coords.latitude;
