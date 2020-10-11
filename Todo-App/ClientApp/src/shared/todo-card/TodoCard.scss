@@ -1,9 +1,9 @@
 .TodoCard {
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 1fr 10em 1fr;
+  grid-template-rows: 1fr 9em 1fr;
   align-items: center;
-  margin: 0.7em 5vw;
+  margin: 0.7em 0;
   min-height: 18em;
   height: 18em;
   max-height: 18em;
@@ -19,6 +19,7 @@
     flex-direction: row;
     align-items: center;
     grid-row: 1;
+    align-self: start;
 
     .title {
       order: 1;
@@ -84,6 +85,7 @@
 
   .description {
     grid-row: 2;
+    align-self: center;
     text-align: left;
     height: 10em;
     padding: 0 0.5em;
@@ -123,6 +125,7 @@
     flex-direction: row;
     align-items: center;
     grid-row: 3;
+    align-self: end;
 
     .edit-btn-container {
       order: 1;
