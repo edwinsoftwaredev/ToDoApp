@@ -35,6 +35,13 @@ const MenuList = (props: any): JSX.Element => {
           <div className='title'>Featured Todos</div>
         </li>
         <li
+          className={(location.pathname === '/todos' && !signingOut ? ' selected' : '')}
+          onClick={() => handleTargetSelection('/todos')}
+        >
+          <div><i className='bx bx-notepad bx-md'></i></div>
+          <div className='title'>Todos</div>
+        </li>
+        <li
           className={(location.pathname === '/calendar' && !signingOut ? ' selected' : '')}
           onClick={() => handleTargetSelection('/calendar')}
         >
