@@ -22,13 +22,26 @@ const FeatureSection: React.FC<any> = () => {
   };
 
   return (
-    <div className='FeatureSection'>
-      <h1 className='heading'>Feature Todos</h1>
-      <div className='feature-todos'>
-        <div className='not-smart'>
-          <WeatherWidget />
+    <div className='FeaturedSection'>
+      <h1 className='heading'>Featured Todos</h1>
+      <div className='featured-todos-container'>
+        <div className='featured-todos'>
+          <div className='not-smart'>
+            <WeatherWidget />
+          </div>
+          <TodoCard todo={todoCard.todo} />
+          <TodoCard todo={todoCard.todo} />
+          <TodoCard todo={todoCard.todo} />
+          <TodoCard todo={todoCard.todo} />
+          <TodoCard todo={todoCard.todo} />
+          <TodoCard todo={todoCard.todo} />
+          <TodoCard todo={todoCard.todo} />
+          <TodoCard todo={todoCard.todo} />
+          <TodoCard todo={todoCard.todo} />
+          <TodoCard todo={todoCard.todo} />
+          <TodoCard todo={todoCard.todo} />
+          <TodoCard todo={todoCard.todo} />
         </div>
-        <TodoCard todo={todoCard.todo} />
       </div>
     </div>
   );

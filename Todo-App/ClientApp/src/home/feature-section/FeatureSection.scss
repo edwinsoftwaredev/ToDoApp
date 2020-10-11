@@ -1,30 +1,24 @@
-.FeatureSection {
-  display: flex;
-  flex-direction: column;
+.FeaturedSection {
   height: 100%;
+  padding: 0 2em;
   .heading {
-    margin-top: 0.5em;
-    font-weight: 600;
+    margin-top: 0;
+    font-weight: 700;
     font-size: 3.3em;
     color: slategray;
+    text-align: left;
   }
 
-  .feature-todos {
-    overflow: auto;
-    &::-webkit-scrollbar {
-      @media only screen and (min-width: 767px) {
-        width: 0.5em;
-      }
-    }
-    &::-webkit-scrollbar-thumb {
-      @media only screen and (min-width: 767px) {
-        background-color: slategray;
-      }
-    }
-    &::-webkit-scrollbar-track {
-      @media only screen and (min-width: 767px) {
-        background-color: lightgray;
-      }
+  .featured-todos {
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto;
+    column-gap: 1em;
+
+    @media only screen and (max-width: 767px) {
+      display: flex;
+      flex-direction: column;
     }
   }
 
