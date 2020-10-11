@@ -13,22 +13,20 @@ const Home: React.FC = (): JSX.Element => {
         <main className='home-main'>
           <Switch>
             <Route exact path="/">
-              <section className='feature-section'>
-                <div className='feature-section-inner'>
-                  <FeatureSection />
-                </div>
-              </section>
-              <section className='today-todos-section'>
-                <div className='today-todos-section-inner'>
-                  <TodosList />
-                </div>
-              </section>
+              <div className='option-container'>
+                <FeatureSection />
+              </div>
+            </Route>
+            <Route exact path="/todos">
+              <div className='option-container'>
+                <TodosList />
+              </div>
             </Route>
             <Route exact path="/calendar">
-              <div className='calendar-container'></div>
+              <div className='option-container'></div>
             </Route>
             <Route exact path="/account">
-              <div className='account-container'></div>
+              <div className='option-container'></div>
             </Route>
           </Switch>
         </main>
