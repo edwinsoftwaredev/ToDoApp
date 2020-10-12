@@ -42,11 +42,11 @@ const MenuList = (props: any): JSX.Element => {
           <div className='title'>Todos</div>
         </li>
         <li
-          className={(location.pathname === '/calendar' && !signingOut ? ' selected' : '')}
-          onClick={() => handleTargetSelection('/calendar')}
+          className={(location.pathname === '/completed-todos' && !signingOut ? ' selected' : '')}
+          onClick={() => handleTargetSelection('/completed-todos')}
         >
           <div><i className='bx bx-calendar-check bx-md'></i></div>
-          <div className='title'>Calendar</div>
+          <div className='title'>Completed Todos</div>
         </li>
         <li
           className={(location.pathname === '/account' && !signingOut ? ' selected' : '')}
