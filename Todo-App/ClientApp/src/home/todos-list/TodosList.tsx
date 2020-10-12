@@ -7,6 +7,7 @@ const TodoList: React.FC<any> = () => {
   };
   const todoCard: ITodoCard = {
     todo: {
+      id: 1,
       title: 'Buying Bread',
       description:
         'Seeing “wheat” on the packaging might suggest your loaf is packed with fiber ' +
@@ -16,8 +17,8 @@ const TodoList: React.FC<any> = () => {
       isFeatured: true,
       endDate: '2020-10-09',
       checked: true,
-      deleteHandler: deleteHandler
-    }
+    },
+    deleteHandler: deleteHandler
   };
 
   const emptyTodoCard: ITodoCard = {
@@ -27,16 +28,18 @@ const TodoList: React.FC<any> = () => {
       isFeatured: false,
       endDate: '',
       checked: false,
-      deleteHandler: deleteHandler
-    }
+    },
+    deleteHandler: deleteHandler
   };
 
   return (
     <div className='TodoList'>
       <h1 className='heading'>Todos</h1>
-      <div className='todos'>
-        <TodoCard todo={emptyTodoCard.todo} />
-        <TodoCard todo={todoCard.todo} />
+      <div className='todos-container'>
+        <div className='todos'>
+          <TodoCard todo={emptyTodoCard.todo} deleteHandler={deleteHandler} />
+          <TodoCard todo={todoCard.todo} deleteHandler={deleteHandler} />
+        </div>
       </div>
     </div>
   );

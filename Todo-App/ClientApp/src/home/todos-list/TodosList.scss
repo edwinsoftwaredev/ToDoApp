@@ -9,19 +9,24 @@
     text-align: left;
   }
 
-  .todos {
-    height: 100%;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: auto;
-    column-gap: 1em;
-    &:last-child {
-      margin-bottom: 6em;
-    }
+  .todos-container {
+    padding-bottom: 3vh;
 
     @media only screen and (max-width: 767px) {
-      display: flex;
-      flex-direction: column;
+      padding-bottom: 13vh;
+    }
+
+    .todos {
+      height: 100%;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: auto;
+      column-gap: 1em;
+
+      @media only screen and (max-width: 767px) {
+        display: flex;
+        flex-direction: column;
+      }
     }
   }
 
