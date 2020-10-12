@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import './FeatureSection.scss';
 import WeatherWidget from '../weather-widget/WeatherWidget';
 import TodoCard from '../../shared/todo-card/TodoCard';
+import TodoCardService from '../../shared/todo-card/TodoCardService';
 
 const initialList = (() => {
   let todoList: any[] = [];
@@ -30,8 +31,12 @@ const FeatureSection: React.FC<any> = () => {
   const [todoList, setTodoList] = useState<any[]>(initialList);
 
   const deleteHandler = (id?: number): void => {
-    const newList = todoList.filter(value => value.id !== id);
-    setTodoList(newList);
+    if (id) {
+      TodoCardService.removeTodo(id).then(() => {
+        const newList = todoList.filter(value => value.id !== id);
+        setTodoList(newList);
+      });
+    }
   };
 
   return (
