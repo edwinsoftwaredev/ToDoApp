@@ -1,7 +1,10 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
+import TodoCardService from './TodoCardService';
 import './TodoCard.scss';
+import {AxiosResponse} from 'axios';
 
 const TodoCard: React.FC<ITodoCard> = (props: ITodoCard) => {
+  const [id, setId] = useState<number>(props.todo.id as number);
   const [title, setTitle] = useState<string>(props.todo.title);
   const [description, setDescription] = useState<string>(props.todo.description);
   const [isFeatured, setIsFeatured] = useState<boolean>(props.todo.isFeatured);
@@ -31,6 +34,28 @@ const TodoCard: React.FC<ITodoCard> = (props: ITodoCard) => {
     }
   };
   const handleEditing = () => {
+    if (isEditing) {
+      if (id) {
+        TodoCardService.updateTodo({
+          id: id,
+          title: title,
+          description: description,
+          isFeatured: isFeatured,
+          endDate: endDate,
+          checked: checked
+        });
+      } else {
+        TodoCardService.saveTodo({
+          title: title,
+          description: description,
+          isFeatured: isFeatured,
+          endDate: endDate,
+          checked: checked
+        }).then((response: AxiosResponse<number>) => {
+          setId(response.data);
+        });
+      }
+    }
     setIsEditing(!isEditing);
   };
 
