@@ -72,7 +72,7 @@ const TodoCard: React.FC<ITodoCard> = (props: ITodoCard) => {
         <div className='delete-btn'>
           <i
             className={'bx bx-trash' + (isEditing ? ' editing' : '')}
-            onClick={() => props.todo.deleteHandler()}></i>
+            onClick={() => isEditing ? props.deleteHandler(props.todo.id) : {}}></i>
         </div>
         <div className='todo-end-date'>
           <input
@@ -88,14 +88,17 @@ const TodoCard: React.FC<ITodoCard> = (props: ITodoCard) => {
 };
 
 export interface ITodoCard {
-  todo: {
-    title: string;
-    description: string;
-    isFeatured: boolean;
-    endDate: string;
-    checked: boolean;
-    deleteHandler: () => void
-  }
+  todo: ITodo,
+  deleteHandler: (id?: number) => void
+}
+
+export interface ITodo {
+  id?: number;
+  title: string;
+  description: string;
+  isFeatured: boolean;
+  endDate: string;
+  checked: boolean;
 }
 
 export default TodoCard;
