@@ -1,44 +1,73 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './TodosList.scss';
-import TodoCard, {ITodoCard} from '../../shared/todo-card/TodoCard';
+import TodoCard, {ITodo} from '../../shared/todo-card/TodoCard';
+import TodoCardService from '../../shared/todo-card/TodoCardService';
+import {AxiosResponse, AxiosError} from 'axios';
 
 const TodoList: React.FC<any> = () => {
-  const deleteHandler = (): void => {
+  const emptyTodo: ITodo = {
+    title: '',
+    description: '',
+    isFeatured: false,
+    endDate: '',
+    checked: false
   };
-  const todoCard: ITodoCard = {
-    todo: {
-      id: 1,
-      title: 'Buying Bread',
-      description:
-        'Seeing “wheat” on the packaging might suggest your loaf is packed with fiber ' +
-        'and nutrients, but you’ll want to check the ingredient list to be sure. The ' +
-        'only flour you should see listed is “whole wheat flour” or “100% whole wheat ' +
-        'flour”—other flours are often stripped of nutrition.',
-      isFeatured: true,
-      endDate: '2020-10-09',
-      checked: true,
-    },
-    deleteHandler: deleteHandler
+  const [todoList, setTodoList] = useState<ITodo[]>([emptyTodo]);
+
+  TodoCardService.getTodos().then((response: AxiosResponse<ITodo[]>) => {
+    setTodoList(response.data);
+  }).catch((error: AxiosError) => {
+    console.log(error.message);
+  });
+
+  const deleteHandler = (id?: number): void => {
+    if (id && typeof (id) === 'number') {
+      TodoCardService.removeTodo(id).then(() => {
+        const newTodoList = todoList.filter((todo: ITodo) => todo.id !== id);
+        setTodoList(newTodoList);
+      }).catch((error: AxiosError) => {
+        console.log(error);
+      });
+    }
   };
 
-  const emptyTodoCard: ITodoCard = {
-    todo: {
-      title: '',
-      description: '',
-      isFeatured: false,
-      endDate: '',
-      checked: false,
-    },
-    deleteHandler: deleteHandler
+  const saveTodoHandler = async (todo: ITodo): Promise<void> => {
+    return TodoCardService.saveTodo(todo).then((response: AxiosResponse<ITodo>) => {
+      // to keep inmutability another array is instanciated
+      // React DOM will only update what is updated!
+      const newTodoList = Array.from(todoList);
+      newTodoList.push(response.data);
+      setTodoList(newTodoList);
+      return Promise.resolve();
+    }).catch((error: AxiosError) => {
+      console.log(error.message);
+      return Promise.reject();
+    });
   };
+
+  const updateTodoHandler = (todo: ITodo): void => {
+    TodoCardService.updateTodo(todo)
+      .catch((error: AxiosError) => {
+        console.log(error.message);
+      });
+  }
 
   return (
     <div className='TodoList'>
       <h1 className='heading'>Todos</h1>
       <div className='todos-container'>
         <div className='todos'>
-          <TodoCard todo={emptyTodoCard.todo} deleteHandler={deleteHandler} />
-          <TodoCard todo={todoCard.todo} deleteHandler={deleteHandler} />
+          {
+            todoList
+              .map(todo => (
+                <TodoCard
+                  todo={todo}
+                  saveTodoHandler={saveTodoHandler}
+                  updateTodoHandler={updateTodoHandler}
+                  deleteHandler={deleteHandler}
+                  key={todo.id ? todo.id : 'none'} />)
+              )
+          }
         </div>
       </div>
     </div>
