@@ -1,7 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import TodoCardService from './TodoCardService';
+import React, {useState} from 'react';
 import './TodoCard.scss';
-import {AxiosResponse} from 'axios';
 
 const TodoCard: React.FC<ITodoCard> = (props: ITodoCard) => {
   const [id, setId] = useState<number>(props.todo.id as number);
@@ -36,7 +34,7 @@ const TodoCard: React.FC<ITodoCard> = (props: ITodoCard) => {
   const handleEditing = () => {
     if (isEditing) {
       if (id) {
-        TodoCardService.updateTodo({
+        props.updateTodoHandler({
           id: id,
           title: title,
           description: description,
@@ -45,15 +43,21 @@ const TodoCard: React.FC<ITodoCard> = (props: ITodoCard) => {
           checked: checked
         });
       } else {
-        TodoCardService.saveTodo({
-          title: title,
-          description: description,
-          isFeatured: isFeatured,
-          endDate: endDate,
-          checked: checked
-        }).then((response: AxiosResponse<number>) => {
-          setId(response.data);
-        });
+        if (props.saveTodoHandler) {
+          props.saveTodoHandler({
+            title: title,
+            description: description,
+            isFeatured: isFeatured,
+            endDate: endDate,
+            checked: checked
+          }).then(() => {
+            setTitle('');
+            setDescription('');
+            setIsFeatured(false);
+            setEndDate('');
+            setChecked(false);
+          });
+        }
       }
     }
     setIsEditing(!isEditing);
@@ -114,7 +118,9 @@ const TodoCard: React.FC<ITodoCard> = (props: ITodoCard) => {
 
 export interface ITodoCard {
   todo: ITodo,
-  deleteHandler: (id?: number) => void
+  deleteHandler: (id?: number) => void,
+  updateTodoHandler: (todo: ITodo) => void,
+  saveTodoHandler?: (todo: ITodo) => Promise<void>
 }
 
 export interface ITodo {
