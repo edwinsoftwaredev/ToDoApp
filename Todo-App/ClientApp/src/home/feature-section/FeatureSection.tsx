@@ -1,42 +1,46 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import './FeatureSection.scss';
 import WeatherWidget from '../weather-widget/WeatherWidget';
-import TodoCard from '../../shared/todo-card/TodoCard';
+import TodoCard, {ITodo} from '../../shared/todo-card/TodoCard';
 import TodoCardService from '../../shared/todo-card/TodoCardService';
-
-const initialList = (() => {
-  let todoList: any[] = [];
-
-  for (let i = 0; i < 10; i++) {
-    const todo =
-    {
-      id: i,
-      title: 'Buying Bread',
-      description:
-        'Seeing “wheat” on the packaging might suggest your loaf is packed with fiber ' +
-        'and nutrients, but you’ll want to check the ingredient list to be sure. The ' +
-        'only flour you should see listed is “whole wheat flour” or “100% whole wheat ' +
-        'flour”—other flours are often stripped of nutrition.',
-      isFeatured: true,
-      endDate: '2020-10-09',
-      checked: true,
-    }
-    todoList.push(todo);
-  }
-
-  return todoList;
-})();
+import {AxiosResponse, AxiosError} from 'axios';
 
 const FeatureSection: React.FC<any> = () => {
-  const [todoList, setTodoList] = useState<any[]>(initialList);
+  const mountedRef = useRef<boolean>(false);
+  useEffect(() => {
+    mountedRef.current = true;
+
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
+
+  const [todoList, setTodoList] = useState<any[]>([]);
+
+  TodoCardService.getFeturedTodos().then((response: AxiosResponse<ITodo[]>) => {
+    if (mountedRef.current) {
+      setTodoList(response.data);
+    }
+  }).catch((error: AxiosError) => {
+    console.log(error.message);
+  });
 
   const deleteHandler = (id?: number): void => {
-    if (id) {
+    if (id && typeof (id) === 'number') {
       TodoCardService.removeTodo(id).then(() => {
         const newList = todoList.filter(value => value.id !== id);
         setTodoList(newList);
+      }).catch((error: AxiosError) => {
+        console.log(error.message);
       });
     }
+  };
+
+  const updateTodoHandler = (todo: ITodo): void => {
+    TodoCardService.updateTodo(todo)
+      .catch((error: AxiosError) => {
+        console.log(error.message);
+      });
   };
 
   return (
@@ -49,7 +53,11 @@ const FeatureSection: React.FC<any> = () => {
           </div>
           {
             todoList.map((todo) =>
-              (<TodoCard todo={todo} deleteHandler={deleteHandler} key={todo.id} />))
+              (<TodoCard
+                todo={todo}
+                deleteHandler={deleteHandler}
+                updateTodoHandler={updateTodoHandler}
+                key={todo.id} />))
           }
         </div>
       </div>
