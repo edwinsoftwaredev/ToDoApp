@@ -1,8 +1,16 @@
-import React, {useState} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import './WeatherWidget.scss';
 import Axios, {AxiosResponse, AxiosError} from 'axios';
 
 const WeatherWidget: React.FC<any> = () => {
+  const mountedRef = useRef<boolean>(false);
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
+
   const [weatherDesc, setWeatherDesc] = useState<string>('');
   const [weatherTemp, setWeatherTemp] = useState<string>('0');
   const [weatherBgClass, setWeatherBgClass] = useState<string>('');
@@ -97,7 +105,7 @@ const WeatherWidget: React.FC<any> = () => {
     const lon = position.coords.longitude;
     const apiUrl = process.env.REACT_APP_API_WEATHER_KEY;
 
-    if (!weatherDesc) {
+    if (!weatherDesc && mountedRef.current) {
       Axios
         .get(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=imperial&appid=${apiUrl}`)
         .then((response: AxiosResponse) => {
