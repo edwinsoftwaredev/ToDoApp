@@ -21,8 +21,8 @@ namespace Todo_App.DAL
 
             /**
              * How to:
-             * First generate the migration IF THE IS A CHANGE IN THE MODEL,
-             * if what it needs it just seeding the database generate a new migration
+             * First generate the migration IF THERE IS A CHANGE IN THE MODEL,
+             * if what its needed it just seeding the database generate a new migration
              * is not something to do.
              *
              * Second just start the server. That will migrate the database if it is needed
