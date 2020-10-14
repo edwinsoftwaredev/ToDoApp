@@ -82,6 +82,10 @@ namespace Todo_App.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
@@ -139,6 +143,8 @@ namespace Todo_App.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("User");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("User");
                 });
 
             modelBuilder.Entity("Todo_App.Model.Auth.UserClaim", b =>
@@ -221,6 +227,50 @@ namespace Todo_App.Migrations
                     b.ToTable("UserToken");
                 });
 
+            modelBuilder.Entity("Todo_App.Model.TodoRest.Todo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Cheked")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("CreateById")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsFetured")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserTodoId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreateById");
+
+                    b.HasIndex("UserTodoId");
+
+                    b.ToTable("Todo");
+                });
+
+            modelBuilder.Entity("Todo_App.Model.TodoRest.UserTodo", b =>
+                {
+                    b.HasBaseType("Todo_App.Model.Auth.User");
+
+                    b.HasDiscriminator().HasValue("UserTodo");
+                });
+
             modelBuilder.Entity("Todo_App.Model.Auth.RoleClaim", b =>
                 {
                     b.HasOne("Todo_App.Model.Auth.Role", null)
@@ -270,6 +320,17 @@ namespace Todo_App.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Todo_App.Model.TodoRest.Todo", b =>
+                {
+                    b.HasOne("Todo_App.Model.TodoRest.UserTodo", "CreateBy")
+                        .WithMany()
+                        .HasForeignKey("CreateById");
+
+                    b.HasOne("Todo_App.Model.TodoRest.UserTodo", null)
+                        .WithMany("TodoList")
+                        .HasForeignKey("UserTodoId");
                 });
 #pragma warning restore 612, 618
         }
