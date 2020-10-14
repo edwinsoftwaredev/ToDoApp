@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Todo_App.Model.Auth;
+using Todo_App.Model.TodoRest;
 
 namespace Todo_App.DAL
 {
@@ -54,6 +55,14 @@ namespace Todo_App.DAL
                 ut.ToTable("UserToken");
             });
 
+            modelBuilder.Entity<Todo>(todo => {
+                todo.ToTable("Todo");
+                todo.HasKey(prop => prop.Id);
+                todo.HasOne(prop => prop.CreateBy)
+                    .WithMany()
+                    .HasForeignKey(todoUser => todoUser.CreateById)
+                    .IsRequired(false);
+            });
         }
     }
 }
