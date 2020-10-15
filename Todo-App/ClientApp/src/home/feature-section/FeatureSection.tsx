@@ -19,7 +19,9 @@ const FeatureSection: React.FC<any> = () => {
 
   TodoCardService.getFeturedTodos().then((response: AxiosResponse<ITodo[]>) => {
     if (mountedRef.current) {
-      setTodoList(response.data);
+      if (response.data.length) {
+        setTodoList(response.data);
+      }
     }
   }).catch((error: AxiosError) => {
     console.log(error.message);
