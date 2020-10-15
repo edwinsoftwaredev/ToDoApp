@@ -12,7 +12,7 @@ const SignOut: React.FC = () => {
 
   useEffect(() => {
     authService.completeSignOut().then(() => {
-      // history.push('/'); // should redirects to other route
+      history.push('/'); // should redirects to other route
     }).catch((error: AxiosError) => {
       setErrorMessage(error.message);
     });
@@ -20,7 +20,6 @@ const SignOut: React.FC = () => {
 
   return (
     <div>
-      <h1>Good Bye!</h1>
       <Message text={errorMessage} />
     </div>
   );
