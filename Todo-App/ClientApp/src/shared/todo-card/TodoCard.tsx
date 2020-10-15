@@ -125,6 +125,8 @@ export interface ITodoCard {
 
 export interface ITodo {
   id?: number;
+  createdById?: string;
+  createdBy?: any;
   title: string;
   description: string;
   isFeatured: boolean;
