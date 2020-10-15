@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import './TodosList.scss';
 import TodoCard, {ITodo} from '../../shared/todo-card/TodoCard';
 import TodoCardService from '../../shared/todo-card/TodoCardService';
@@ -12,13 +12,36 @@ const TodoList: React.FC<any> = () => {
     endDate: '',
     checked: false
   };
+
   const [todoList, setTodoList] = useState<ITodo[]>([emptyTodo]);
 
-  TodoCardService.getTodos().then((response: AxiosResponse<ITodo[]>) => {
-    setTodoList(response.data);
-  }).catch((error: AxiosError) => {
-    console.log(error.message);
-  });
+  const getTodos = () => {
+    TodoCardService.getTodos().then((response: AxiosResponse<ITodo[]>) => {
+      if (response.data.length) {
+        const newData = response.data.map((todo: ITodo) => {
+          todo.endDate = new Date(Date.parse(todo.endDate)).toISOString().split('T')[0];
+          return todo;
+        });
+
+        // an empty todo card
+        newData.unshift({
+          title: '',
+          description: '',
+          isFeatured: false,
+          endDate: '',
+          checked: false
+        });
+
+        setTodoList(newData);
+      }
+    }).catch((error: AxiosError) => {
+      console.log(error.message);
+    });
+  };
+
+  useEffect(() => {
+    getTodos();
+  }, []);
 
   const deleteHandler = (id?: number): void => {
     if (id && typeof (id) === 'number') {
@@ -36,6 +59,7 @@ const TodoList: React.FC<any> = () => {
       // to keep inmutability another array is instanciated
       // React DOM will only update what is updated!
       const newTodoList = Array.from(todoList);
+      response.data.endDate = new Date(Date.parse(todo.endDate)).toISOString().split('T')[0];
       newTodoList.push(response.data);
       setTodoList(newTodoList);
       return Promise.resolve();
