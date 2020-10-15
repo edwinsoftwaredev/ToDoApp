@@ -1,5 +1,5 @@
 import React from 'react';
-import {Switch, Route} from 'react-router-dom';
+import {Switch, Route, useLocation} from 'react-router-dom';
 import SignIn from './sign-in/SignIn';
 import SignUp from './sign-up/SignUp';
 import {AuthService} from './AuthService';
@@ -22,18 +22,27 @@ const SignInComponent: React.FC = (): JSX.Element => {
 }
 
 const Auth: React.FC = (): JSX.Element => {
+  const location = useLocation();
+  const isAnyPath = (location.pathname !== "/authentication/signin" &&
+    location.pathname !== "/auth/codes" &&
+    location.pathname !== "/authentication/signout" &&
+    location.pathname !== "/authentication/signup")
+
   return (
     <div className='Auth'>
       <header><h1 className='title'>Todos Manager</h1></header>
+      {
+        isAnyPath ? AuthService.NotAuthenticated() : null
+      }
       <Switch>
-        <Route path="/authentication/signin" children={<SignInComponent />} />
-        <Route path="/authentication/signup">
+        <Route exact path="/authentication/signin" children={<SignInComponent />} />
+        <Route exact path="/authentication/signup">
           <SignUp />
         </Route>
-        <Route path='/auth/codes'>
+        <Route exact path='/auth/codes'>
           <AuthCodes />
         </Route>
-        <Route path='/authentication/signout'>
+        <Route exact path='/authentication/signout'>
           <SignOut />
         </Route>
       </Switch>

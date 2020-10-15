@@ -44,12 +44,8 @@ function AppContainer(): JSX.Element {
 
   return (
     <div className="App">
-      <Switch>
-        <PrivateRoute exact path="/">
-          <Home />
-        </PrivateRoute>
-        <Auth />
-      </Switch>
+      {!isUserLoggedIn ? <Auth /> : null}
+      {isUserLoggedIn ? <Home /> : null}
     </div>
   );
 }
