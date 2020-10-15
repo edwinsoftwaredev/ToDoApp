@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Todo_App.DAL;
 using Todo_App.Model.TodoRest;
 using Todo_App.Model.TodoRest.VM;
+using Todo_App.Services.Models.Interfaces;
 
 namespace Todo_App.Controllers
 {
@@ -19,13 +20,16 @@ namespace Todo_App.Controllers
     {
         private readonly ILogger<TodoController> _logger;
         private readonly IdDbContext _dbcontext;
+        private readonly IUserService _userService;
         public TodoController(
                 ILogger<TodoController> logger,
-                IdDbContext dbContext
+                IdDbContext dbContext,
+                IUserService userService
         )
         {
             this._logger = logger;
             this._dbcontext = dbContext;
+            this._userService = userService;
         }
 
         [HttpGet]
@@ -34,10 +38,18 @@ namespace Todo_App.Controllers
             using(this._dbcontext)
             {
                 var todoDbSet = this._dbcontext.Set<Todo>();
+                var user = await this._userService.GetCurrentUser();
 
-                return await todoDbSet
-                    .Where(todo => !todo.Cheked)
+                var todos = await todoDbSet
+                    .Where(todo => !todo.Cheked && todo.CreatedById == user.Id)
                     .ToListAsync();
+
+                if (todos.Count == 0)
+                {
+                    return NoContent();
+                }
+
+                return todos;
             }
         }
 
@@ -47,10 +59,18 @@ namespace Todo_App.Controllers
             using(this._dbcontext)
             {
                 var todoDbSet = this._dbcontext.Set<Todo>();
+                var user = await this._userService.GetCurrentUser();
 
-                return await todoDbSet
-                    .Where(todo => todo.IsFetured)
+                var todos =  await todoDbSet
+                    .Where(todo => todo.IsFetured && todo.CreatedById == user.Id)
                     .ToListAsync();
+
+                if (todos.Count == 0)
+                {
+                    return NoContent();
+                }
+
+                return todos;
             }
         }
 
@@ -60,10 +80,18 @@ namespace Todo_App.Controllers
             using(this._dbcontext)
             {
                 var todoDbSet = this._dbcontext.Set<Todo>();
+                var user = await this._userService.GetCurrentUser();
 
-                return await todoDbSet
-                    .Where(todo => todo.Cheked)
+                var todos =  await todoDbSet
+                    .Where(todo => todo.Cheked && todo.CreatedById == user.Id)
                     .ToListAsync();
+
+                if (todos.Count == 0)
+                {
+                    return NoContent();
+                }
+
+                return todos;
             }
         }
 
@@ -73,9 +101,17 @@ namespace Todo_App.Controllers
             using(this._dbcontext)
             {
                 var todoDbSet = this._dbcontext.Set<Todo>();
+                var user = await this._userService.GetCurrentUser();
+                var todoUser = this._dbcontext.Set<TodoUser>()
+                    .Single(todoUser => todoUser.UserId == user.Id);
+
+                if (todoUser == null) {
+                    return BadRequest();
+                }
 
                 var todo = new Todo {
                     Title = todoVM.Title,
+                    CreatedById = todoUser.UserId,
                     Description = todoVM.Description,
                     Cheked = todoVM.Cheked,
                     IsFetured = todoVM.IsFetured,
@@ -93,7 +129,8 @@ namespace Todo_App.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> updateTodo(int id, Todo todo)
         {
-            if (id != todo.Id)
+            var user = await this._userService.GetCurrentUser();
+            if (id != todo.Id && todo.CreatedById != user.Id)
             {
                 return BadRequest();
             }
@@ -119,6 +156,12 @@ namespace Todo_App.Controllers
                 if (todo == null)
                 {
                     return NotFound();
+                }
+
+                var user = await this._userService.GetCurrentUser();
+
+                if (todo.CreatedById != user.Id) {
+                    return BadRequest();
                 }
 
                 todoDbSet.Remove(todo);
