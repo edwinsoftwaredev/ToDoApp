@@ -82,6 +82,8 @@ export class AccountService {
 
           if (!xcsrfToken) return request;
 
+          if (request.url?.includes('https://api.openweathermap.org')) return request;
+
           request.headers[xcsrfHeaderName] = xcsrfToken;
           return request;
         });
