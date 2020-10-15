@@ -51,6 +51,6 @@ namespace Todo_App.Services.Models.Interfaces {
         Task Create(User user, string password, List<string> roles);
         Task Delete(string id);
         Task Update(User obj);
-        Task Get(string id);
+        Task<User> GetCurrentUser();
     }
 }
