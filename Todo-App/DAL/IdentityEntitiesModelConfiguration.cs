@@ -55,13 +55,20 @@ namespace Todo_App.DAL
                 ut.ToTable("UserToken");
             });
 
+            modelBuilder.Entity<TodoUser>(tu =>
+            {
+
+                tu.ToTable("TodoUser");
+                tu.HasKey(tu => tu.UserId);
+            });
+
             modelBuilder.Entity<Todo>(todo => {
                 todo.ToTable("Todo");
-                todo.HasKey(prop => prop.Id);
-                todo.HasOne(prop => prop.CreateBy)
-                    .WithMany()
-                    .HasForeignKey(todoUser => todoUser.CreateById)
-                    .IsRequired(false);
+                todo.HasKey(todo => todo.Id);
+                todo.HasOne(todo => todo.CreatedBy)
+                    .WithMany(todoUser => todoUser.Todos)
+                    .HasForeignKey(props => props.CreatedById)
+                    .IsRequired(true);
             });
         }
     }

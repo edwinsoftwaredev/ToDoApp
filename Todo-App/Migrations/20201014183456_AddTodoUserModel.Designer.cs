@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Todo_App.DAL;
 
 namespace Todo_App.Migrations
 {
     [DbContext(typeof(IdDbContext))]
-    partial class IdDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201014183456_AddTodoUserModel")]
+    partial class AddTodoUserModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -231,8 +233,7 @@ namespace Todo_App.Migrations
                     b.Property<bool>("Cheked")
                         .HasColumnType("bit");
 
-                    b.Property<string>("CreatedById")
-                        .IsRequired()
+                    b.Property<string>("CreateById")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Description")
@@ -249,7 +250,7 @@ namespace Todo_App.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedById");
+                    b.HasIndex("CreateById");
 
                     b.ToTable("Todo");
                 });
@@ -258,9 +259,6 @@ namespace Todo_App.Migrations
                 {
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("UserId");
 
@@ -320,9 +318,16 @@ namespace Todo_App.Migrations
 
             modelBuilder.Entity("Todo_App.Model.TodoRest.Todo", b =>
                 {
-                    b.HasOne("Todo_App.Model.TodoRest.TodoUser", "CreatedBy")
+                    b.HasOne("Todo_App.Model.TodoRest.TodoUser", "CreateBy")
                         .WithMany("Todos")
-                        .HasForeignKey("CreatedById")
+                        .HasForeignKey("CreateById");
+                });
+
+            modelBuilder.Entity("Todo_App.Model.TodoRest.TodoUser", b =>
+                {
+                    b.HasOne("Todo_App.Model.Auth.User", "User")
+                        .WithOne("TodoUser")
+                        .HasForeignKey("Todo_App.Model.TodoRest.TodoUser", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
