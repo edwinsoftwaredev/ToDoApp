@@ -3,26 +3,26 @@ import {ITodo} from './TodoCard';
 
 export default class TodoCardService {
   public static getTodos(): Promise<AxiosResponse<ITodo[]>> {
-    return Axios.get(`${process.env.REACT_APP_API_SERVER_URL}/api/todos`);
+    return Axios.get(`${process.env.REACT_APP_API_SERVER_URL}/api/todo`);
   }
 
   public static getFeturedTodos(): Promise<AxiosResponse<ITodo[]>> {
-    return Axios.get(`${process.env.REACT_APP_API_SERVER_URL}/api/todos/featured`);
+    return Axios.get(`${process.env.REACT_APP_API_SERVER_URL}/api/todo/featured`);
   }
 
   public static getCompletedTodos(): Promise<AxiosResponse<ITodo[]>> {
-    return Axios.get(`${process.env.REACT_APP_API_SERVER_URL}/api/todos/completed`);
+    return Axios.get(`${process.env.REACT_APP_API_SERVER_URL}/api/todo/completed`);
   }
 
   public static saveTodo(todo: ITodo): Promise<AxiosResponse<ITodo>> {
-    return Axios.post(`${process.env.REACT_APP_API_SERVER_URL}/api/todos`, todo);
+    return Axios.post(`${process.env.REACT_APP_API_SERVER_URL}/api/todo`, todo);
   }
 
   public static updateTodo(todo: ITodo): Promise<AxiosResponse<void>> {
-    return Axios.put(`${process.env.REACT_APP_API_SERVER_URL}/api/todos/${todo.id}`, todo);
+    return Axios.put(`${process.env.REACT_APP_API_SERVER_URL}/api/todo/${todo.id}`, todo);
   }
 
   public static removeTodo(id: number): Promise<AxiosResponse<void>> {
-    return Axios.delete(`${process.env.REACT_APP_API_SERVER_URL}/api/todos/${id}`);
+    return Axios.delete(`${process.env.REACT_APP_API_SERVER_URL}/api/todo/${id}`);
   }
 }
