@@ -1,8 +1,9 @@
 using System.Collections.Generic;
-using Todo_App.Model.Auth;
 
 namespace Todo_App.Model.TodoRest {
-    public class TodoUser : User {
-        public List<Todo> TodoList { get; set; }
+    public class TodoUser {
+        public string UserId { get; set; }
+        public string UserName { get; set; }
+        public List<Todo> Todos { get; set; }
     }
 }
