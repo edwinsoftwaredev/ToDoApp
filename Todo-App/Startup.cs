@@ -53,7 +53,13 @@ namespace Todo_App
                 // this filters are applied globally
                 options.Filters.Add(new HttpResponseExceptionFilter());
                 options.Filters.Add(new ValidateAntiForgeryTokenAttribute());
-            }).ConfigureApiBehaviorOptions(options =>
+            })
+            .AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.ReferenceLoopHandling =
+                    Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            })
+            .ConfigureApiBehaviorOptions(options =>
                {
                     options.InvalidModelStateResponseFactory = context =>  {
                         /*
