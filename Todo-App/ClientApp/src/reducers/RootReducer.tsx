@@ -4,6 +4,7 @@ import {combineEpics, ActionsObservable, StateObservable} from 'redux-observable
 import {catchError} from 'rxjs/operators';
 import {setUserEpic, SaveUserActions} from '../auth/auth-codes/AuthCodes';
 import {testSlice, TestComponentActions, valueEpic} from '../test-component/TestComponent';
+import {weatherSlice, SaveWeatherAction, weatherEpic} from '../home/weather-widget/WeatherWidget';
 
 interface IAppInitialState {
   appName: string;
@@ -19,7 +20,8 @@ const initialSlice: Slice<IAppInitialState> = createSlice({
   }
 });
 
-type Actions = SaveUserActions | TestComponentActions; // SaveUserActions | others...
+// SaveUserActions | others...
+type Actions = SaveUserActions | SaveWeatherAction | TestComponentActions;
 
 // https://redux-observable.js.org/docs/basics/Epics.html
 // https://redux-observable.js.org/docs/basics/SettingUpTheMiddleware.html
@@ -28,6 +30,7 @@ export const rootEpic =
     store$: StateObservable<any>
   ) => combineEpics(
     setUserEpic,
+    weatherEpic,
     valueEpic
   )(action$, store$).pipe(catchError((error, source) => {
     console.log(error);
@@ -37,6 +40,7 @@ export const rootEpic =
 export const rootReducer = combineReducers({
   app: initialSlice.reducer,
   oidcUser: authSlice.reducer,
+  weather: weatherSlice.reducer,
   testState: testSlice.reducer
 });
 
