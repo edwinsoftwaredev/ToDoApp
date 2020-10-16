@@ -2,8 +2,6 @@ import React, {useEffect} from 'react';
 import './App.scss';
 import {
   BrowserRouter as Router,
-  Switch,
-  useLocation,
 } from 'react-router-dom';
 import Home from './home/Home';
 import Auth from './auth/Auth';
@@ -15,32 +13,31 @@ import {AccountService} from './auth/AccountService';
 
 function AppContainer(): JSX.Element {
   const authService = AuthService.getInstance();
-  const PrivateRoute = authService.privateRoute;
   const dispatch = useDispatch();
   // this hook cant be called inside a component
   // that implements Router
-  const location = useLocation();
   const isUserLoggedIn = useSelector(AuthService.isUserLoggedInSelector);
 
   useEffect(() => {
     AccountService.getAntiForgeryToken().then(() => {
+      const windowLocation = window.location.pathname;
       if (
-        location.pathname !== '/authentication/signin' &&
-        location.pathname !== '/auth/codes' &&
-        location.pathname !== '/authentication/signout' &&
-        location.pathname !== '/authentication/signup' &&
-        !isUserLoggedIn
+        !isUserLoggedIn &&
+        windowLocation !== '/authentication/signin' &&
+        windowLocation !== '/authentication/signup' &&
+        windowLocation !== '/authentication/signout' &&
+        windowLocation !== '/auth/codes'
       ) {
         authService.getUser().then((user: OidcUser | null) => {
           if (user) {
-            dispatch(saveUser(user));
+            dispatch(saveUser(user))
           } else {
-            authService.startAuthentication();
+            authService.startAuthentication(); // this generates a browser redirection
           }
         });
       }
     });
-  }, [authService, dispatch, isUserLoggedIn, location.pathname]);
+  }, [authService, dispatch, isUserLoggedIn]);
 
   return (
     <div className="App">
