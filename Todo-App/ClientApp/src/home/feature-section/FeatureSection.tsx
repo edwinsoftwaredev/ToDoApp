@@ -7,25 +7,31 @@ import {AxiosResponse, AxiosError} from 'axios';
 
 const FeatureSection: React.FC<any> = () => {
   const mountedRef = useRef<boolean>(false);
+  const [todoList, setTodoList] = useState<any[]>([]);
+
+  const getTodos =
+    () => TodoCardService.getFeturedTodos().then((response: AxiosResponse<ITodo[]>) => {
+      if (mountedRef.current) {
+        if (response.data.length) {
+          const mappedData = response.data.map((todo: ITodo) => {
+            todo.endDate = new Date(todo.endDate).toISOString().split('T')[0]
+            return todo;
+          });
+          setTodoList(mappedData);
+        }
+      }
+    }).catch((error: AxiosError) => {
+      console.log(error.message);
+    });
+
   useEffect(() => {
     mountedRef.current = true;
+    getTodos();
 
     return () => {
       mountedRef.current = false;
     };
-  }, []);
-
-  const [todoList, setTodoList] = useState<any[]>([]);
-
-  TodoCardService.getFeturedTodos().then((response: AxiosResponse<ITodo[]>) => {
-    if (mountedRef.current) {
-      if (response.data.length) {
-        setTodoList(response.data);
-      }
-    }
-  }).catch((error: AxiosError) => {
-    console.log(error.message);
-  });
+  }, [])
 
   const deleteHandler = (id?: number): void => {
     if (id && typeof (id) === 'number') {
