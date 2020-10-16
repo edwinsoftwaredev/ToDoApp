@@ -8,7 +8,9 @@ const TodoCard: React.FC<ITodoCard> = (props: ITodoCard) => {
   const [isFeatured, setIsFeatured] = useState<boolean>(props.todo.isFeatured);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [endDate, setEndDate] = useState<string>(props.todo.endDate);
-  const [checked, setChecked] = useState<boolean>(props.todo.checked);
+  const [isCompleted, setIsCompleted] = useState<boolean>(props.todo.isCompleted);
+  const [createdById, setCreatedById] = useState<string | undefined>(props.todo.createdById);
+  // const [createdBy, setCreatedBy] = useState<any>(props.todo.createdBy);
 
   const handleTitle = (value: string) => {
     setTitle(value);
@@ -23,7 +25,7 @@ const TodoCard: React.FC<ITodoCard> = (props: ITodoCard) => {
   };
   const handleCheckMark = () => {
     if (isEditing) {
-      setChecked(!checked);
+      setIsCompleted(!isCompleted);
     }
   };
   const handleEndDate = (value: string) => {
@@ -32,31 +34,40 @@ const TodoCard: React.FC<ITodoCard> = (props: ITodoCard) => {
     }
   };
   const handleEditing = () => {
+
+    if (!isEditing && typeof (id) === 'undefined') {
+      setEndDate(new Date().toISOString().split('T')[0]);
+    }
+
     if (isEditing) {
       if (id) {
         props.updateTodoHandler({
           id: id,
+          createdById: createdById,
           title: title,
           description: description,
           isFeatured: isFeatured,
           endDate: endDate,
-          checked: checked
+          isCompleted: isCompleted
         });
       } else {
         if (props.saveTodoHandler) {
-          props.saveTodoHandler({
-            title: title,
-            description: description,
-            isFeatured: isFeatured,
-            endDate: endDate,
-            checked: checked
-          }).then(() => {
-            setTitle('');
-            setDescription('');
-            setIsFeatured(false);
-            setEndDate('');
-            setChecked(false);
-          });
+          if (title) {
+            props.saveTodoHandler({
+              title: title,
+              description: description,
+              isFeatured: isFeatured,
+              endDate: endDate,
+              isCompleted: isCompleted
+            }).then(() => {
+              setTitle('');
+              setCreatedById('');
+              setDescription('');
+              setIsFeatured(false);
+              setEndDate('');
+              setIsCompleted(false);
+            });
+          }
         }
       }
     }
@@ -71,11 +82,11 @@ const TodoCard: React.FC<ITodoCard> = (props: ITodoCard) => {
             className={'uk-input' + (isEditing ? ' editing' : '')}
             type='text'
             value={title}
-            placeholder="todo's title..."
+            placeholder="new todo's title..."
             onChange={event => handleTitle(event.target.value)}
             disabled={isEditing ? false : true} />
         </div>
-        <div className={'checkmark' + (checked ? ' checked' : '') + (isEditing ? ' editing' : '')}>
+        <div className={'checkmark' + (isCompleted ? ' checked' : '') + (isEditing ? ' editing' : '')}>
           <i className='bx bx-check' onClick={() => handleCheckMark()}></i>
         </div>
         <div className={'todo-star' + (!isFeatured ? ' not-featured' : '') + (isEditing ? ' editing' : '')}>
@@ -103,6 +114,7 @@ const TodoCard: React.FC<ITodoCard> = (props: ITodoCard) => {
             className={'bx bx-trash' + (isEditing ? ' editing' : '')}
             onClick={() => isEditing ? props.deleteHandler(props.todo.id) : {}}></i>
         </div>
+        <div className='footer-items-space'></div>
         <div className='todo-end-date'>
           <input
             className={(isEditing ? ' editing' : '')}
@@ -131,7 +143,7 @@ export interface ITodo {
   description: string;
   isFeatured: boolean;
   endDate: string;
-  checked: boolean;
+  isCompleted: boolean;
 }
 
 export default TodoCard;
