@@ -4,16 +4,17 @@ import TodoCard, {ITodo} from '../../shared/todo-card/TodoCard';
 import TodoCardService from '../../shared/todo-card/TodoCardService';
 import {AxiosResponse, AxiosError} from 'axios';
 
-const TodoList: React.FC<any> = () => {
-  const emptyTodo: ITodo = {
-    title: '',
-    description: '',
-    isFeatured: false,
-    endDate: '',
-    checked: false
-  };
+const emptyTodo: ITodo = {
+  title: '',
+  description: '',
+  isFeatured: false,
+  endDate: '',
+  isCompleted: false
+};
 
-  const [todoList, setTodoList] = useState<ITodo[]>([emptyTodo]);
+const TodoList: React.FC<any> = () => {
+
+  const [todoList, setTodoList] = useState<ITodo[]>([]);
 
   const getTodos = () => {
     TodoCardService.getTodos().then((response: AxiosResponse<ITodo[]>) => {
@@ -22,16 +23,6 @@ const TodoList: React.FC<any> = () => {
           todo.endDate = new Date(Date.parse(todo.endDate)).toISOString().split('T')[0];
           return todo;
         });
-
-        // an empty todo card
-        newData.unshift({
-          title: '',
-          description: '',
-          isFeatured: false,
-          endDate: '',
-          checked: false
-        });
-
         setTodoList(newData);
       }
     }).catch((error: AxiosError) => {
@@ -81,6 +72,11 @@ const TodoList: React.FC<any> = () => {
       <h1 className='heading'>Todos</h1>
       <div className='todos-container'>
         <div className='todos'>
+          <TodoCard
+            todo={emptyTodo}
+            saveTodoHandler={saveTodoHandler}
+            updateTodoHandler={updateTodoHandler}
+            deleteHandler={deleteHandler} />
           {
             todoList
               .map(todo => (
