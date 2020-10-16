@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import './TodoCard.scss';
 
 const TodoCard: React.FC<ITodoCard> = (props: ITodoCard) => {
@@ -10,6 +10,7 @@ const TodoCard: React.FC<ITodoCard> = (props: ITodoCard) => {
   const [endDate, setEndDate] = useState<string>(props.todo.endDate);
   const [isCompleted, setIsCompleted] = useState<boolean>(props.todo.isCompleted);
   const [createdById, setCreatedById] = useState<string | undefined>(props.todo.createdById);
+  const [isDeletable, setIsDeletable] = useState<boolean>(true);
   // const [createdBy, setCreatedBy] = useState<any>(props.todo.createdBy);
 
   const handleTitle = (value: string) => {
@@ -33,6 +34,11 @@ const TodoCard: React.FC<ITodoCard> = (props: ITodoCard) => {
       setEndDate(value);
     }
   };
+
+  useEffect(() => {
+    setIsDeletable(!id && !title);
+  }, [id, title]);
+
   const handleEditing = () => {
 
     if (!isEditing && typeof (id) === 'undefined') {
@@ -52,7 +58,7 @@ const TodoCard: React.FC<ITodoCard> = (props: ITodoCard) => {
         });
       } else {
         if (props.saveTodoHandler) {
-          if (title) {
+          if (title && endDate) {
             props.saveTodoHandler({
               title: title,
               description: description,
@@ -110,9 +116,9 @@ const TodoCard: React.FC<ITodoCard> = (props: ITodoCard) => {
             onClick={() => handleEditing()}></i>
         </div>
         <div className='delete-btn'>
-          <i
+          {!isDeletable ? <i
             className={'bx bx-trash' + (isEditing ? ' editing' : '')}
-            onClick={() => isEditing ? props.deleteHandler(props.todo.id) : {}}></i>
+            onClick={() => isEditing ? props.deleteHandler(props.todo.id) : {}}></i> : null}
         </div>
         <div className='footer-items-space'></div>
         <div className='todo-end-date'>
