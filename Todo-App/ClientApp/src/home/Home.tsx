@@ -1,12 +1,13 @@
 import React from 'react';
 import './Home.scss';
 import Menu from './menu/Menu';
-import FeatureSection from './feature-section/FeatureSection';
-import TodosList from './todos-list/TodosList';
 import {Switch, Route} from 'react-router-dom';
+import FeaturedTodos from './featured-todos/FeaturedTodos';
+import Todos from './todos/Todos';
 import Axios, {AxiosError, AxiosResponse} from 'axios';
 import {useDispatch} from 'react-redux';
 import {saveWeather} from './weather-widget/WeatherWidget';
+import CompletedTodos from './completed-todos/CompletedTodos';
 
 const Home: React.FC = (): JSX.Element => {
   const dispatch = useDispatch();
@@ -39,16 +40,18 @@ const Home: React.FC = (): JSX.Element => {
           <Switch>
             <Route exact path="/">
               <div className='option-container'>
-                <FeatureSection />
+                <FeaturedTodos />
               </div>
             </Route>
             <Route exact path="/todos">
               <div className='option-container'>
-                <TodosList />
+                <Todos />
               </div>
             </Route>
-            <Route exact path="/calendar">
-              <div className='option-container'></div>
+            <Route exact path="/completed-todos">
+              <div className='option-container'>
+                <CompletedTodos />
+              </div>
             </Route>
             <Route exact path="/account">
               <div className='option-container'></div>
