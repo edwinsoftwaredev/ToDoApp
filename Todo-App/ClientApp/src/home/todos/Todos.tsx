@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import './TodosList.scss';
+import './Todos.scss';
 import TodoCard, {ITodo} from '../../shared/todo-card/TodoCard';
 import TodoCardService from '../../shared/todo-card/TodoCardService';
 import {AxiosResponse, AxiosError} from 'axios';
@@ -12,7 +12,7 @@ const emptyTodo: ITodo = {
   isCompleted: false
 };
 
-const TodoList: React.FC<any> = () => {
+const Todos: React.FC<any> = () => {
 
   const [todoList, setTodoList] = useState<ITodo[]>([]);
 
@@ -68,7 +68,7 @@ const TodoList: React.FC<any> = () => {
   }
 
   return (
-    <div className='TodoList'>
+    <div className='Todos'>
       <h1 className='heading'>Todos</h1>
       <div className='todos-container'>
         <div className='todos'>
@@ -94,4 +94,4 @@ const TodoList: React.FC<any> = () => {
   );
 }
 
-export default TodoList;
+export default Todos;
