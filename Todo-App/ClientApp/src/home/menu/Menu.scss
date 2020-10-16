@@ -3,7 +3,7 @@
   box-sizing: border-box;
   min-width: 20vw;
   max-width: 20vw;
-  background-color: slategray;
+  background-color: whitesmoke;
   @media only screen and (max-width: 767px) {
     position: fixed;
     min-width: 100vw;
@@ -65,8 +65,8 @@
 
           div {
             font-size: 1.2vw;
-            font-weight: 400;
-            color: white;
+            font-weight: 370;
+            color: slategray;
             line-height: 0;
             text-align: center;
             @media only screen and (max-width: 767px) {
