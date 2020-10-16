@@ -74,7 +74,7 @@ namespace Todo_App.Controllers
             }
         }
 
-        [HttpGet("complete")]
+        [HttpGet("completed")]
         public async Task<ActionResult<List<Todo>>> getCompletedTodos()
         {
             using(this._dbcontext)
