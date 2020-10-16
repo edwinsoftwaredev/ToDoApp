@@ -41,7 +41,7 @@ namespace Todo_App.Controllers
                 var user = await this._userService.GetCurrentUser();
 
                 var todos = await todoDbSet
-                    .Where(todo => !todo.Cheked && todo.CreatedById == user.Id)
+                    .Where(todo => !todo.IsCompleted && todo.CreatedById == user.Id)
                     .ToListAsync();
 
                 if (todos.Count == 0)
@@ -62,7 +62,7 @@ namespace Todo_App.Controllers
                 var user = await this._userService.GetCurrentUser();
 
                 var todos =  await todoDbSet
-                    .Where(todo => todo.IsFetured && todo.CreatedById == user.Id)
+                    .Where(todo => todo.IsFeatured && todo.CreatedById == user.Id)
                     .ToListAsync();
 
                 if (todos.Count == 0)
@@ -83,7 +83,7 @@ namespace Todo_App.Controllers
                 var user = await this._userService.GetCurrentUser();
 
                 var todos =  await todoDbSet
-                    .Where(todo => todo.Cheked && todo.CreatedById == user.Id)
+                    .Where(todo => todo.IsCompleted && todo.CreatedById == user.Id)
                     .ToListAsync();
 
                 if (todos.Count == 0)
@@ -113,8 +113,8 @@ namespace Todo_App.Controllers
                     Title = todoVM.Title,
                     CreatedById = todoUser.UserId,
                     Description = todoVM.Description,
-                    Cheked = todoVM.Cheked,
-                    IsFetured = todoVM.IsFetured,
+                    IsCompleted = todoVM.IsCompleted,
+                    IsFeatured = todoVM.IsFeatured,
                     EndDate = todoVM.EndDate
                 };
 
