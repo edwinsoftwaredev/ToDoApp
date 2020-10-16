@@ -1,11 +1,11 @@
 import React, {useState, useEffect, useRef} from 'react';
-import './FeatureSection.scss';
+import './FeaturedTodos.scss';
 import WeatherWidget from '../weather-widget/WeatherWidget';
 import TodoCard, {ITodo} from '../../shared/todo-card/TodoCard';
 import TodoCardService from '../../shared/todo-card/TodoCardService';
 import {AxiosResponse, AxiosError} from 'axios';
 
-const FeatureSection: React.FC<any> = () => {
+const FeaturedTodos: React.FC<any> = () => {
   const mountedRef = useRef<boolean>(false);
   const [todoList, setTodoList] = useState<any[]>([]);
 
@@ -52,7 +52,7 @@ const FeatureSection: React.FC<any> = () => {
   };
 
   return (
-    <div className='FeaturedSection'>
+    <div className='FeaturedTodos'>
       <h1 className='heading'>Featured Todos</h1>
       <div className='featured-todos-container'>
         <div className='featured-todos'>
@@ -73,4 +73,4 @@ const FeatureSection: React.FC<any> = () => {
   );
 };
 
-export default FeatureSection;
+export default FeaturedTodos;
