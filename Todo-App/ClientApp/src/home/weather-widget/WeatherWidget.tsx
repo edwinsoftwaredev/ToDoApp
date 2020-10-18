@@ -1,11 +1,10 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import './WeatherWidget.scss';
-import Axios, {AxiosResponse, AxiosError} from 'axios';
 import {Slice, createSlice, PayloadAction, Action, createSelector} from '@reduxjs/toolkit';
 import {ActionsObservable, StateObservable, ofType} from 'redux-observable';
 import {RootState} from '../../reducers/RootReducer';
 import {map} from 'rxjs/operators';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 
