@@ -49,6 +49,8 @@ namespace Todo_App.Services.Models.Interfaces {
         //     throws an HttpResponseException
         //
         Task Create(User user, string password, List<string> roles);
+        Task<bool> IsSignedUp(string email);
+        Task<User> GetUserByEmail(string email);
         Task Delete(string id);
         Task Update(User obj);
         Task<User> GetCurrentUser();
