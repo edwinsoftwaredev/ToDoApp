@@ -5,6 +5,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Todo_App.Model.Auth.VM;
 using Todo_App.Services.Interfaces;
+using Google.Apis.Auth;
+using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
+using Todo_App.Services.Models.Interfaces;
+using Todo_App.Model.Auth;
+using System.Linq;
 
 /**
  * This Controllers is based on the configuration of the following resources:
@@ -25,15 +31,21 @@ namespace Todo_App.Controllers {
         private readonly IAuthenticationService _authenticationService;
         private readonly ILogger<AuthenticationController> _logger;
         private readonly IIdentityServerInteractionService _interactionService;
+        private readonly IUserService _userService;
+        private readonly IConfiguration _configuration;
 
         public AuthenticationController(
                 IAuthenticationService authenticationService,
                 ILogger<AuthenticationController> logger,
-                IIdentityServerInteractionService interactionService)
+                IIdentityServerInteractionService interactionService,
+                IUserService userService,
+                IConfiguration configuration)
         {
             this._authenticationService = authenticationService;
             this._logger = logger;
             this._interactionService = interactionService;
+            this._userService = userService;
+            this._configuration = configuration;
         }
 
         /**
@@ -78,7 +90,7 @@ namespace Todo_App.Controllers {
                 throw new HttpResponseException {
                     Status = 500,
                     Value = new {
-                        title = "User is not allowed to sign in!"
+                        title = "User is not allowed to sign in."
                     }
                 };
             }
@@ -87,12 +99,80 @@ namespace Todo_App.Controllers {
                 throw new HttpResponseException {
                     Status = 500,
                     Value = new {
-                        title = "User has been locked out!"
+                        title = "User has been locked out."
                      }
                 };
             }
 
             return NotFound();
+        }
+
+        [HttpPost("signin-google")]
+        [AllowAnonymous]
+        public async Task<IActionResult> SignInGoogle(GoogleIDToken googleIDToken)
+        {
+            if (string.IsNullOrEmpty(googleIDToken.Id_Token))
+            {
+                this._logger.LogInformation(googleIDToken.Id_Token);
+                return BadRequest();
+            }
+
+            IConfigurationSection googleAuthNSection =
+                  this._configuration.GetSection("Authentication:Google");
+
+            var validationSettings = new GoogleJsonWebSignature.ValidationSettings();
+            validationSettings.Audience = new List<string> {
+                googleAuthNSection["ClientId"]
+            };
+
+            var result = await GoogleJsonWebSignature.ValidateAsync(googleIDToken.Id_Token);
+
+            var isSignedUp = await this._userService.IsSignedUp(result.Email);
+
+            if (isSignedUp)
+            {
+                var user = await this._userService.GetUserByEmail(result.Email);
+
+                if (user == null)
+                {
+                    return NotFound(new {message = "User not found when sign in"});
+                }
+
+                var authResult = await this._authenticationService.AuthenticateByUser(user);
+
+                if (!authResult.Succeeded)
+                {
+                    return BadRequest(new {message="User was not signed in"});
+                }
+
+                return Ok();
+            }
+            else
+            {
+                var newUser = new User {
+                    Email = result.Email,
+                    Name = result.Name,
+                    UserName = result.Email.Split('@').First()
+                };
+
+                await this._userService.Create(newUser);
+
+                var user = await this._userService.GetUserByEmail(newUser.Email);
+
+                if (user == null)
+                {
+                    return NotFound(new {message="User was not found when sign in"});
+                }
+
+                var authResult = await this._authenticationService.AuthenticateByUser(user);
+
+                if (!authResult.Succeeded)
+                {
+                    return BadRequest(new {message="User was not signed in"});
+                }
+
+                return Ok();
+            }
         }
 
         [HttpPost("signout")]
@@ -106,5 +186,10 @@ namespace Todo_App.Controllers {
 
             return BadRequest();
         }
+    }
+
+    public class GoogleIDToken
+    {
+        public string Id_Token { get; set; }
     }
 }
