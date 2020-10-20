@@ -14,11 +14,11 @@ enum ActionTypes {
   SAVE_USER = 'oidcUser/identifyUser', // this is the name of the Action in the slice
 };
 
-export const saveUser = (user: OidcUser) => ({type: ActionTypes.SAVE_USER, payload: user});
+export const saveUser = (user: OidcUser | {}) => ({type: ActionTypes.SAVE_USER, payload: user});
 
 interface ISaveUser extends Action {
   type: ActionTypes.SAVE_USER
-  user: OidcUser
+  user: OidcUser | {}
 }
 
 export const setUserEpic = (
