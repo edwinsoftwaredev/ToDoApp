@@ -1,5 +1,6 @@
 using System.Net.Mime;
 using System.Reflection;
+using IdentityServer4;
 using IdentityServer4.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -17,7 +18,6 @@ using Todo_App.Services.Interfaces;
 using Todo_App.Services.Models;
 using Todo_App.Services.Models.Interfaces;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
-using Microsoft.AspNetCore.Antiforgery;
 
 namespace Todo_App
 {
@@ -122,7 +122,7 @@ namespace Todo_App
              * When an authorization request is sent, it is send with a sha256 encrypted random string
              * known as t(code_verifier) from a code_verifier. Auth server respond with an Authorization code as normal.
              * Then the client send the code to token endpoint along with the code_verifier without been transformed.
-             * the code_verifier is used to compare and decript the t(code_verifier) sent in the first request.
+             * the code_verifier is used to compare and decrypt the t(code_verifier) sent in the first request.
              * If there is no match then the access token is not sent <-- the request is rejected.
              *
              * To know more about the attack read: https://tools.ietf.org/html/rfc7636#section-1
@@ -162,6 +162,19 @@ namespace Todo_App
                 })
                 .AddDeveloperSigningCredential()
                 .AddAspNetIdentity<User>();
+
+            services.AddAuthentication()
+                .AddGoogle("Google", options =>
+                {
+                    options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+
+                    IConfigurationSection googleAuthNSection =
+                        Configuration.GetSection("Authentication:Google");
+
+
+                    options.ClientId = googleAuthNSection["ClientId"];
+                    options.ClientSecret = googleAuthNSection["ClientSecret"];
+                });
 
             /*services.AddAuthentication()
                 .AddIdentityServerAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme,
