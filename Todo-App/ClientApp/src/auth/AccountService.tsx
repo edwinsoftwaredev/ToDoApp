@@ -1,4 +1,5 @@
 import Axios, {AxiosResponse, AxiosRequestConfig} from 'axios';
+import {IGoogleIDToken} from './sign-in/SignIn';
 
 export class AccountService {
 
@@ -24,6 +25,16 @@ export class AccountService {
     return Axios.post(
       `${process.env.REACT_APP_API_SERVER_URL}/api/authentication/signin`,
       loginData
+    );
+  }
+
+  /**
+   * signed in a user using google sign in
+   */
+  public static authenticateUserWithGoogle(idToken: IGoogleIDToken): Promise<AxiosResponse<any>> {
+    return Axios.post(
+      `${process.env.REACT_APP_API_SERVER_URL}/api/authentication/signin-google`,
+      idToken
     );
   }
 
