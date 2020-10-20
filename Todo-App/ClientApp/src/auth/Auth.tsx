@@ -18,21 +18,28 @@ const SignInComponent: React.FC = (): JSX.Element => {
 
   if (!isValidUrl) authService.startAuthentication();
 
+
   return isValidUrl ? <SignIn /> : <ConnectingAuthorizationServer />;
 }
 
 const Auth: React.FC = (): JSX.Element => {
+  const authService = AuthService.getInstance();
   const location = useLocation();
   const isAnyPath = (location.pathname !== "/authentication/signin" &&
     location.pathname !== "/auth/codes" &&
     location.pathname !== "/authentication/signout" &&
     location.pathname !== "/authentication/signup")
 
+  const handleAuthPathRedirection = (): JSX.Element => {
+    authService.startAuthentication();
+    return AuthService.NotAuthenticated();
+  }
+
   return (
     <div className='Auth'>
-      <header><h1 className='title'>Todos Manager</h1></header>
+      <header><h1 className='title'>Todo App</h1></header>
       {
-        isAnyPath ? AuthService.NotAuthenticated() : null
+        isAnyPath ? handleAuthPathRedirection() : null
       }
       <Switch>
         <Route exact path="/authentication/signin" children={<SignInComponent />} />
