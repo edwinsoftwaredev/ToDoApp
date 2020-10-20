@@ -16,9 +16,9 @@ const Home: React.FC = (): JSX.Element => {
   navigator.geolocation.getCurrentPosition((position: Position) => {
     const lat = position.coords.latitude;
     const lon = position.coords.longitude;
-    const apiUrl = process.env.REACT_APP_API_WEATHER_KEY;
+    const apiKey = process.env.REACT_APP_API_WEATHER_KEY;
     Axios
-      .get(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=imperial&appid=${apiUrl}`)
+      .get(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=imperial&appid=${apiKey}`)
       .then((response: AxiosResponse) => {
         dispatch(saveWeather({
           weatherDescription: response.data.weather[0].description,
