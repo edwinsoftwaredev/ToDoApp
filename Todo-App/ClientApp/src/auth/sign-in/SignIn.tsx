@@ -9,11 +9,16 @@ import Message from '../../shared/message/Message';
 import {useQuery} from '../../shared/utils';
 
 declare const gapi: any;
+export interface IGoogleIDToken {
+  id_token: string
+}
+
 const SignIn: React.FC = (): JSX.Element => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [disableForm, setDisableForm] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
+  const [googleIDToken, setGoogleIDToken] = useState<IGoogleIDToken>();
 
   const history = useHistory();
   const handleRoute = () => history.push('/authentication/signup');
@@ -30,8 +35,15 @@ const SignIn: React.FC = (): JSX.Element => {
           // after login this has to call redirects to auth-callback
           window.location.assign(result.data.redirectUrl);
         })
-        .catch((error: AxiosError) => {
-          setErrorMessage(error.message);
+        .catch((error: AxiosError<any>) => {
+          if (error.response?.status === 404) {
+            console.log('XXX');
+            setErrorMessage('Check your Username and Password.');
+          } if (error.response?.status === 500) {
+            setErrorMessage(error.response.data.title);
+          } else if (error.response?.status !== 404 && error.response?.status !== 500) {
+            setErrorMessage(error.message);
+          }
         });
     }
 
@@ -48,11 +60,21 @@ const SignIn: React.FC = (): JSX.Element => {
   }, [username, password]);
 
   const onGoogleSignIn = (googleUser: any) => {
-    const profile = googleUser.getBasicProfile();
-    console.log('ID: ' + profile.getId());
-    console.log('Name: ' + profile.getName());
-    console.log('Email: ' + profile.getEmail());
+    const idToken = googleUser.getAuthResponse().id_token;
+    setGoogleIDToken({id_token: idToken});
   }
+
+  useEffect(() => {
+    if (googleIDToken) {
+      AccountService.authenticateUserWithGoogle(googleIDToken)
+        .then(() => {
+          history.push('/');
+        })
+        .catch((error: AxiosError) => {
+          console.log(error.message);
+        });
+    }
+  }, [googleIDToken, history]);
 
   useEffect(() => {
     const googleScript = document.createElement<'script'>('script');
