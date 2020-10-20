@@ -8,6 +8,7 @@ import {AxiosError, AxiosResponse} from 'axios';
 import Message from '../../shared/message/Message';
 import {useQuery} from '../../shared/utils';
 
+declare const gapi: any;
 const SignIn: React.FC = (): JSX.Element => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -44,7 +45,42 @@ const SignIn: React.FC = (): JSX.Element => {
       !(username
         && password
       ));
-  }, [disableForm, username, password])
+  }, [username, password]);
+
+  const onGoogleSignIn = (googleUser: any) => {
+    const profile = googleUser.getBasicProfile();
+    console.log('ID: ' + profile.getId());
+    console.log('Name: ' + profile.getName());
+    console.log('Email: ' + profile.getEmail());
+  }
+
+  useEffect(() => {
+    const googleScript = document.createElement<'script'>('script');
+    googleScript.src = 'https://apis.google.com/js/platform.js';
+    googleScript.async = true;
+    googleScript.defer = true;
+    document.body.appendChild(googleScript);
+
+    googleScript.onload = () => {
+
+      gapi.load('auth2', () => {
+        const googleAuth = gapi.auth2.init({
+          client_id: '539369846251-q5upr5nftjdf30ruqbs2i0v45tqn96h4.apps.googleusercontent.com'
+        });
+
+        googleAuth.then(() => {
+          gapi?.signin2.render('g-signin2', {
+            scope: 'profile email',
+            width: 'auto',
+            height: 38,
+            longtitle: true,
+            theme: 'dark',
+            onsuccess: onGoogleSignIn
+          });
+        })
+      });
+    };
+  }, []);
 
   return (
     <div className='signin'>
@@ -63,14 +99,21 @@ const SignIn: React.FC = (): JSX.Element => {
           type={disableForm ? 'button' : 'submit'}
           disabled={disableForm}>
           Sign In
-          </button>
+        </button>
         <button
           className={'uk-button uk-button-default btn-route-link'}
           type={'button'}
           onClick={handleRoute}
         >
           Sign Up
-          </button>
+        </button>
+        <div className='signin-providers-separator'>
+          <span>- or -</span>
+        </div>
+        <div className='google-signin-container'>
+          <div id="g-signin2">
+          </div>
+        </div>
       </form>
     </div>
   );
