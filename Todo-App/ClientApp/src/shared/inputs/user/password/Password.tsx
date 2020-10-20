@@ -41,7 +41,8 @@ const Password: React.FC<IPassword> = (props: IPassword) => {
         isValid={validated}
         value={valueHandler}
         others={{
-          type: 'password'
+          type: 'password',
+          autoComplete: 'off'
         }}
       />
     </div>
