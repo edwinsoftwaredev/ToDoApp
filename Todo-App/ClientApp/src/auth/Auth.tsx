@@ -25,10 +25,10 @@ const SignInComponent: React.FC = (): JSX.Element => {
 const Auth: React.FC = (): JSX.Element => {
   const authService = AuthService.getInstance();
   const location = useLocation();
-  const isAnyPath = (location.pathname !== "/authentication/signin" &&
+  const isNotAnyPath = (location.pathname !== "/authentication/signin" &&
     location.pathname !== "/auth/codes" &&
     location.pathname !== "/authentication/signout" &&
-    location.pathname !== "/authentication/signup")
+    location.pathname !== "/authentication/signup");
 
   const handleAuthPathRedirection = (): JSX.Element => {
     authService.startAuthentication();
@@ -39,7 +39,7 @@ const Auth: React.FC = (): JSX.Element => {
     <div className='Auth'>
       <header><h1 className='title'>Todo App</h1></header>
       {
-        isAnyPath ? handleAuthPathRedirection() : null
+        isNotAnyPath ? handleAuthPathRedirection() : null
       }
       <Switch>
         <Route exact path="/authentication/signin" children={<SignInComponent />} />
