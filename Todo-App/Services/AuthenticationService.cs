@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -45,6 +46,25 @@ namespace Todo_App.Services
             this._logger.LogInformation("An attemp to sign in user: " + loginData.Username + " was executed.");
 
             return result;
+        }
+
+        public async Task<SignInResult> AuthenticateByUser(User user)
+        {
+            if (this._signInManager.IsSignedIn(this._httpContextAcessor.HttpContext.User))
+            {
+                return SignInResult.Failed;
+            }
+
+            try
+            {
+                // change flag to true
+                await this._signInManager.SignInAsync(user, false, "GoogleSignIn");
+                return SignInResult.Success;
+            }
+            catch(Exception)
+            {
+                return SignInResult.Failed;
+            }
         }
 
         public async Task SignOut()
