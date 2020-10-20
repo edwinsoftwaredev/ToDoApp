@@ -163,7 +163,7 @@ namespace Todo_App
                 .AddDeveloperSigningCredential()
                 .AddAspNetIdentity<User>();
 
-            services.AddAuthentication()
+            /*services.AddAuthentication()
                 .AddGoogle("Google", options =>
                 {
                     options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
@@ -174,7 +174,7 @@ namespace Todo_App
 
                     options.ClientId = googleAuthNSection["ClientId"];
                     options.ClientSecret = googleAuthNSection["ClientSecret"];
-                });
+                });*/
 
             /*services.AddAuthentication()
                 .AddIdentityServerAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme,
