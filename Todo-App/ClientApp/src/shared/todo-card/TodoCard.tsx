@@ -88,24 +88,24 @@ const TodoCard: React.FC<ITodoCard> = (props: ITodoCard) => {
             className={'uk-input' + (isEditing ? ' editing' : '')}
             type='text'
             value={title}
-            placeholder="new todo's title..."
+            placeholder="todo title..."
             onChange={event => handleTitle(event.target.value)}
-            disabled={isEditing ? false : true} />
+            disabled={!isEditing} />
         </div>
         <div className={'checkmark' + (isCompleted ? ' checked' : '') + (isEditing ? ' editing' : '')}>
-          <i className='bx bx-check' onClick={() => handleCheckMark()}></i>
+          <i className='bx bx-check' onClick={() => handleCheckMark()} />
         </div>
         <div className={'todo-star' + (!isFeatured ? ' not-featured' : '') + (isEditing ? ' editing' : '')}>
-          <i className='bx bxs-star' onClick={() => handleFeatured()}></i>
+          <i className='bx bxs-star' onClick={() => handleFeatured()} />
         </div>
       </div>
       <div className='description'>
         <textarea
           className={'uk-textarea' + (isEditing ? ' editing' : '')}
           value={description}
-          placeholder="todo's description..."
+          placeholder="todo description..."
           onChange={event => handleDescription(event.target.value)}
-          disabled={isEditing ? false : true}
+          disabled={!isEditing}
         >
         </textarea>
       </div>
@@ -113,21 +113,21 @@ const TodoCard: React.FC<ITodoCard> = (props: ITodoCard) => {
         <div className='edit-btn-container'>
           <i
             className={'bx bx-edit' + (isEditing ? ' editing' : '')}
-            onClick={() => handleEditing()}></i>
+            onClick={() => handleEditing()} />
         </div>
         <div className='delete-btn'>
           {!isDeletable ? <i
             className={'bx bx-trash' + (isEditing ? ' editing' : '')}
-            onClick={() => isEditing ? props.deleteHandler(props.todo.id) : {}}></i> : null}
+            onClick={() => isEditing ? props.deleteHandler(props.todo.id) : {}} /> : null}
         </div>
-        <div className='footer-items-space'></div>
+        <div className='footer-items-space' />
         <div className='todo-end-date'>
           <input
             className={(isEditing ? ' editing' : '')}
             value={endDate}
             type='date'
             onChange={(event) => handleEndDate(event.target.value)}
-            disabled={isEditing ? false : true} />
+            disabled={!isEditing} />
         </div>
       </div>
     </div>
