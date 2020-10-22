@@ -30,7 +30,7 @@ function AppContainer(): JSX.Element {
       ) {
         authService.getUser().then((user: OidcUser | null) => {
           if (user) {
-            dispatch(saveUser(user))
+            dispatch(saveUser(user));
           } else {
             authService.startAuthentication(); // this generates a browser redirection
           }
