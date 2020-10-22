@@ -1,6 +1,5 @@
 using System.Net.Mime;
 using System.Reflection;
-using IdentityServer4;
 using IdentityServer4.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -18,6 +17,10 @@ using Todo_App.Services.Interfaces;
 using Todo_App.Services.Models;
 using Todo_App.Services.Models.Interfaces;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Todo_App.Utils.Constants;
+using System.Threading.Tasks;
+using System;
 
 namespace Todo_App
 {
@@ -163,43 +166,37 @@ namespace Todo_App
                 .AddDeveloperSigningCredential()
                 .AddAspNetIdentity<User>();
 
-            /*services.AddAuthentication()
-                .AddGoogle("Google", options =>
+            services.AddLocalApiAuthentication();
+            // protecting APIs
+            /*services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
                 {
-                    options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
-
-                    IConfigurationSection googleAuthNSection =
-                        Configuration.GetSection("Authentication:Google");
-
-
-                    options.ClientId = googleAuthNSection["ClientId"];
-                    options.ClientSecret = googleAuthNSection["ClientSecret"];
+                    options.Authority = "https://localhost:5001";
+                    options.Audience = "TodoAppApi";
+                    options.TokenValidationParameters.ValidIssuer = "https://localhost:5001";
+                    options.TokenValidationParameters.ValidateIssuer = true;
                 });*/
 
-            /*services.AddAuthentication()
-                .AddIdentityServerAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme,
-                    jwtOptions =>
-                    {
-                        jwtOptions.Authority = "https://localhost:5001";
-                        jwtOptions.Audience = "TodoAppApi";
-                    },
-                    referenceOptions =>
-                    {
-                        // this is left empty for future configurations
-                    });
-
+            // authorization base on Scope for users who what access to an api
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("TodoAppApiAdminPolicy", builder =>
+                options.AddPolicy("TodoAppApiAdmin", builder =>
                 {
-                    builder.RequireScope("TodoAppApi.TodoApp");
+                    builder.RequireAuthenticatedUser();
+                    builder.AuthenticationSchemes.Add(JwtBearerDefaults.AuthenticationScheme);
+                    builder.RequireRole(RoleConstants.ADMIN_ROLE);
+                    // builder.RequireClaim("scope", "TodoAppApi.TodoApp");
                 });
 
-                options.AddPolicy("TodoAppApiUserPolicy", builder =>
+                options.AddPolicy("TodoAppApiUser", builder =>
                 {
-                    builder.RequireScope("TodoAppApi.TodoAppUser");
+                    builder.RequireAuthenticatedUser()
+                        .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                        // .RequireRole(RoleConstants.USER_ROLE)
+                        // .RequireClaim("scope", "TodoAppApi.TodoAppUser")
+                        .Build();
                 });
-            });*/
+            });
 
             services.AddSpaStaticFiles(configuration =>
             {
@@ -230,8 +227,8 @@ namespace Todo_App
             // https://identityserver4.readthedocs.io/en/latest/topics/startup.html
             // app.UseAuthentication(); <-- It's not needed when we add the IdentityServer middleware to the pipeline
 
+            app.UseAuthentication();
             app.UseIdentityServer();
-
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });

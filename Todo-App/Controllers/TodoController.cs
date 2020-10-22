@@ -9,12 +9,13 @@ using Todo_App.DAL;
 using Todo_App.Model.TodoRest;
 using Todo_App.Model.TodoRest.VM;
 using Todo_App.Services.Models.Interfaces;
+using static IdentityServer4.IdentityServerConstants;
 
 namespace Todo_App.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
+    [Authorize(LocalApi.PolicyName)]
     [ValidateAntiForgeryToken]
     public class TodoController : ControllerBase
     {
