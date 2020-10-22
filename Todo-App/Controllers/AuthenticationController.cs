@@ -125,7 +125,8 @@ namespace Todo_App.Controllers {
                 googleAuthNSection["ClientId"]
             };
 
-            var result = await GoogleJsonWebSignature.ValidateAsync(googleIDToken.Id_Token);
+            var result = await GoogleJsonWebSignature
+                .ValidateAsync(googleIDToken.Id_Token, validationSettings);
 
             var isSignedUp = await this._userService.IsSignedUp(result.Email);
 
