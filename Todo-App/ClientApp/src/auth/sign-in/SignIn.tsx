@@ -37,7 +37,6 @@ const SignIn: React.FC = (): JSX.Element => {
         })
         .catch((error: AxiosError<any>) => {
           if (error.response?.status === 404) {
-            console.log('XXX');
             setErrorMessage('Check your Username and Password.');
           } if (error.response?.status === 500) {
             setErrorMessage(error.response.data.title);
