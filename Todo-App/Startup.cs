@@ -19,8 +19,6 @@ using Todo_App.Services.Models.Interfaces;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Todo_App.Utils.Constants;
-using System.Threading.Tasks;
-using System;
 
 namespace Todo_App
 {
@@ -165,17 +163,6 @@ namespace Todo_App
                 })
                 .AddDeveloperSigningCredential()
                 .AddAspNetIdentity<User>();
-
-            services.AddLocalApiAuthentication();
-            // protecting APIs
-            /*services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                {
-                    options.Authority = "https://localhost:5001";
-                    options.Audience = "TodoAppApi";
-                    options.TokenValidationParameters.ValidIssuer = "https://localhost:5001";
-                    options.TokenValidationParameters.ValidateIssuer = true;
-                });*/
 
             // authorization base on Scope for users who what access to an api
             services.AddAuthorization(options =>
