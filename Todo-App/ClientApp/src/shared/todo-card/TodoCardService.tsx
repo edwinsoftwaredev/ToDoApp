@@ -7,42 +7,42 @@ export default class TodoCardService {
 
   public static async getTodos(): Promise<AxiosResponse<ITodo[]>> {
     const user = await this.authService.getUser();
-    return Axios.get(`${process.env.REACT_APP_API_SERVER_URL}/api/todo`, {
+    return Axios.get(`${process.env.REACT_APP_TODO_SERVER_URL}/api/todo`, {
       headers: {'Authorization': `${user?.token_type} ${user?.access_token}`}
     });
   }
 
   public static async getFeturedTodos(): Promise<AxiosResponse<ITodo[]>> {
     const user = await this.authService.getUser();
-    return Axios.get(`${process.env.REACT_APP_API_SERVER_URL}/api/todo/featured`, {
+    return Axios.get(`${process.env.REACT_APP_TODO_SERVER_URL}/api/todo/featured`, {
       headers: {'Authorization': `${user?.token_type} ${user?.access_token}`}
     });
   }
 
   public static async getCompletedTodos(): Promise<AxiosResponse<ITodo[]>> {
     const user = await this.authService.getUser();
-    return Axios.get(`${process.env.REACT_APP_API_SERVER_URL}/api/todo/completed`, {
+    return Axios.get(`${process.env.REACT_APP_TODO_SERVER_URL}/api/todo/completed`, {
       headers: {'Authorization': `${user?.token_type} ${user?.access_token}`}
     });
   }
 
   public static async saveTodo(todo: ITodo): Promise<AxiosResponse<ITodo>> {
     const user = await this.authService.getUser();
-    return Axios.post(`${process.env.REACT_APP_API_SERVER_URL}/api/todo`, todo, {
+    return Axios.post(`${process.env.REACT_APP_TODO_SERVER_URL}/api/todo`, todo, {
       headers: {'Authorization': `${user?.token_type} ${user?.access_token}`}
     });
   }
 
   public static async updateTodo(todo: ITodo): Promise<AxiosResponse<void>> {
     const user = await this.authService.getUser();
-    return Axios.put(`${process.env.REACT_APP_API_SERVER_URL}/api/todo/${todo.id}`, todo, {
+    return Axios.put(`${process.env.REACT_APP_TODO_SERVER_URL}/api/todo/${todo.id}`, todo, {
       headers: {'Authorization': `${user?.token_type} ${user?.access_token}`}
     });
   }
 
   public static async removeTodo(id: number): Promise<AxiosResponse<void>> {
     const user = await this.authService.getUser();
-    return Axios.delete(`${process.env.REACT_APP_API_SERVER_URL}/api/todo/${id}`, {
+    return Axios.delete(`${process.env.REACT_APP_TODO_SERVER_URL}/api/todo/${id}`, {
       headers: {'Authorization': `${user?.token_type} ${user?.access_token}`}
     });
   }
