@@ -68,7 +68,6 @@ namespace Todo_App.DAL
                     AllowedScopes =
                     {
                         "TodoAppApi.TodoAppUser", // This is name of an ApiResource scope
-                        IdentityServerConstants.LocalApi.ScopeName,
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile
                     },
@@ -106,13 +105,7 @@ namespace Todo_App.DAL
                     }
                 }.ToEntity();
 
-                var localApiResource =
-                    new IdentityServer4.
-                        Models
-                        .ApiResource(IdentityServerConstants.LocalApi.ScopeName).ToEntity();
-
                 configurationDbContext.ApiResources.Add(apiResource);
-                configurationDbContext.ApiResources.Add(localApiResource);
                 configurationDbContext.SaveChanges();
             }
 
