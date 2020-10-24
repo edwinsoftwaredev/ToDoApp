@@ -94,6 +94,7 @@ export class AccountService {
           if (!xcsrfToken) return request;
 
           if (request.url?.includes('https://api.openweathermap.org')) return request;
+          if (request.url?.includes(`${process.env.REACT_APP_TODO_SERVER_URL}`)) return request;
 
           request.headers[xcsrfHeaderName] = xcsrfToken;
           return request;
