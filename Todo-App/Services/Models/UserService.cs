@@ -49,16 +49,6 @@ namespace Todo_App.Services.Models
                 };
             }
 
-            var userDbSet = this._dbcontext.Set<User>();
-            var savedUser = userDbSet.Single(su => su.UserName == user.UserName);
-            var todoUserSet = this._dbcontext.Set<TodoUser>();
-            await todoUserSet.AddAsync(new TodoUser
-            {
-                UserId = savedUser.Id, // this is the key and foreign key
-                UserName = savedUser.UserName
-            });
-            await this._dbcontext.SaveChangesAsync();
-
             return;
         }
 
@@ -88,18 +78,6 @@ namespace Todo_App.Services.Models
                         title = "Error creating user"
                     }
                 };
-
-            // adding a new TodoUser
-            var userDbSet = this._dbcontext.Set<User>();
-            var savedUser = userDbSet.Single(su => su.UserName == user.UserName);
-            var todoUserSet = this._dbcontext.Set<TodoUser>();
-            await todoUserSet.AddAsync(new TodoUser
-            {
-                UserId = savedUser.Id, // this is the key and foreign key
-                UserName = savedUser.UserName
-            });
-            await this._dbcontext.SaveChangesAsync();
-
 
             // Here I have to add authentication features, like:
             // Token Email Confirmation, Password Recovery, Google, Facebook, Microsoft, Twitter
