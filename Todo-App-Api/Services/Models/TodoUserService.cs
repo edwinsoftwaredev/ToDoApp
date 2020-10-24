@@ -32,7 +32,36 @@ namespace Todo_App_Api.Services.Models
 
             var todoUserSet = this._dbcontext.Set<TodoUser>();
 
-            return todoUserSet.SingleAsync(todoUser => todoUser.UserId == idTodoUser);
+            return todoUserSet.SingleOrDefaultAsync(todoUser => todoUser.UserId == idTodoUser);
+        }
+
+        public Task<TodoUser> CreateTodoUser()
+        {
+            var user_UserId = this._httpContextAcessor
+                .HttpContext
+                .User
+                .FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            var user_UserName = this._httpContextAcessor
+                .HttpContext
+                .User
+                .FindFirst("preferred_username").Value;
+
+            var todoUserSet = this._dbcontext.Set<TodoUser>();
+
+            var todoUser = new TodoUser
+            {
+                UserId = user_UserId,
+                UserName = user_UserName
+            };
+
+            var result = todoUserSet.Add(todoUser);
+
+            var todoUserResult = this._dbcontext
+                .SaveChangesAsync()
+                .ContinueWith<TodoUser>((task) => result.Entity);
+
+            return todoUserResult;
         }
     }
 }

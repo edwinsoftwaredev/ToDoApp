@@ -5,5 +5,6 @@ namespace Todo_App_Api.Services.Models.Interfaces {
     public interface ITodoUserService
     {
         Task<TodoUser> GetCurrentUser();
+        Task<TodoUser> CreateTodoUser();
     }
 }
