@@ -95,12 +95,16 @@ namespace Todo_App.DAL
                         new Scope
                         {
                             Name = "TodoAppApi.TodoApp",
-                            DisplayName = "Full access to TodoApp"
+                            DisplayName = "Full access to TodoApp",
+                            // check UserProfileService
+                            UserClaims = new List<string> {"preferred_username"}
                         },
                         new Scope
                         {
                             Name = "TodoAppApi.TodoAppUser",
-                            DisplayName = "User access TodoApp"
+                            DisplayName = "User access TodoApp",
+                            // check UserProfileService
+                            UserClaims = new List<string> {"preferred_username"}
                         }
                     }
                 }.ToEntity();
