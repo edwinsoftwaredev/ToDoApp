@@ -61,14 +61,12 @@ namespace Todo_App_Api
                 {
                     options.Authority = "https://localhost:5001";
                     options.Audience = "TodoAppApi";
-                    options.TokenValidationParameters.RoleClaimType = "role";
                 });
 
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("TodoAppApiAdmin", builder =>
                 {
-                    // builder.RequireRole(RoleConstants.ADMIN_ROLE);
                     builder.RequireAuthenticatedUser()
                         .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
                         .RequireClaim("scope", "TodoAppApi.TodoApp") // role must be added
