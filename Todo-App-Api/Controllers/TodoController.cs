@@ -115,11 +115,13 @@ namespace Todo_App_Api.Controllers
                     EndDate = todoVM.EndDate
                 };
 
-                var result = await todoDbSet.AddAsync(todo);
+                var result = todoDbSet.Add(todo);
 
-                await this._dbcontext.SaveChangesAsync();
+                var todoResult = await this._dbcontext
+                    .SaveChangesAsync()
+                    .ContinueWith<Todo>((task) => result.Entity);
 
-                return result.Entity;
+                return todoResult;
             }
         }
 
