@@ -19,6 +19,7 @@ using Todo_App.Services.Models.Interfaces;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Todo_App.Utils.Constants;
+using Todo_App.Utils;
 
 namespace Todo_App
 {
@@ -161,29 +162,9 @@ namespace Todo_App
                     };
                     options.EnableTokenCleanup = true;
                 })
+                .AddProfileService<UserProfileService>()
                 .AddDeveloperSigningCredential()
                 .AddAspNetIdentity<User>();
-
-            // authorization base on Scope for users who what access to an api
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("TodoAppApiAdmin", builder =>
-                {
-                    builder.RequireAuthenticatedUser();
-                    builder.AuthenticationSchemes.Add(JwtBearerDefaults.AuthenticationScheme);
-                    builder.RequireRole(RoleConstants.ADMIN_ROLE);
-                    // builder.RequireClaim("scope", "TodoAppApi.TodoApp");
-                });
-
-                options.AddPolicy("TodoAppApiUser", builder =>
-                {
-                    builder.RequireAuthenticatedUser()
-                        .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
-                        // .RequireRole(RoleConstants.USER_ROLE)
-                        // .RequireClaim("scope", "TodoAppApi.TodoAppUser")
-                        .Build();
-                });
-            });
 
             services.AddSpaStaticFiles(configuration =>
             {
