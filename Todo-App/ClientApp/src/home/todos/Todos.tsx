@@ -3,6 +3,8 @@ import './Todos.scss';
 import TodoCard, {ITodo} from '../../shared/todo-card/TodoCard';
 import TodoCardService from '../../shared/todo-card/TodoCardService';
 import {AxiosResponse, AxiosError} from 'axios';
+import {useSelector} from 'react-redux';
+import {todoUserSelector} from '../Home';
 
 const emptyTodo: ITodo = {
   title: '',
@@ -13,7 +15,7 @@ const emptyTodo: ITodo = {
 };
 
 const Todos: React.FC<any> = () => {
-
+  const todoUser = useSelector(todoUserSelector);
   const [todoList, setTodoList] = useState<ITodo[]>([]);
 
   const getTodos = () => {
@@ -31,8 +33,10 @@ const Todos: React.FC<any> = () => {
   };
 
   useEffect(() => {
-    getTodos();
-  }, []);
+    if (todoUser.userId) {
+      getTodos();
+    }
+  }, [todoUser]);
 
   const deleteHandler = (id?: number): void => {
     if (id && typeof (id) === 'number') {

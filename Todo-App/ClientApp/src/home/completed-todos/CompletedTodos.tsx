@@ -3,10 +3,13 @@ import './CompletedTodos.scss';
 import TodoCardService from '../../shared/todo-card/TodoCardService';
 import {AxiosResponse, AxiosError} from 'axios';
 import TodoCard, {ITodo} from '../../shared/todo-card/TodoCard';
+import {useSelector} from 'react-redux';
+import {todoUserSelector} from '../Home';
 
 const CompletedTodos: React.FC<any> = () => {
   const mountedRef = useRef<boolean>(false);
   const [completedTodoList, setCompletedTodoList] = useState<ITodo[]>([]);
+  const todoUser = useSelector(todoUserSelector);
 
   const getCompletedTodos = () => {
     TodoCardService.getCompletedTodos().then((response: AxiosResponse<ITodo[]>) => {
@@ -27,12 +30,14 @@ const CompletedTodos: React.FC<any> = () => {
   useEffect(() => {
     mountedRef.current = true;
 
-    getCompletedTodos();
+    if (todoUser.userId) {
+      getCompletedTodos();
+    }
 
     return () => {
       mountedRef.current = false;
     };
-  }, []);
+  }, [todoUser]);
 
   const deleteHandler = (id?: number) => {
     if (id && typeof (id) === 'number') {

@@ -4,12 +4,15 @@ import WeatherWidget from '../weather-widget/WeatherWidget';
 import TodoCard, {ITodo} from '../../shared/todo-card/TodoCard';
 import TodoCardService from '../../shared/todo-card/TodoCardService';
 import {AxiosResponse, AxiosError} from 'axios';
+import {useSelector} from 'react-redux';
+import {todoUserSelector} from '../Home';
 
 const FeaturedTodos: React.FC<any> = () => {
   const mountedRef = useRef<boolean>(false);
   const [todoList, setTodoList] = useState<any[]>([]);
+  const todoUser = useSelector(todoUserSelector)
 
-  const getTodos =
+  const getFeturedTodos =
     () => TodoCardService.getFeturedTodos().then((response: AxiosResponse<ITodo[]>) => {
       if (mountedRef.current) {
         if (response.data.length) {
@@ -26,12 +29,15 @@ const FeaturedTodos: React.FC<any> = () => {
 
   useEffect(() => {
     mountedRef.current = true;
-    getTodos();
+
+    if (todoUser.userId) {
+      getFeturedTodos();
+    }
 
     return () => {
       mountedRef.current = false;
     };
-  }, [])
+  }, [todoUser])
 
   const deleteHandler = (id?: number): void => {
     if (id && typeof (id) === 'number') {
