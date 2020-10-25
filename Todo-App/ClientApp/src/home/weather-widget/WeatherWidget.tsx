@@ -9,9 +9,9 @@ import {useSelector} from 'react-redux';
 /////////////////////////////////////////////////////////////////////////////////////////////
 
 export interface IWeather {
-  weatherDescription: string,
-  weatherTemperature: string
-  weatherIcon: string
+  weatherDescription: string;
+  weatherTemperature: string;
+  weatherIcon: string;
 }
 
 const initialWeatherState: IWeather = {
@@ -40,8 +40,8 @@ enum ActionTypes {
 export const saveWeather = (weather: IWeather) => ({type: ActionTypes.SAVE_WEATHER, payload: weather});
 
 interface ISaveWeather extends Action {
-  type: ActionTypes.SAVE_WEATHER,
-  weather: IWeather
+  type: ActionTypes.SAVE_WEATHER;
+  weather: IWeather;
 }
 
 export const weatherEpic = (
