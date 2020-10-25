@@ -1,13 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# 
+#
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Todo-App", "Todo-App\Todo-App.csproj", "{5E18BE15-4212-487B-B396-CDF74871EEE6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Todo-App.Tests", "Todo-App.Tests\Todo-App.Tests.csproj", "{B6E60502-1B78-4885-98D0-C2CC71989FDD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Todo-App-Api", "Todo-App-Api\Todo-App-Api.csproj", "{C326DDBA-FE8C-4446-80A6-A64EDB1DE757}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Todo-App-Ui", "Todo-App-Ui\Todo-App-Ui.csproj", "{1E733F89-23E1-49F6-9138-A581DD5E0CB3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,9 +25,5 @@ Global
 		{C326DDBA-FE8C-4446-80A6-A64EDB1DE757}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C326DDBA-FE8C-4446-80A6-A64EDB1DE757}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C326DDBA-FE8C-4446-80A6-A64EDB1DE757}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1E733F89-23E1-49F6-9138-A581DD5E0CB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1E733F89-23E1-49F6-9138-A581DD5E0CB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1E733F89-23E1-49F6-9138-A581DD5E0CB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1E733F89-23E1-49F6-9138-A581DD5E0CB3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
