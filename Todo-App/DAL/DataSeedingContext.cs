@@ -19,8 +19,7 @@ namespace Todo_App.DAL
                 ConfigurationDbContext configurationDbContext)
         {
 
-            /**
-             * How to:
+            /* How to:
              * First generate the migration IF THERE IS A CHANGE IN THE MODEL,
              * if what its needed it just seeding the database generate a new migration
              * is not something to do.
@@ -33,7 +32,7 @@ namespace Todo_App.DAL
              * https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/applying
              *
              * THIS IS A MIGRATION AT RUNTIME
-             **/
+             */
 
             // use code with precaution
             context.Database.Migrate();
@@ -53,7 +52,7 @@ namespace Todo_App.DAL
 
             if (!configurationDbContext.Clients.Any())
             {
-                var firstPartyUserClient = new IdentityServer4.Models.Client
+                var firstPartyUserClient = new Client
                 {
                     ClientId = "TodoAppFirstPartyUser",
                     ClientName = "Todo App First Party - User",
@@ -63,7 +62,7 @@ namespace Todo_App.DAL
                     AllowPlainTextPkce = false, // default is false
                     RequireConsent = false, // this is a firstParty client
                     PostLogoutRedirectUris = {
-                        "https://localhost:5001/authentication/signout"
+                        "http://localhost:3000"
                     },
                     AllowedScopes =
                     {
@@ -73,11 +72,11 @@ namespace Todo_App.DAL
                     },
                     RedirectUris = new List<string>
                     {
-                        "https://localhost:5001/auth/codes"
+                        "http://localhost:3000/auth/codes"
                     },
                     AllowedCorsOrigins = new List<string>
                     {
-                        "https://localhost:5001"
+                        "http://localhost:3000"
                     }
                 }.ToEntity();
 
@@ -87,7 +86,7 @@ namespace Todo_App.DAL
 
             if(!configurationDbContext.ApiResources.Any())
             {
-                var apiResource = new IdentityServer4.Models.ApiResource
+                var apiResource = new ApiResource
                 {
                     Name = "TodoAppApi",
                     Scopes =
@@ -112,8 +111,6 @@ namespace Todo_App.DAL
                 configurationDbContext.ApiResources.Add(apiResource);
                 configurationDbContext.SaveChanges();
             }
-
-            return;
         }
     }
 }
