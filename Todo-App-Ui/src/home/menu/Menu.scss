@@ -1,0 +1,121 @@
+.Menu {
+  float: left;
+  box-sizing: border-box;
+  min-width: 20vw;
+  max-width: 20vw;
+  background-color: whitesmoke;
+  @media only screen and (max-width: 767px) {
+    position: fixed;
+    min-width: 100vw;
+    bottom: 0;
+  }
+  z-index: 10;
+
+  .side-menu-section {
+    padding-top: 2em;
+    width: 100%;
+    @media only screen and (max-width: 767px) {
+      padding-top: 0;
+      height: 10vh;
+    }
+
+    nav {
+      @media only screen and (max-width: 767px) {
+        height: 100%;
+      }
+
+      ol {
+        padding-left: 0;
+        list-style: none;
+        @media only screen and (max-width: 767px) {
+          display: grid;
+          grid-template-columns: repeat(5, 1fr);
+          grid-auto-flow: row;
+          column-gap: 1vw;
+          padding: 0;
+          margin: 0;
+          height: 100%;
+          align-items: center;
+        }
+
+        li {
+          height: 3vw;
+          cursor: pointer;
+          align-items: center;
+          display: flex;
+          flex-flow: row nowrap;
+          border-left: 1px solid transparent;
+          padding-left: 1.3em;
+          @media only screen and (max-width: 767px) {
+            padding: 0;
+            height: 100%;
+          }
+
+          &:hover {
+            transition: background-color 200ms;
+            background-color: rgba(193,213,224,0.2) !important;
+          }
+
+          & + * {
+            margin-top: 1em;
+            @media only screen and (max-width: 767px) {
+              margin-top: 0;
+            }
+          }
+
+          div {
+            font-size: 1.2vw;
+            font-weight: 370;
+            color: slategray;
+            line-height: 0;
+            text-align: center;
+            @media only screen and (max-width: 767px) {
+              margin: auto;
+            }
+          }
+
+          i {
+            font-size: 1.6vw !important;
+            @media only screen and (max-width: 767px) {
+              font-size: 10vw !important;
+            }
+          }
+
+          .title {
+            text-align: left;
+            padding-left: 1em;
+          }
+
+          &.selected {
+            border-left: 4px solid lightblue;
+            background-color: rgba(193,213,224,0.3) !important;
+            div {
+              font-weight: 600;
+            }
+            @media only screen and (max-width: 767px) {
+              border-left: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .smart-screen-weather-widget {
+    @media only screen and (max-width: 767px) {
+      display: none;
+    }
+  }
+
+  .smart-screen-list {
+    ol {
+      li {
+        .title {
+          @media only screen and (max-width: 767px) {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}

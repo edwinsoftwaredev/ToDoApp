@@ -1,0 +1,42 @@
+// @import '../node_modules/uikit/src/scss/variables.scss';
+// @import '../node_modules/uikit/src/scss/mixins.scss';
+// @import '../node_modules/uikit/src/scss/uikit.scss';
+@import '../node_modules/uikit/dist/css/uikit.min.css';
+@import '../node_modules/boxicons/css/boxicons.min.css';
+
+html {
+  font-size: 10px;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+button {
+  font-size: 1.3em !important;
+  font-weight: bold !important;
+  text-transform: capitalize !important;
+  color: slategray !important;
+  border-color: slategray !important;
+  transition: background-color 240ms !important;
+
+  &.disabled {
+    background-color: transparent !important;
+    color: lightgray !important;
+    border-color: lightgray !important;
+  }
+
+  &:hover:not(.disabled) {
+    background-color: #eceff1 !important;
+  }
+}

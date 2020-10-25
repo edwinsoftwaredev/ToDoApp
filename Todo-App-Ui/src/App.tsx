@@ -1,25 +1,51 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {useEffect} from 'react';
+import './App.scss';
+import {
+  BrowserRouter as Router,
+} from 'react-router-dom';
+import Home from './home/Home';
+import Auth from './auth/Auth';
+import {AuthService} from './auth/AuthService';
+import {User as OidcUser} from 'oidc-client';
+import {saveUser} from './auth/auth-codes/AuthCodes';
+import {useDispatch, useSelector} from 'react-redux';
 
-function App() {
+function AppContainer(): JSX.Element {
+  const authService = AuthService.getInstance();
+  const dispatch = useDispatch();
+  // this hook cant be called inside a component
+  // that implements Router
+  const isUserLoggedIn = useSelector(AuthService.isUserLoggedInSelector);
+
+  useEffect(() => {
+      const windowLocation = window.location.pathname;
+      if (
+        !isUserLoggedIn &&
+        windowLocation !== '/auth/codes'
+      ) {
+        authService.getUser().then((user: OidcUser | null) => {
+          if (user) {
+            dispatch(saveUser(user));
+          } else {
+            authService.startAuthentication();
+          }
+        });
+      }
+  }, [authService, dispatch, isUserLoggedIn]);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {!isUserLoggedIn ? <Auth /> : null}
+      {isUserLoggedIn ? <Home /> : null}
     </div>
+  );
+}
+
+function App(): JSX.Element {
+  return (
+    <Router>
+      <AppContainer />
+    </Router>
   );
 }
 
