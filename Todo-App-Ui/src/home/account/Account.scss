@@ -1,0 +1,56 @@
+﻿.Account {
+  height: 100%;
+  padding: 0 2em;
+  
+  .heading {
+    margin-top: 0;
+    font-weight: 700;
+    font-size: 3.3em;
+    color: slategray;
+    text-align: left;
+  }
+  
+  .account-container {
+    padding-bottom: 3vh;
+    @media only screen and (max-width: 767px) {
+      padding-bottom: 13vh;
+    }
+    
+    .account-info {
+      height: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto;
+      justify-items: center;
+      align-items: center;
+      gap: 25% 5%;
+      @media only screen and (max-width: 767px) {
+        display: flex;
+        flex-direction: column;
+      }
+      
+      .account-username {
+        width: 80%;
+        @media only screen and (max-width: 767px) {
+          width: 100%;
+        }
+      }
+      
+      .btn-delete-account {
+        color: red !important;
+        border: 1px solid red !important;
+        display: block;
+        width: 80%;
+        transition: 350ms !important;
+        &:hover {
+          background-color: #ffa9a9 !important;
+        }
+        
+        @media only screen and (max-width: 767px) {
+          width: 100%;
+          margin-top: 3em;
+        }
+      }
+    }
+  }
+}
