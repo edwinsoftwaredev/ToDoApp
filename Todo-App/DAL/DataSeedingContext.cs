@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using IdentityServer4;
-using IdentityServer4.EntityFramework.DbContexts;
+using IdentityServer4.EntityFramework.Interfaces;
 using IdentityServer4.EntityFramework.Mappers;
 using IdentityServer4.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Todo_App.Model.Auth;
 using Todo_App.Utils.Constants;
+using IdentityResource = IdentityServer4.EntityFramework.Entities.IdentityResource;
 
 namespace Todo_App.DAL
 {
@@ -16,7 +17,7 @@ namespace Todo_App.DAL
     {
         public static void Initialize(IdDbContext context,
                 RoleManager<Role> roleManager,
-                ConfigurationDbContext configurationDbContext)
+                IConfigurationDbContext configurationDbContext)
         {
 
             /* How to:
@@ -48,6 +49,21 @@ namespace Todo_App.DAL
 
                 if (!result.Succeeded)
                     throw new Exception("An Error occurred when creating the DB");
+            }
+
+            if (!configurationDbContext.IdentityResources.Any())
+            {
+                var identityResourcesApi = new List<IdentityResource>
+                {
+                    new IdentityResources.OpenId().ToEntity(),
+                    new IdentityResources.Profile().ToEntity(),
+                    new IdentityResources.Address().ToEntity(),
+                    new IdentityResources.Email().ToEntity(),
+                    new IdentityResources.Phone().ToEntity()
+                };
+
+                configurationDbContext.IdentityResources.AddRange(identityResourcesApi);
+                configurationDbContext.SaveChanges();
             }
 
             if (!configurationDbContext.Clients.Any())
