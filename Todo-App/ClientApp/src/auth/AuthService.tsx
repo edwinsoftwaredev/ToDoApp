@@ -1,34 +1,9 @@
 import React from 'react';
-import {UserManagerSettings, UserManager, User as OidcUser, SignoutResponse} from 'oidc-client';
-import {AxiosError} from 'axios';
-import {RootState} from '../reducers/RootReducer';
-import {createSelector} from '@reduxjs/toolkit';
-import {Route} from 'react-router-dom';
-import {useSelector} from 'react-redux';
 
 export class AuthService {
   private static _instance: AuthService;
-  private _userManager: UserManager;
 
   private constructor() {
-    const userManagerSettings: UserManagerSettings = {
-      authority: process.env.REACT_APP_API_SERVER_URL,
-      client_id: 'TodoAppFirstPartyUser',
-      redirect_uri: process.env.REACT_APP_REDIRECT_URI,
-      response_type: 'code',
-      scope: 'openid profile TodoAppApi.TodoAppUser',
-      post_logout_redirect_uri: process.env.REACT_APP_REDIRECT_LOGOUT
-    };
-
-    this._userManager = new UserManager(userManagerSettings);
-  }
-
-  get UserManager(): UserManager {
-    return this._userManager;
-  }
-
-  getUser(): Promise<OidcUser | null> {
-    return this._userManager.getUser();
   }
 
   /**
@@ -41,71 +16,6 @@ export class AuthService {
     return this._instance;
   }
 
-  /**
-   * Redirects to the authorization endpoint
-   */
-  async startAuthentication(): Promise<void> {
-    return this._userManager.signinRedirect()
-      .catch((error: AxiosError) => {
-        if (error.message === 'Network Error') {
-          this.redirectLogNetErrorAuthService(error.message);
-        }
-      });
-  }
-
-  /**
-   * requests tokens and return the Authenticated User
-   */
-  async completeAuthentication(): Promise<OidcUser | void> {
-    return this._userManager.signinRedirectCallback();
-  }
-
-  startSignOut = async (): Promise<SignoutResponse | void> => {
-    return this._userManager.signoutRedirect();
-  };
-
-  completeSignOut = async (): Promise<SignoutResponse> => {
-    return this._userManager.signoutRedirectCallback();
-  };
-
-  public static isUserLoggedInSelector = createSelector(
-    (state: RootState) => state.oidcUser,
-    (oidcUser: OidcUser | {}) => {
-      const isEmpty = (oidcUser: OidcUser | {}): boolean => {
-        return Object.keys(oidcUser).length !== 0 ? false : true;
-      };
-
-      return !isEmpty(oidcUser) && !(oidcUser as OidcUser).expired;
-    }
-  );
-
-  /**
-   * This function redirects and logs when auth server was not reach.
-   * When this function is called while tests are running a error is going to be logged.
-   * That error does not mean that the a test may fail.
-   */
-  private redirectLogNetErrorAuthService(error: string) {
-    console.log(error);
-  }
-
-  /*
-   * Guards a route based on user authentication state
-   */
-  public privateRoute({children, ...rest}: any): JSX.Element {
-    const guardedRoute = (
-      <Route {...rest} render={() => (children)} />
-    );
-
-    // useSelector is a Hook and in StrictMode it is called twice. In fact is not the hook which
-    // is called twice but the reducer wrapped by the hook.
-    // This is the normal behavior of React in developement mode, which helps the developer to
-    // check if there is an unexpected side effect.
-    // To avoid unexpected side effects the reducer must be pure <-- just values not calculated values.
-    const isUserLoggedIn: boolean = useSelector(AuthService.isUserLoggedInSelector);
-
-    return isUserLoggedIn ? guardedRoute : AuthService.NotAuthenticated();
-  };
-
   /*
    * returns true if the argument is a valid signin url
    **/
@@ -114,10 +24,9 @@ export class AuthService {
     if (!returnUrlString) return false;
 
     const returnUrlSearch =
-      returnUrlString ? new URLSearchParams(new URL(returnUrlString as string).search) : null;
-
-    const hasQuery: boolean =
-      returnUrlString &&
+      returnUrlString ? new URLSearchParams(returnUrlString.split('?')[1]) : null;
+    
+    return !!(returnUrlString &&
         returnUrlSearch?.get('client_id') &&
         returnUrlSearch?.get('redirect_uri') &&
         returnUrlSearch?.get('response_mode') &&
@@ -125,9 +34,7 @@ export class AuthService {
         returnUrlSearch?.get('state') &&
         returnUrlSearch?.get('code_challenge') &&
         returnUrlSearch?.get('code_challenge_method') &&
-        returnUrlSearch?.get('response_mode') ? true : false;
-
-    return hasQuery;
+        returnUrlSearch?.get('response_mode'));
 
   }
 
@@ -141,5 +48,13 @@ export class AuthService {
     return (
       <div><h3>Connecting to authorization server...</h3></div>
     );
+  }
+  
+  public static InvalidUrl(): JSX.Element {
+    return (
+      <div>
+        <h3>Invalid Url...</h3>
+      </div>
+    )
   }
 }
