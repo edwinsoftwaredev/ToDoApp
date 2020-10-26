@@ -12,7 +12,7 @@ using Todo_App.Services.Models.Interfaces;
 using Todo_App.Model.Auth;
 using System.Linq;
 
-/**
+/*
  * This Controllers is based on the configuration of the following resources:
  *
  * https://docs.microsoft.com/en-us/aspnet/core/security/authentication/identity
@@ -41,11 +41,11 @@ namespace Todo_App.Controllers {
                 IUserService userService,
                 IConfiguration configuration)
         {
-            this._authenticationService = authenticationService;
-            this._logger = logger;
-            this._interactionService = interactionService;
-            this._userService = userService;
-            this._configuration = configuration;
+            _authenticationService = authenticationService;
+            _logger = logger;
+            _interactionService = interactionService;
+            _userService = userService;
+            _configuration = configuration;
         }
 
         /**
@@ -146,7 +146,7 @@ namespace Todo_App.Controllers {
                     return BadRequest(new {message="User was not signed in"});
                 }
 
-                return Ok();
+                return Ok(new {redirectUrl=googleIDToken.returnUrl});
             }
             else
             {
@@ -172,7 +172,7 @@ namespace Todo_App.Controllers {
                     return BadRequest(new {message="User was not signed in"});
                 }
 
-                return Ok();
+                return Ok(new {redirectUrl=googleIDToken.returnUrl});
             }
         }
 
@@ -196,6 +196,7 @@ namespace Todo_App.Controllers {
     
     public class GoogleIDToken
     {
+        public string returnUrl { get; set; }
         public string Id_Token { get; set; }
     }
 }
