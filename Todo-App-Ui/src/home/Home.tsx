@@ -15,6 +15,7 @@ import {ActionsObservable, StateObservable, ofType} from 'redux-observable';
 import {RootState} from '../reducers/RootReducer';
 import {map} from 'rxjs/operators';
 import {User} from 'oidc-client';
+import Account from "./account/Account";
 
 // TodoUser Reducer
 export interface ITodoUser {
@@ -138,7 +139,9 @@ const Home: React.FC = (): JSX.Element => {
               </div>
             </Route>
             <Route exact path="/account">
-              <div className='option-container'></div>
+              <div className='option-container'>
+                <Account />
+              </div>
             </Route>
           </Switch>
         </main>
