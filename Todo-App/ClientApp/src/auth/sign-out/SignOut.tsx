@@ -1,56 +1,73 @@
 import React, {useState, useEffect} from 'react';
-import {AuthService} from '../AuthService';
 import Message from '../../shared/message/Message';
-import {useHistory} from 'react-router-dom';
-import {AxiosError} from 'axios';
-import {useDispatch} from 'react-redux';
-import {saveUser} from '../auth-codes/AuthCodes';
+import {AccountService} from "../AccountService";
+import {AxiosResponse} from "axios";
 
 declare const gapi: any;
 const SignOut: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState('');
-  const [signOutWithGoogle, setSignOutWithGoogle] = useState(false);
-
-  const authService = AuthService.getInstance();
-  const history = useHistory();
-  const dispatch = useDispatch();
-
-  useEffect(() => {
+  const [googleScriptsLoaded, setGoogleScriptsLoaded] = useState(false);
+  const [signedOutWithGoogle, setSignedOutWithGoogle] = useState(false);
+  
+  const loadGoogleScripts = () => {
     const googleScript = document.createElement<'script'>('script');
     googleScript.src = 'https://apis.google.com/js/platform.js';
     googleScript.async = true;
     googleScript.defer = true;
     document.body.appendChild(googleScript);
-
+    
     googleScript.onload = () => {
-      gapi.load('auth2', () => {
-        const googleAuth = gapi.auth2.init({
-          client_id: '539369846251-q5upr5nftjdf30ruqbs2i0v45tqn96h4.apps.googleusercontent.com'
-        });
-
-        googleAuth.then(() => {
-          const auth2 = gapi?.auth2.getAuthInstance();
-          auth2.signOut().then(() => {
-            setSignOutWithGoogle(true);
-          });
-        })
+      setGoogleScriptsLoaded(true);
+    }
+  }
+  
+  const signOutGoogle = () => {
+    gapi.load('auth2', () => {
+      const googleAuth = gapi.auth2.init({
+        client_id: '539369846251-q5upr5nftjdf30ruqbs2i0v45tqn96h4.apps.googleusercontent.com'
       });
-    };
-  }, []);
+
+      googleAuth.then(() => {
+        const auth2 = gapi?.auth2.getAuthInstance();
+        auth2.signOut().then(() => {
+          setSignedOutWithGoogle(true);
+        });
+      })
+    });
+  };
+  
+  const signOut = () => {
+    AccountService.getAntiForgeryToken().then(() => {
+
+      const params = new URLSearchParams(window.location.search);
+      let logoutId = '';
+      if (params.get('logoutId')) logoutId = params.get('logoutId') as string;
+
+      AccountService.deleteAuthCookie(logoutId).then((response: AxiosResponse<string>) => {
+        // check if user is signed out from external IdP
+        console.log('User signed out');
+        if (response.data) {
+          window.location.href = response.data;
+        } else {
+          setErrorMessage('Invalid redirection URL.');
+        }
+      });
+    })
+  }
 
   useEffect(() => {
-    authService.completeSignOut().then(() => {
-      // and others
-      if (signOutWithGoogle) {
-        console.log('User signed out');
-        dispatch(saveUser({}));
-        // history.push('/') wont reload App.tsx component
-        history.push('/'); // should redirects to other route
-      }
-    }).catch((error: AxiosError) => {
-      setErrorMessage(error.message);
-    });
-  }, [authService, dispatch, history, signOutWithGoogle])
+    // add more checks for other external authentications
+    if (googleScriptsLoaded) {
+      signOutGoogle();
+    } else {
+      loadGoogleScripts();  
+    }
+    
+    // add more checks for other external authentications
+    if (signedOutWithGoogle) {
+      signOut();
+    }
+  }, [googleScriptsLoaded, signedOutWithGoogle]);
 
   return (
     <div>

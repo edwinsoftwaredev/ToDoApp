@@ -1,11 +1,16 @@
 using System;
 using System.Threading.Tasks;
+using IdentityServer4;
+using IdentityServer4.Services;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Todo_App.Model.Auth;
 using Todo_App.Model.Auth.VM;
-using Todo_App.Services.Interfaces;
+using IAuthenticationService = Todo_App.Services.Interfaces.IAuthenticationService;
+using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace Todo_App.Services
 {
@@ -14,16 +19,19 @@ namespace Todo_App.Services
         readonly SignInManager<User> _signInManager;
         readonly ILogger<AuthenticationService> _logger;
         readonly IHttpContextAccessor _httpContextAcessor;
+        readonly IIdentityServerInteractionService _interactionService;
 
         public AuthenticationService(
                 SignInManager<User> signInManager,
                 ILogger<AuthenticationService> logger,
-                IHttpContextAccessor httpContextAccessor
+                IHttpContextAccessor httpContextAccessor,
+                IIdentityServerInteractionService interactionService
             )
         {
-            this._signInManager = signInManager;
-            this._logger = logger;
-            this._httpContextAcessor = httpContextAccessor;
+            _signInManager = signInManager;
+            _logger = logger;
+            _httpContextAcessor = httpContextAccessor;
+            _interactionService = interactionService;
         }
 
         // https://docs.microsoft.com/en-us/aspnet/core/security/authentication/identity
@@ -67,10 +75,14 @@ namespace Todo_App.Services
             }
         }
 
-        public async Task SignOut()
+        public async Task<string> SignOut(string logoutId)
         {
-            await this._signInManager.SignOutAsync();
-            this._logger.LogInformation("User logged out");
+            await _signInManager.SignOutAsync();
+            _logger.LogInformation("User logged out.");
+            
+            var result = await _interactionService.GetLogoutContextAsync(logoutId);
+            
+            return result.PostLogoutRedirectUri;
         }
     }
 }

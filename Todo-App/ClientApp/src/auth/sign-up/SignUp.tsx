@@ -19,8 +19,8 @@ const SignUp: React.FC = (): JSX.Element => {
   const handleSubmit = (event: any) => {
     if (!disableForm) {
       AccountService.registerUser(userObj).then(() => {
-        // redirecting to login component
-        AuthService.getInstance().startAuthentication();
+        // user has to be signed in or redirected to a returnUrl
+        // AuthService.getInstance().startAuthentication();
       }).catch((error: AxiosError) => {
         setErrorMessage(error.message);
       });

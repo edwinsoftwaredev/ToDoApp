@@ -177,18 +177,23 @@ namespace Todo_App.Controllers {
         }
 
         [HttpPost("signout")]
-        public async Task<IActionResult> SignOut()
+        public async Task<IActionResult> SignOut(LogoutData logoutData)
         {
             if (User?.Identity.IsAuthenticated == true)
             {
-                await this._authenticationService.SignOut();
-                return Ok();
+                var postLogoutRedirect = await this._authenticationService.SignOut(logoutData.LogoutId);
+                return Ok(postLogoutRedirect);
             }
 
             return BadRequest();
         }
     }
-
+    
+    public class LogoutData
+    {
+        public string LogoutId { get; set; }
+    }
+    
     public class GoogleIDToken
     {
         public string Id_Token { get; set; }

@@ -1,5 +1,6 @@
 using System.Net.Mime;
 using System.Reflection;
+using IdentityServer4;
 using IdentityServer4.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -140,8 +141,8 @@ namespace Todo_App
                     options.UserInteraction = new UserInteractionOptions
                     {
                         // because these paths are local they must start with a leadind slash
-                        LoginUrl = "https://localhost:5001/authentication/signin", // This must be the real Server URL! -- Im testing now
-                        LogoutUrl = "https://localhost:5001/authentication/signout", // This must be the real Server URL! -- Im testing now
+                        LoginUrl = "/authentication/signin", // This must be the real Server URL! -- Im testing now
+                        LogoutUrl = "/authentication/signout", // This must be the real Server URL! -- Im testing now
                         LoginReturnUrlParameter = "returnUrl",
                     };
                 })
@@ -194,8 +195,6 @@ namespace Todo_App
 
             // https://identityserver4.readthedocs.io/en/latest/topics/startup.html
             // app.UseAuthentication(); <-- It's not needed when we add the IdentityServer middleware to the pipeline
-
-            app.UseAuthentication();
             app.UseIdentityServer();
             app.UseAuthorization();
 

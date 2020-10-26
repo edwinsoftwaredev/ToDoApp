@@ -5,7 +5,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {StateObservable, ActionsObservable, ofType} from 'redux-observable';
 import {map} from 'rxjs/operators';
 
-// HERE IT IS DETAILED, THROUGH CODE, HOW REDUX-OBSERVABLES(EPICS)
+// HERE IT'S DETAILED, THROUGH CODE, HOW REDUX-OBSERVABLES(EPICS)
 // ARE IMPLEMENTED
 
 export const testSlice = createSlice({

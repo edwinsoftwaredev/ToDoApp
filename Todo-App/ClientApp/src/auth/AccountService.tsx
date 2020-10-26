@@ -21,7 +21,7 @@ export class AccountService {
    * Login a user
    * @return {Promise<void>}
    */
-  public static authenticateUser(loginData: any): Promise<AxiosResponse<any>> {
+  public static authenticateUser(loginData: any): Promise<AxiosResponse> {
     return Axios.post(
       `${process.env.REACT_APP_API_SERVER_URL}/api/authentication/signin`,
       loginData
@@ -31,7 +31,7 @@ export class AccountService {
   /**
    * signed in a user using google sign in
    */
-  public static authenticateUserWithGoogle(idToken: IGoogleIDToken): Promise<AxiosResponse<any>> {
+  public static authenticateUserWithGoogle(idToken: IGoogleIDToken): Promise<AxiosResponse> {
     return Axios.post(
       `${process.env.REACT_APP_API_SERVER_URL}/api/authentication/signin-google`,
       idToken
@@ -42,9 +42,10 @@ export class AccountService {
    * makes a request to delete authentication cookie
    * @returns {Promise<void>}
    */
-  public static deleteAuthCookie(): Promise<void> {
+  public static deleteAuthCookie(logoutId: string): Promise<AxiosResponse<string>> {
     return Axios.post(
-      `${process.env.REACT_APP_API_SERVER_URL}/api/authentication/signout`
+      `${process.env.REACT_APP_API_SERVER_URL}/api/authentication/signout`,
+        {logoutId: logoutId}
     );
   }
 
@@ -92,9 +93,6 @@ export class AccountService {
           const xcsrfToken = window.sessionStorage.getItem(xcsrfHeaderName);
 
           if (!xcsrfToken) return request;
-
-          if (request.url?.includes('https://api.openweathermap.org')) return request;
-          if (request.url?.includes(`${process.env.REACT_APP_TODO_SERVER_URL}`)) return request;
 
           request.headers[xcsrfHeaderName] = xcsrfToken;
           return request;

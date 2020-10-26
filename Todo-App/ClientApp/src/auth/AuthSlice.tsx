@@ -1,24 +1,9 @@
 import {Slice, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {User as OidcUser} from 'oidc-client';
-import {AuthService} from './AuthService';
-
-// return the authenticatedUser, if there isnt then return a empty object
-const authenticatedUser = ((): OidcUser | {} => {
-  let user: OidcUser | null = null;
-  const authService = AuthService.getInstance();
-
-  // The getUser method doesnt make an api request
-  // however it returns a promise
-  authService.getUser().then((usr: OidcUser | null) => {
-    user = usr;
-  });
-
-  return user ? user : {};
-})();
 
 const authSlice: Slice<OidcUser | {}> = createSlice({
   name: 'oidcUser',
-  initialState: authenticatedUser,
+  initialState: {},
   reducers: {
     identifyUser: (state: OidcUser | {}, action: PayloadAction<OidcUser>) => {
       state = action.payload;
