@@ -1,5 +1,6 @@
 using System;
 using IdentityServer4.EntityFramework.DbContexts;
+using IdentityServer4.EntityFramework.Interfaces;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,7 +32,7 @@ namespace Todo_App
                 {
                     var context = services.GetRequiredService<IdDbContext>();
                     var roleManager = services.GetRequiredService<RoleManager<Role>>();
-                    var configurationDbContext = services.GetRequiredService<ConfigurationDbContext>();
+                    var configurationDbContext = services.GetRequiredService<IConfigurationDbContext>();
                     // Add more services here if required when seeding the database
 
                     DataSeedingContext.Initialize(context, roleManager, configurationDbContext);
