@@ -10,7 +10,8 @@ import {useQuery} from '../../shared/utils';
 
 declare const gapi: any;
 export interface IGoogleIDToken {
-  id_token: string
+  id_token: string,
+  returnUrl: string
 }
 
 const SignIn: React.FC = (): JSX.Element => {
@@ -22,7 +23,7 @@ const SignIn: React.FC = (): JSX.Element => {
 
   const history = useHistory();
   const handleRoute = () => history.push('/authentication/signup');
-  const returnUrl = useQuery().get('returnUrl');
+  const returnUrl = useQuery().get('returnUrl') ?? '';
 
   const handleSubmit = (event: any) => {
     if (!disableForm) {
@@ -60,14 +61,17 @@ const SignIn: React.FC = (): JSX.Element => {
 
   const onGoogleSignIn = (googleUser: any) => {
     const idToken = googleUser.getAuthResponse().id_token;
-    setGoogleIDToken({id_token: idToken});
+    setGoogleIDToken({
+      id_token: idToken,
+      returnUrl: returnUrl
+    });
   }
 
   useEffect(() => {
     if (googleIDToken) {
       AccountService.authenticateUserWithGoogle(googleIDToken)
-        .then(() => {
-          history.push('/');
+        .then((response: AxiosResponse) => {
+            window.location.href = response.data.redirectUrl;
         })
         .catch((error: AxiosError) => {
           console.log(error.message);
