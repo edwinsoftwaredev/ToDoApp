@@ -33,13 +33,15 @@ const Username: React.FC<IUsername> = (props: IUsername) => {
         name='Username'
         value={(value: string) => usernameHandler(value)}
         isValid={validate}
-        others={{autoComplete: 'off'}} />
+        others={{autoComplete: 'off', disabled: props.isDisabled, value: props.initialValue}} />
     </div>
   );
 }
 
 export interface IUsername {
   username: (username: string) => void;
+  initialValue: string;
+  isDisabled: boolean;
 }
 
 export default Username;
