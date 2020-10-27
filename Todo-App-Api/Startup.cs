@@ -50,7 +50,7 @@ namespace Todo_App_Api
             {
                 options.AddPolicy(_corsPolicyTodoApi, policy =>
                 {
-                    policy.WithOrigins("https://localhost:5001")
+                    policy.WithOrigins("http://localhost:3000")
                         .AllowAnyHeader()
                         .AllowAnyMethod();
                 });
