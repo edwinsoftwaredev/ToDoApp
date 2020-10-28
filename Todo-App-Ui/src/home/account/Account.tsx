@@ -11,7 +11,7 @@ const Account: React.FC = () => {
   const authService = AuthService.getInstance();
   
   const handleDeleteAccount = () => {
-    AccountService.deleteAccount(todoUser.userId).then(() => {
+    AccountService.deleteTodoAccount(todoUser.userId).then(() => {
       authService.startSignOut();
     });
   }
@@ -24,7 +24,7 @@ const Account: React.FC = () => {
           <div className={'account-username'}>
             <Username
               username={() => null}
-              initialValue={todoUser.userName}
+              initialValue={todoUser.userName ?? ''}
               isDisabled={true}
             />
           </div>
@@ -33,7 +33,7 @@ const Account: React.FC = () => {
             className={'uk-button uk-button-default btn-delete-account'}
             onClick={handleDeleteAccount}
           >
-            Delete Account
+            Delete Todo Account
           </button>
         </div>
       </div>
