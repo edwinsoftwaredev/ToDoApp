@@ -4,13 +4,13 @@
   grid-template-rows: auto 1fr auto;
   align-items: center;
   margin: 0.7em 0;
-  min-height: 18em;
-  height: 18em;
-  max-height: 18em;
+  height: 13vw;
   box-sizing: border-box;
   background-color: white;
   @media only screen and (max-width: 767px) {
     margin: 0.7em 0;
+    min-height: 40vw;
+    height: auto;
   }
 
   .header {
@@ -27,14 +27,14 @@
       grid-column: 1;
       text-align: left;
       input {
-        font-size: 1.8vw;
+        font-size: 1.6vw;
         height: auto;
         color: slategray;
         background-color: transparent;
         border: 0;
         padding: 0 0.3em;
         @media only screen and (max-width: 767px) {
-          font-size: 7vw;
+          font-size: 5vw;
         }
 
         &.editing {
