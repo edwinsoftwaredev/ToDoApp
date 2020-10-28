@@ -13,36 +13,58 @@ namespace Todo_App_Api.Controllers
     [Authorize(Policy = "TodoAppApiUser")]
     public class TodoUserController : ControllerBase
     {
-        private readonly ILogger<TodoUserController> _logger;
-        private readonly TodoDbContext _dbcontext;
-        private readonly ITodoUserService _userService;
+        readonly ILogger<TodoUserController> _logger;
+        readonly TodoDbContext _dbcontext;
+        readonly ITodoUserService _userService;
         public TodoUserController(
             ILogger<TodoUserController> logger,
             TodoDbContext dbContext,
             ITodoUserService userService
         )
         {
-            this._logger = logger;
-            this._dbcontext = dbContext;
-            this._userService = userService;
+            _logger = logger;
+            _dbcontext = dbContext;
+            _userService = userService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<TodoUser>> getTodoUser()
+        public async Task<ActionResult<TodoUser>> GetTodoUser()
         {
-            var user = await this._userService.GetCurrentUser();
+            var user = await _userService.GetCurrentUser();
 
             if (user != null)
             {
                 return user;
-            } else
-            {
-                var todoUser = await this._userService.CreateTodoUser();
-
-                return  todoUser;
             }
 
+            var todoUser = await _userService.CreateTodoUser();
+
+            return  todoUser;
         }
 
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteTodoUser(string id)
+        {
+            var todoUser = await _userService.GetCurrentUser();
+
+            if (todoUser == null)
+            {
+                return NotFound();
+            }
+
+            if (todoUser.UserId != id)
+            {
+                return BadRequest();
+            }
+
+            var result = _userService.DeleteUser(todoUser);
+
+            if (!result.IsCompletedSuccessfully)
+            {
+                return BadRequest();
+            }
+
+            return Ok();
+        }
     }
 }
