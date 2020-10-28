@@ -6,5 +6,6 @@ namespace Todo_App_Api.Services.Models.Interfaces {
     {
         Task<TodoUser> GetCurrentUser();
         Task<TodoUser> CreateTodoUser();
+        Task DeleteUser(TodoUser user);
     }
 }
