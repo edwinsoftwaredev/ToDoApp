@@ -84,7 +84,7 @@ export class AuthService {
   
   public static NotAuthenticated(): JSX.Element {
     return (
-      <div><h3>You are not logged in.<br />😅</h3></div>
+      <div><h3>Connecting to authentication server...</h3></div>
     );
   }
 
