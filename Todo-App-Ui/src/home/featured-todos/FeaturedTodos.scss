@@ -4,16 +4,20 @@
   .heading {
     margin-top: 0;
     font-weight: 700;
-    font-size: 3.3em;
+    font-size: 3vw;
     color: slategray;
     text-align: center;
+    
+    @media only screen and (max-width: 767px) {
+      font-size: 10vw;
+    }
   }
 
   .featured-todos-container {
     padding-bottom: 3vh;
 
     @media only screen and (max-width: 767px) {
-      padding-bottom: 13vh;
+      padding-bottom: 25vh;
     }
 
     .featured-todos {
