@@ -3,11 +3,17 @@ import './Account.scss';
 import {useSelector} from "react-redux";
 import {todoUserSelector} from "../Home";
 import Username from "../../shared/inputs/user/username/Username";
+import AccountService from "./AccountService";
+import {AuthService} from "../../auth/AuthService";
 
 const Account: React.FC = () => {
   const todoUser = useSelector(todoUserSelector);
+  const authService = AuthService.getInstance();
   
   const handleDeleteAccount = () => {
+    AccountService.deleteAccount(todoUser.userId).then(() => {
+      authService.startSignOut();
+    });
   }
   
   return (
