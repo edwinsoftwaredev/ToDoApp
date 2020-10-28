@@ -64,11 +64,11 @@ namespace Todo_App_Api.Services.Models
             return todoUserResult;
         }
 
-        public Task DeleteUser(TodoUser todoUser)
+        public async Task DeleteUser(TodoUser todoUser)
         {
             var todoUserSet = _dbcontext.Set<TodoUser>();
             todoUserSet.Remove(todoUser);
-            return _dbcontext.SaveChangesAsync();
+            await _dbcontext.SaveChangesAsync();
         }
     }
 }

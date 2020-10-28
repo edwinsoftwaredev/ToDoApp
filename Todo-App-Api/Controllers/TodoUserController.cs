@@ -57,12 +57,7 @@ namespace Todo_App_Api.Controllers
                 return BadRequest();
             }
 
-            var result = _userService.DeleteUser(todoUser);
-
-            if (!result.IsCompletedSuccessfully)
-            {
-                return BadRequest();
-            }
+            await _userService.DeleteUser(todoUser);
 
             return Ok();
         }
