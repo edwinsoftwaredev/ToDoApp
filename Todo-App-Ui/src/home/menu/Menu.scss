@@ -16,7 +16,6 @@
     width: 100%;
     @media only screen and (max-width: 767px) {
       padding-top: 0;
-      height: 10vh;
     }
 
     nav {
@@ -36,6 +35,7 @@
           margin: 0;
           height: 100%;
           align-items: center;
+          overflow: hidden;
         }
 
         li {
@@ -60,6 +60,7 @@
             margin-top: 1em;
             @media only screen and (max-width: 767px) {
               margin-top: 0;
+              padding: 1.2em 0;
             }
           }
 
