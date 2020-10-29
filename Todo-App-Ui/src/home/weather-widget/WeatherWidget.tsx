@@ -102,7 +102,7 @@ const clouds: string[] = [
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
-const weatherSelector = createSelector(
+export const weatherSelector = createSelector(
   (state: RootState) => state.weather,
   (weather: IWeather) => weather
 );
