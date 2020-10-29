@@ -39,7 +39,7 @@ const Todos: React.FC<any> = () => {
   }, [todoUser]);
 
   const deleteHandler = (id?: number): void => {
-    if (id && typeof (id) === 'number') {
+    if (id) {
       TodoCardService.removeTodo(id).then(() => {
         const newTodoList = todoList.filter((todo: ITodo) => todo.id !== id);
         setTodoList(newTodoList);
