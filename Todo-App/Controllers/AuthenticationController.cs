@@ -169,7 +169,7 @@ namespace Todo_App.Controllers {
 
                 if (!authResult.Succeeded)
                 {
-                    return BadRequest(new {message="User was not signed in"});
+                    return BadRequest(new {message="It wasn't possible to sign in the user."});
                 }
 
                 return Ok(new {redirectUrl=googleIDToken.returnUrl});
