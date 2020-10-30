@@ -16,20 +16,16 @@ namespace Todo_App.Services.Models
 {
     public class UserService : IUserService
     {
-        private readonly UserManager<User> _userManager;
-        private readonly IIdentityServerInteractionService _identityServerInteractionService;
-        private readonly IHttpContextAccessor _httpContextAcessor;
-        private readonly IdDbContext _dbcontext;
+        readonly UserManager<User> _userManager;
+        readonly IHttpContextAccessor _httpContextAcessor;
 
-        public UserService(UserManager<User> userManager,
-                IIdentityServerInteractionService identityServerInteractionService,
-                IHttpContextAccessor httpContextAccessor,
-                IdDbContext dbContext)
+        public UserService(
+            UserManager<User> userManager,
+            IHttpContextAccessor httpContextAccessor
+        )
         {
             _userManager = userManager;
-            _identityServerInteractionService = identityServerInteractionService;
             _httpContextAcessor = httpContextAccessor;
-            _dbcontext = dbContext;
         }
 
         public async Task Create(User user) {
