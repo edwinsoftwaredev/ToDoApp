@@ -1,26 +1,18 @@
 import React from 'react';
 import * as SignIn from './sign-in/SignIn';
-import {AuthService} from './AuthService';
 import {render} from '@testing-library/react';
 import Auth from './Auth';
 import {MemoryRouter} from 'react-router-dom';
 
 describe('Auth component', () => {
   let signInSpy: jest.SpyInstance<any>;
-  let connectingAuthorizationServerSpy: jest.SpyInstance<any>;
-  let startAuthentication: jest.SpyInstance<any>;
-  const authService = AuthService.getInstance();
 
   beforeEach(() => {
     signInSpy = jest.spyOn(SignIn, 'default');
-    connectingAuthorizationServerSpy = jest.spyOn(AuthService, 'ConnectingAuthorizationServer');
-    startAuthentication = jest.spyOn(authService, 'startAuthentication');
   });
 
   afterEach(() => {
     signInSpy.mockClear();
-    connectingAuthorizationServerSpy.mockClear();
-    startAuthentication.mockClear();
   });
 
   test('should render SignIn. URL is valid', () => {
@@ -33,9 +25,7 @@ describe('Auth component', () => {
       </MemoryRouter>
     );
 
-    expect(startAuthentication).not.toHaveBeenCalled();
     expect(signInSpy).toHaveBeenCalledTimes(1);
-    expect(connectingAuthorizationServerSpy).not.toHaveBeenCalled();
   });
 
   test('should not render SignIn. URL is not valid', () => {
@@ -47,9 +37,7 @@ describe('Auth component', () => {
         <Auth />
       </MemoryRouter>
     );
-
-    expect(startAuthentication).toHaveBeenCalledTimes(1);
+    
     expect(signInSpy).not.toHaveBeenCalled();
-    expect(connectingAuthorizationServerSpy).toHaveBeenCalledTimes(1);
   });
 });

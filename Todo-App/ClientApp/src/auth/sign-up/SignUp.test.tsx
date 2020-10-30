@@ -2,7 +2,6 @@ import React from 'react';
 import SignUp, * as SignUpUtils from './SignUp';
 import {render, screen, fireEvent} from '@testing-library/react';
 import {MemoryRouter} from 'react-router-dom';
-import {AuthService} from '../AuthService';
 import * as Email from '../../shared/inputs/user/email/Email';
 import * as Name from '../../shared/inputs/user/name/Name';
 import * as Password from '../../shared/inputs/user/password/Password';
@@ -10,9 +9,7 @@ import * as Username from '../../shared/inputs/user/username/Username';
 import {AccountService} from '../../auth/AccountService';
 
 describe('SignUp Component', () => {
-  let spyStartAuthentication: jest.SpyInstance<Promise<void>>;
   let spyRegisterUser: jest.SpyInstance<Promise<void>>;
-  const authService: AuthService = AuthService.getInstance();
   let spyEmail = jest.spyOn(Email, 'default');
   let spyName = jest.spyOn(Name, 'default');
   let spyPassword = jest.spyOn(Password, 'default');
@@ -20,12 +17,10 @@ describe('SignUp Component', () => {
 
   beforeEach(() => {
     jest.resetModules();
-    spyStartAuthentication = jest.spyOn(authService, 'startAuthentication');
     spyRegisterUser = jest.spyOn(AccountService, 'registerUser');
   });
 
   afterEach(() => {
-    spyStartAuthentication.mockClear();
     spyRegisterUser.mockClear();
     spyEmail.mockClear();
     spyUsername.mockClear();

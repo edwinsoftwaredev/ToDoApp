@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import './App.scss';
 import {
   BrowserRouter as Router,
@@ -6,10 +6,6 @@ import {
 import Auth from './auth/Auth';
 
 function AppContainer(): JSX.Element {
-  useEffect(() => {
-    // AccountService.getAntiForgeryToken();
-  }, []);
-
   return (
     <div className="App">
       <Auth />
