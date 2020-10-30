@@ -3,9 +3,11 @@ import Home, * as HomeUtils from './Home';
 import {render} from '@testing-library/react';
 import Store from '../store/Store';
 import {Provider} from 'react-redux';
+import {MemoryRouter} from 'react-router-dom';
 
 describe('Home Component', () => {
   const store = Store.getInstance();
+
   beforeEach(() => {
   });
 
@@ -13,9 +15,18 @@ describe('Home Component', () => {
   });
 
   test('should render', () => {
-    // this could have a mocked implementation
-    const homeSpy = jest.spyOn(HomeUtils, 'default');
-    render(<Provider store={store}><Home /></Provider>);
-    expect(homeSpy).toHaveBeenCalledTimes(1);
+    const mockGeolocation = {
+      getCurrentPosition: jest.fn()
+    };
+
+    global.navigator.geolocation = mockGeolocation;
+    
+    render(
+      <Provider store={store}>
+        <MemoryRouter>
+          <Home />          
+        </MemoryRouter>
+      </Provider>
+    );
   });
 });

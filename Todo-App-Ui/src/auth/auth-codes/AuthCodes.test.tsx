@@ -1,64 +1,75 @@
 import React from 'react';
-import {render, wait, waitForDomChange} from '@testing-library/react';
+import {act, render, waitFor} from '@testing-library/react';
 import {MemoryRouter} from 'react-router-dom';
 import * as AuthCodesExp from './AuthCodes';
 import {Provider} from 'react-redux';
 import Store from '../../store/Store';
 import {AuthService} from '../AuthService';
+import AuthCodes from "./AuthCodes";
 
 describe('AuthCodes tests', () => {
 
   const store = Store.getInstance();
-  let completeAuthenticationSpy: jest.SpyInstance<any>;
   let saveUserSpy: jest.SpyInstance<any>;
-  const authService = AuthService.getInstance();
 
   beforeEach(() => {
-    completeAuthenticationSpy = jest.spyOn(authService, 'completeAuthentication');
     saveUserSpy = jest.spyOn(AuthCodesExp, 'saveUser')
   });
 
   afterEach(() => {
-    completeAuthenticationSpy.mockClear();
-    saveUserSpy.mockClear();
+    saveUserSpy.mockRestore();
   });
 
-  test('should render', async () => {
+  test('should render', () => {
+    const authService = AuthService.getInstance();
+    let completeAuthenticationSpy = jest.spyOn(authService, 'completeAuthentication');
+    completeAuthenticationSpy.mockImplementation(() => Promise.resolve());
     render(
       <Provider store={store}>
         <MemoryRouter>
-          <AuthCodesExp.default />
+          <AuthCodes />
         </MemoryRouter>
       </Provider>
     );
-    await wait();
+  });
+  
+  test('should not call saveUser if completeAuthentication is resolved to void', async () => {
+    const authService = AuthService.getInstance();
+    let completeAuthenticationSpy = jest.spyOn(authService, 'completeAuthentication');
+    completeAuthenticationSpy.mockImplementation(() => Promise.resolve());
+
+    act(() => {
+      render(
+        <Provider store={store}>
+          <MemoryRouter>
+            <AuthCodes />
+          </MemoryRouter>
+        </Provider>
+      );
+    });
+
+    await waitFor(() => {
+      expect(AuthCodesExp.saveUser).not.toHaveBeenCalled();
+    });
   });
 
   test('should call completeAuthentication', async () => {
-    render(
-      <Provider store={store}>
-        <MemoryRouter>
-          <AuthCodesExp.default /> {/*AuthCodes default export is being called*/}
-        </MemoryRouter>
-      </Provider>
-    );
-    await wait();
-    expect(completeAuthenticationSpy).toHaveBeenCalledTimes(1);
-  });
-
-  test('should not call saveUser if completeAuthentication is resolved to void', async () => {
-    completeAuthenticationSpy.mockImplementation(() => {
-      return Promise.resolve();
+    const authService = AuthService.getInstance();
+    let completeAuthenticationSpy = jest.spyOn(authService, 'completeAuthentication');
+    completeAuthenticationSpy.mockImplementation(() => Promise.resolve());
+    
+    act(() => {
+      render(
+        <Provider store={store}>
+          <MemoryRouter>
+            <AuthCodes />
+          </MemoryRouter>
+        </Provider>
+      );
     });
-
-    render(
-      <Provider store={store}>
-        <MemoryRouter>
-          <AuthCodesExp.default /> {/*AuthCodes default export is being called*/}
-        </MemoryRouter>
-      </Provider>
-    );
-    await wait();
-    expect(AuthCodesExp.saveUser).not.toHaveBeenCalled();
+    
+    await waitFor(() => {
+      expect(completeAuthenticationSpy).toHaveBeenCalledTimes(1);
+    });
   });
 });
