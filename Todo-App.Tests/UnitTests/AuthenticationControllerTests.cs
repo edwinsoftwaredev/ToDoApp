@@ -1,11 +1,13 @@
 using System.Threading.Tasks;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Todo_App.Controllers;
 using Todo_App.Model.Auth.VM;
 using Todo_App.Services.Interfaces;
+using Todo_App.Services.Models.Interfaces;
 using Xunit;
 
 namespace Todo_App.Tests.UnitTests
@@ -22,6 +24,8 @@ namespace Todo_App.Tests.UnitTests
             };
 
             var mockLogger = Mock.Of<ILogger<AuthenticationController>>();
+            var mockUserService = Mock.Of<IUserService>();
+            var mockConfiguration = Mock.Of<IConfiguration>();
             var mockIdentityServerInteractionService =
                 Mock.Of<IIdentityServerInteractionService>();
             var mockAuthenticationService = new Mock<IAuthenticationService>();
@@ -34,7 +38,9 @@ namespace Todo_App.Tests.UnitTests
                 new AuthenticationController(
                         mockAuthenticationService.Object,
                         mockLogger,
-                        mockIdentityServerInteractionService);
+                        mockIdentityServerInteractionService,
+                        mockUserService,
+                        mockConfiguration);
 
             var result = await authenticationController.SignIn(mockLoginData);
             Assert.IsType<NotFoundResult>(result);
@@ -52,6 +58,8 @@ namespace Todo_App.Tests.UnitTests
             };
 
             var mockLogger = Mock.Of<ILogger<AuthenticationController>>();
+            var mockUserService = Mock.Of<IUserService>();
+            var mockConfiguration = Mock.Of<IConfiguration>();
             var mockIdentityServerInteractionService =
                 Mock.Of<IIdentityServerInteractionService>();
             var mockAuthenticationService = new Mock<IAuthenticationService>();
@@ -64,7 +72,9 @@ namespace Todo_App.Tests.UnitTests
                 new AuthenticationController(
                         mockAuthenticationService.Object,
                         mockLogger,
-                        mockIdentityServerInteractionService);
+                        mockIdentityServerInteractionService,
+                        mockUserService,
+                        mockConfiguration);
 
             var result = await authenticationController.SignIn(mockLoginData);
 

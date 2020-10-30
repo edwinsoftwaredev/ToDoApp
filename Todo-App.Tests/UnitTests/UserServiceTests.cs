@@ -1,7 +1,11 @@
 using System.Threading.Tasks;
 using IdentityServer4.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Moq;
+using Todo_App.DAL;
 using Todo_App.Model.Auth;
 using Todo_App.Model.Auth.VM;
 using Todo_App.Services.Models;
@@ -32,14 +36,15 @@ namespace Todo_App.Tests.UnitTests
             // For future references
             // mockUserManager.Object.UserValidators.Add(new UserValidator<TUser);
             // mockUserManager.Object.PasswordValidators.Add(new PasswordValidator<TUser>());
-
-            // does nothing atm
-            var mockIIdentityServerInteractionService =
-                Mock.Of<IIdentityServerInteractionService>();
+            
+            var mockHttpContextAccessor = Mock.Of<IHttpContextAccessor>();
 
             // Injecting mocks
             var userService =
-                new UserService(mockUserManager.Object, mockIIdentityServerInteractionService);
+                new UserService(
+                    mockUserManager.Object,
+                    mockHttpContextAccessor
+                    );
 
             var mockUserVM = new UserVM
             {
@@ -63,11 +68,13 @@ namespace Todo_App.Tests.UnitTests
                 .Setup(ums => ums.CreateAsync(It.IsAny<User>(), It.IsAny<string>()))
                 .Returns(Task.Run(() => IdentityResult.Success));
 
-            var mockIIdentityServerInteractionService =
-                Mock.Of<IIdentityServerInteractionService>();
+            var mockHttpContextAccessor = Mock.Of<IHttpContextAccessor>();
 
             var userService =
-                new UserService(mockUserManager.Object, mockIIdentityServerInteractionService);
+                new UserService(
+                    mockUserManager.Object,
+                    mockHttpContextAccessor
+                    );
 
             var mockUserVM = new UserVM
             {

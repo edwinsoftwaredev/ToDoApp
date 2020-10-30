@@ -186,14 +186,7 @@ namespace Todo_App.Tests.IntegrationTests {
                 Assert.Equal("user", reader.GetString(reader.GetOrdinal("UserName")));
                 Assert.Equal("user@email.com", reader.GetString(reader.GetOrdinal("Email")));
             }
-
-            selectCmd.CommandText = $"Select * from Role where Name = '{RoleConstants.USER_ROLE}'";
-            using (var reader = selectCmd.ExecuteReader())
-            {
-                reader.Read();
-                Assert.Equal(RoleConstants.USER_ROLE, reader.GetString(reader.GetOrdinal("Name")));
-            };
-
+            
             _connection.Dispose();
         }
 

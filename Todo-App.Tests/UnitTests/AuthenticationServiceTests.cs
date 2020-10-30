@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using System.Threading.Tasks;
+using IdentityServer4.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
@@ -29,18 +30,19 @@ namespace Todo_App.Tests.UnitTests {
 
             var mockSignInManager =
                 new Mock<SignInManager<User>>(
-                        mockUserManager.Object,
-                        mockHttpContextAccessor,
-                        mockClaimsFactory,
-                        mockIOptions,
-                        mockLoggerSignInManager,
-                        mockIAuthenticationSchemeProvider,
-                        mockIUserConfirmation
-                    );
+                    mockUserManager.Object,
+                    mockHttpContextAccessor,
+                    mockClaimsFactory,
+                    mockIOptions,
+                    mockLoggerSignInManager,
+                    mockIAuthenticationSchemeProvider,
+                    mockIUserConfirmation
+                );
 
             var mockHttpContextAccessor1 = new Mock<IHttpContextAccessor>();
 
             var mockLogger = Mock.Of<ILogger<AuthenticationService>>();
+            var mockInteractionService = Mock.Of<IIdentityServerInteractionService>();
 
             mockHttpContextAccessor1
                 .Setup(hca => hca.HttpContext.User)
@@ -62,7 +64,8 @@ namespace Todo_App.Tests.UnitTests {
             var authenticationService =
                 new AuthenticationService(mockSignInManager.Object,
                         mockLogger,
-                        mockHttpContextAccessor1.Object
+                        mockHttpContextAccessor1.Object,
+                        mockInteractionService
                         );
 
             var mockLoginData = new LoginData {
@@ -117,6 +120,7 @@ namespace Todo_App.Tests.UnitTests {
             var mockHttpContextAccessor1 = new Mock<IHttpContextAccessor>();
 
             var mockLogger = Mock.Of<ILogger<AuthenticationService>>();
+            var mockInteractionService = Mock.Of<IIdentityServerInteractionService>();
 
             mockHttpContextAccessor1
                 .Setup(hca => hca.HttpContext.User)
@@ -138,7 +142,8 @@ namespace Todo_App.Tests.UnitTests {
             var authenticationService =
                 new AuthenticationService(mockSignInManager.Object,
                         mockLogger,
-                        mockHttpContextAccessor1.Object
+                        mockHttpContextAccessor1.Object,
+                        mockInteractionService
                         );
 
             var mockLoginData = new LoginData {
@@ -193,6 +198,7 @@ namespace Todo_App.Tests.UnitTests {
             var mockHttpContextAccessor1 = new Mock<IHttpContextAccessor>();
 
             var mockLogger = Mock.Of<ILogger<AuthenticationService>>();
+            var mockInteractionService = Mock.Of<IIdentityServerInteractionService>();
 
             mockHttpContextAccessor1
                 .Setup(hca => hca.HttpContext.User)
@@ -214,7 +220,8 @@ namespace Todo_App.Tests.UnitTests {
             var authenticationService =
                 new AuthenticationService(mockSignInManager.Object,
                         mockLogger,
-                        mockHttpContextAccessor1.Object
+                        mockHttpContextAccessor1.Object,
+                        mockInteractionService
                         );
 
             var mockLoginData = new LoginData {
