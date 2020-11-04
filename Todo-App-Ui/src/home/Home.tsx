@@ -79,24 +79,30 @@ const Home: React.FC = (): JSX.Element => {
 
   // getting weather at startup
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition((position: Position) => {
-      const lat = position.coords.latitude;
-      const lon = position.coords.longitude;
-      const apiKey = process.env.REACT_APP_API_WEATHER_KEY;
-      Axios
-        .get(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=imperial&appid=${apiKey}`)
-        .then((response: AxiosResponse) => {
-          dispatch(saveWeather({
-            weatherDescription: response.data.weather[0].description,
-            weatherTemperature: response.data.main.temp,
-            weatherIcon: response.data.weather[0].icon
-          }));
-        }).catch((error: AxiosError) => {
-          console.log(error.message);
-        });
-    }, ((posError: PositionError) => {
-      console.log(posError);
-    }), {enableHighAccuracy: true} as PositionOptions);
+    AuthService.getInstance().getUser().then((user) => {
+      navigator.geolocation.getCurrentPosition((position: Position) => {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+        Axios.get(`${process.env.REACT_APP_TODO_SERVER_URL}/api/weather`, {
+          headers: {'Authorization': `${user?.token_type} ${user?.access_token}`},
+          params: {
+            lat: lat,
+            lon: lon
+          }})
+          .then((response: AxiosResponse) => {
+            dispatch(saveWeather({
+              weatherDescription: response.data.weather[0].description,
+              weatherTemperature: response.data.main.temp,
+              weatherIcon: response.data.weather[0].icon
+            }));
+          })
+          .catch((error: AxiosError) => {
+            console.log(error.message);
+          });
+      }, ((posError: PositionError) => {
+        console.log(posError);
+      }), {enableHighAccuracy: true} as PositionOptions);
+    });
   }, [dispatch]);
 
   // getting/setting TodoUser at startup
