@@ -45,6 +45,7 @@ namespace Todo_App_Api
             services.AddDbContext<TodoDbContext>();
             services.AddScoped<ITodoUserService, TodoUserService>();
             services.AddHttpContextAccessor();
+            services.AddHttpClient();
 
             services.AddCors(options =>
             {
