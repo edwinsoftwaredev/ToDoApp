@@ -8,7 +8,7 @@ using Todo_App.Services.Models.Interfaces;
 namespace Todo_App.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/authentication/[controller]")]
     [Authorize]
     public class UserController : ControllerBase
     {

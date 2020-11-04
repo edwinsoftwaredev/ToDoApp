@@ -12,7 +12,7 @@ export class AccountService {
   public static registerUser(userObj: object): Promise<void> {
 
     return Axios.post(
-      `${process.env.REACT_APP_API_SERVER_URL}/api/user`,
+      `${process.env.REACT_APP_API_SERVER_URL}/api/authentication/user`,
       userObj
     );
   }
@@ -54,7 +54,7 @@ export class AccountService {
    */
   public static deleteUser(userName: string): Promise<void> {
     return Axios.delete(
-      `${process.env.REACT_APP_API_SERVER_URL}/api/user?id=${userName}`
+      `${process.env.REACT_APP_API_SERVER_URL}/api/authentication/user?id=${userName}`
     );
   }
 
@@ -63,7 +63,7 @@ export class AccountService {
    * a X-XSRF-TOKEN on every request
    */
   public static async getAntiForgeryToken(): Promise<void> {
-    return Axios.get(`${process.env.REACT_APP_API_SERVER_URL}/api/xsrftoken`)
+    return Axios.get(`${process.env.REACT_APP_API_SERVER_URL}/api/authentication/xsrftoken`)
       .then((response: AxiosResponse) => {
 
         const headerName = response.config.xsrfHeaderName;

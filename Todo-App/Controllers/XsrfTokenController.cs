@@ -11,7 +11,7 @@ namespace Todo_App.Controllers
      * https://docs.microsoft.com/en-us/aspnet/core/security/anti-request-forgery
      */
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/authentication/[controller]")]
     [AllowAnonymous]
     public class XsrfTokenController : ControllerBase
     {
