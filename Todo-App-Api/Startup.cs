@@ -20,15 +20,7 @@ namespace Todo_App_Api
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            _dbConnectionString = new SqlConnectionStringBuilder
-            {
-                DataSource = "localhost",
-                IntegratedSecurity = true,
-                UserID = Configuration["ConnData:UserID"],
-                Password = Configuration["ConnData:Password"],
-                InitialCatalog = Configuration["ConnData:Catalog"]
-
-            }.ConnectionString;
+            _dbConnectionString = Configuration.GetConnectionString("AzureSqlServerConnString");
         }
 
         public IConfiguration Configuration { get; }
@@ -51,7 +43,7 @@ namespace Todo_App_Api
             {
                 options.AddPolicy(_corsPolicyTodoApi, policy =>
                 {
-                    policy.WithOrigins("http://localhost:3000")
+                    policy.WithOrigins("https://todoapp-demo.azurewebsites.net")
                         .AllowAnyHeader()
                         .AllowAnyMethod();
                 });
@@ -60,7 +52,7 @@ namespace Todo_App_Api
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
-                    options.Authority = "https://localhost:5001";
+                    options.Authority = "https://todoapp-demo.azurewebsites.net";
                     options.Audience = "TodoAppApi";
                 });
 
