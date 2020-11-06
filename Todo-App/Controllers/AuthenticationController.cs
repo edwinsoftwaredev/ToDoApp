@@ -116,13 +116,9 @@ namespace Todo_App.Controllers {
                 this._logger.LogInformation(googleIDToken.Id_Token);
                 return BadRequest();
             }
-
-            IConfigurationSection googleAuthNSection =
-                  this._configuration.GetSection("Authentication:Google");
-
+            
             var validationSettings = new GoogleJsonWebSignature.ValidationSettings();
-            validationSettings.Audience = new List<string> {
-                googleAuthNSection["ClientId"]
+            validationSettings.Audience = new List<string> {_configuration["Authentication_Google_ClientId"]
             };
 
             var result = await GoogleJsonWebSignature
