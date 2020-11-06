@@ -1,12 +1,10 @@
 using System.Net.Mime;
 using System.Reflection;
-using IdentityServer4;
 using IdentityServer4.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,8 +16,6 @@ using Todo_App.Services.Interfaces;
 using Todo_App.Services.Models;
 using Todo_App.Services.Models.Interfaces;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Todo_App.Utils.Constants;
 using Todo_App.Utils;
 
 namespace Todo_App
@@ -38,14 +34,7 @@ namespace Todo_App
 
         private string GetConnectionStringIdentityServer()
         {
-            return new SqlConnectionStringBuilder
-            {
-                DataSource = "localhost",
-                IntegratedSecurity = true,
-                UserID = Configuration["ConnData:UserID"],
-                Password = Configuration["ConnData:Password"],
-                InitialCatalog = Configuration["ConnData:Catalog"]
-            }.ConnectionString;
+            return Configuration.GetConnectionString("AzureSqlServerConnString");
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.

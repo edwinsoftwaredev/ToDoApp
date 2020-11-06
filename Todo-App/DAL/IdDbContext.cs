@@ -38,15 +38,7 @@ namespace Todo_App.DAL
             base.OnConfiguring(optionsBuilder);
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(
-                    new SqlConnectionStringBuilder
-                    {
-                        DataSource = "localhost",
-                        IntegratedSecurity = true,
-                        UserID = Configuration["ConnData:UserID"],
-                        Password = Configuration["ConnData:Password"],
-                        InitialCatalog = Configuration["ConnData:Catalog"]
-                    }.ConnectionString);
+                optionsBuilder.UseSqlServer(Configuration.GetConnectionString("AzureSqlServerConnString"));
             }
         }
     }
