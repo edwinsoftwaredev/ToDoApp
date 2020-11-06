@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using IdentityServer4;
+using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Interfaces;
 using IdentityServer4.EntityFramework.Mappers;
 using IdentityServer4.Models;
@@ -17,7 +18,8 @@ namespace Todo_App.DAL
     {
         public static void Initialize(IdDbContext context,
                 RoleManager<Role> roleManager,
-                IConfigurationDbContext configurationDbContext)
+                ConfigurationDbContext configurationDbContext,
+                PersistedGrantDbContext persistedGrantDbContext)
         {
 
             /* How to:
@@ -37,6 +39,8 @@ namespace Todo_App.DAL
 
             // use code with precaution
             context.Database.Migrate();
+            persistedGrantDbContext.Database.Migrate(); // migrating persistedGrant(devices, devides_codes, ...) tables
+            configurationDbContext.Database.Migrate(); // migrating configuration(resources, clients,...) tables
 
             if (!context.Roles.Any())
             {
@@ -78,7 +82,7 @@ namespace Todo_App.DAL
                     AllowPlainTextPkce = false, // default is false
                     RequireConsent = false, // this is a firstParty client
                     PostLogoutRedirectUris = {
-                        "http://localhost:3000"
+                        "https://todoapp-demo.azurewebsites.net"
                     },
                     AllowedScopes =
                     {
@@ -88,11 +92,11 @@ namespace Todo_App.DAL
                     },
                     RedirectUris = new List<string>
                     {
-                        "http://localhost:3000/auth/codes"
+                        "https://todoapp-demo.azurewebsites.net/auth/codes"
                     },
                     AllowedCorsOrigins = new List<string>
                     {
-                        "http://localhost:3000"
+                        "https://todoapp-demo.azurewebsites.net"
                     }
                 }.ToEntity();
 

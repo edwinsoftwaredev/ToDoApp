@@ -32,10 +32,11 @@ namespace Todo_App
                 {
                     var context = services.GetRequiredService<IdDbContext>();
                     var roleManager = services.GetRequiredService<RoleManager<Role>>();
-                    var configurationDbContext = services.GetRequiredService<IConfigurationDbContext>();
+                    var configurationDbContext = services.GetRequiredService<ConfigurationDbContext>();
+                    var persistantGrantDbContext = services.GetRequiredService<PersistedGrantDbContext>();
                     // Add more services here if required when seeding the database
 
-                    DataSeedingContext.Initialize(context, roleManager, configurationDbContext);
+                    DataSeedingContext.Initialize(context, roleManager, configurationDbContext, persistantGrantDbContext);
                 }
                 catch(Exception ex)
                 {
