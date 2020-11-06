@@ -31,7 +31,7 @@ namespace Todo_App_Api.Controllers
         [HttpGet]
         public async Task<ActionResult<object>> GetWeather(string lat, string lon)
         {
-            var apiKey = _configuration["WeatherApi:Key"];
+            var apiKey = _configuration["WeatherApi_Key"];
             var url = "https://api.openweathermap.org/data/2.5/weather?" +
                       $"lat={lat}&" +
                       $"lon={lon}&" +
