@@ -10,6 +10,6 @@ RUN npm run build
 
 # Production enviroment
 FROM nginx:stable-alpine
-COPY --from=build /app/build/static /var/www/static/
+COPY --from=build /app/build /var/www/html/
 COPY --from=build /app/nginx.conf /etc/nginx/nginx.conf
-EXPOSE 443
+EXPOSE 80
