@@ -12,9 +12,10 @@ WORKDIR /app
 COPY *.csproj ./
 RUN dotnet restore
 # Copy everything else and build
-COPY --from=ui-build /app/build/static ./ClientApp/build
 COPY . ./
 RUN dotnet publish -c Release -o out
+# After build is completed ClientApp build has to be copied
+COPY --from=ui-build /app/build ./out/ClientApp/build/
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
