@@ -17,6 +17,8 @@ using Todo_App.Services.Models;
 using Todo_App.Services.Models.Interfaces;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Todo_App.Utils;
+using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.StaticFiles;
 
 namespace Todo_App
 {
@@ -126,6 +128,9 @@ namespace Todo_App
                     options.Events.RaiseFailureEvents = true;
                     options.Events.RaiseInformationEvents = true;
                     options.Events.RaiseSuccessEvents = true;
+                    // this option will configure all the endpoints in openid-configuration
+                    // to use https or the given origin.
+                    options.PublicOrigin = "https://todoapp-demo.azurewebsites.net";
 
                     options.UserInteraction = new UserInteractionOptions
                     {
@@ -176,8 +181,15 @@ namespace Todo_App
                 // app.UseHsts();
             }
 
+            app.UseForwardedHeaders(new ForwardedHeadersOptions {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
+
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
+            var mimeProvider = new FileExtensionContentTypeProvider();
+            app.UseStaticFiles(new StaticFileOptions {
+                ContentTypeProvider = mimeProvider
+            });
             app.UseSpaStaticFiles();
 
             app.UseRouting();
