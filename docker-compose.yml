@@ -10,6 +10,7 @@ services:
     environment:
       Authentication_Google_ClientId: ${Authentication_Google_ClientId}
       AzureSqlServerConnString: ${AzureSqlServerConnString}
+      ASPNETCORE_URLS: http://+:5000 #by default server listen on port 80
   todo-api-server:
     image: "edwinsoftwaredev/todo-app-repo:todo-api-server"
     depends_on:
@@ -20,11 +21,12 @@ services:
     environment:
       AzureSqlServerConnString: ${AzureSqlServerConnString}
       WeatherApi_Key: ${WeatherApi_Key}
+      ASPNETCORE_URLS: http://+:6000 #by default server listen on port 80
   todo-app-ui:
     image: "edwinsoftwaredev/todo-app-repo:todo-app-ui"
     depends_on:
       - authentication-server
       - todo-api-server
     ports:
-      - "80:80"
+      - "443:80" #by listen on port 80 but it is expose to 443 to directly use https
     restart: always
