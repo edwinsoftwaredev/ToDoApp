@@ -22,7 +22,7 @@ const SignIn: React.FC = (): JSX.Element => {
   const [googleIDToken, setGoogleIDToken] = useState<IGoogleIDToken>();
 
   const history = useHistory();
-  const handleRoute = () => history.push('/authentication/signup');
+  const handleRoute = () => history.push('/authentication/signup' + window.location.search);
   const returnUrl = useQuery().get('returnUrl') ?? '';
 
   const handleSubmit = (event: any) => {
@@ -34,7 +34,7 @@ const SignIn: React.FC = (): JSX.Element => {
       })
         .then((result: AxiosResponse<any>) => {
           // after login this has to call redirects to auth-callback
-          window.location.assign(result.data.redirectUrl);  
+          window.location.assign(result.data.redirectUrl);
         })
         .catch((error: AxiosError<any>) => {
           if (error.response?.status === 404) {
@@ -59,19 +59,11 @@ const SignIn: React.FC = (): JSX.Element => {
       ));
   }, [username, password]);
 
-  const onGoogleSignIn = (googleUser: any) => {
-    const idToken = googleUser.getAuthResponse().id_token;
-    setGoogleIDToken({
-      id_token: idToken,
-      returnUrl: returnUrl
-    });
-  }
-
   useEffect(() => {
     if (googleIDToken) {
       AccountService.authenticateUserWithGoogle(googleIDToken)
         .then((response: AxiosResponse) => {
-            window.location.href = response.data.redirectUrl;
+          window.location.href = response.data.redirectUrl;
         })
         .catch((error: AxiosError) => {
           console.log(error.message);
@@ -100,12 +92,18 @@ const SignIn: React.FC = (): JSX.Element => {
             height: 38,
             longtitle: true,
             theme: 'dark',
-            onsuccess: onGoogleSignIn
+            onsuccess: (googleUser: any) => {
+              const idToken = googleUser.getAuthResponse().id_token;
+              setGoogleIDToken({
+                id_token: idToken,
+                returnUrl: returnUrl
+              });
+            }
           });
         })
       });
     };
-  }, []);
+  }, [returnUrl]);
 
   return (
     <div className='signin'>
