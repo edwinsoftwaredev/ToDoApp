@@ -26,9 +26,9 @@
     .title {
       grid-column: 1;
       text-align: left;
+      height: 100%;
       input {
         font-size: 1.6vw;
-        height: auto;
         color: slategray;
         background-color: transparent;
         border: 0;
@@ -53,10 +53,14 @@
     .checkmark {
       margin-left: 0.5em;
       grid-column: 2;
+      height: 100%;
+      display: flex;
+      align-items: center;
       i {
         font-size: 1.8vw;
         color: darkgray;
         cursor: pointer;
+        margin: 1px 0;
         padding: 0.25em;
         @media only screen and (max-width: 767px) {
           font-size: 7vw;
@@ -73,6 +77,9 @@
     .todo-star {
       margin-left: 0.5em;
       grid-column: 3;
+      height: 100%;
+      display: flex;
+      align-items: center;
       i {
         font-size: 1.8vw;
         color: gold;
