@@ -15,12 +15,15 @@ const SignUp: React.FC = (): JSX.Element => {
   const [userObj, setUserObj] = useState({});
   const [disableForm, setDisableForm] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
+  const history = useHistory();
+
+  const handleRoute = () => history.push('/authentication/signin' + window.location.search);
 
   const handleSubmit = (event: any) => {
     if (!disableForm) {
       AccountService.registerUser(userObj).then(() => {
         // user has to be signed in or redirected to a returnUrl
-        // AuthService.getInstance().startAuthentication();
+        handleRoute();
       }).catch((error: AxiosError) => {
         setErrorMessage(error.message);
       });
@@ -28,10 +31,6 @@ const SignUp: React.FC = (): JSX.Element => {
     // avoids redirection on submit because of default behavior
     event.preventDefault();
   }
-
-  const history = useHistory();
-
-  const handleRoute = () => history.push('/authentication/signin');
 
   useEffect(() => {
     setDisableForm(
