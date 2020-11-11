@@ -14,13 +14,13 @@ This is Todo App project has the following features:
   * ASP.NET Core
   * IdentityServer4
   * Google Sign In
-  * React (React Router, Redux, Redux-Observable)
+  * React (TypeScript, React Router, Redux, Redux-Observable)
   * Jest
 * Todo-App-Api (Todo api server)
   * ASP.NET Core
   * OpenWeatherMap api
 * Todo-App-Ui (Todo app client)
-  * React (React Router, Redux, Redux-Observable)
+  * React (TypeScript, React Router, Redux, Redux-Observable)
   * IdentityModel/OIDC-Client
   * Jest
 * Todo-App.Tests
