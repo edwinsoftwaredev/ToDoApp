@@ -1,5 +1,5 @@
 # Todo App (*Overcomplicated version* 🤷‍♂️)
-A web app to keep track todos and check the local weather.
+A web app to keep track of todos and check the local weather.
 ## Features
 This Todo App project has the following features:
 * User authentication
